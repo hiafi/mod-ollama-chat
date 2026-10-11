@@ -1,0 +1,33 @@
+id = "real-08-trueeee"
+path = "reply"
+notes = "Real exchange 2026-10-11 06:40 (server time), bot guid 2646. Original reply, verbatim: 'lol what? u good over there?' Bot role, bot and player levels are best guesses from today's character rows."
+message = "TRUEEEE"
+
+[bot]
+name = "Doria"
+level = 1
+class = "priest"
+race = "Human"
+gender = "Female"
+role = "discipline priest"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "Solo"
+area = "Northshire Valley"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "LONE_WOLF"
+
+[player]
+name = "Leetwarlock"
+level = 5
+class = "warlock"
+race = "Human"
+gender = "Male"
+role = "affliction warlock"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "Solo"
+distance = 10.0

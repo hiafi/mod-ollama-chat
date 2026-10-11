@@ -1,0 +1,22 @@
+id = "random-deathknell-danger"
+path = "random"
+notes = "Horde starting zone (undead), level 1-10, a stronger creature nearby."
+[bot]
+name = "Mordrake"
+level = 7
+class = "warlock"
+race = "Undead"
+gender = "Male"
+role = "affliction warlock"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Deathknell"
+zone = "Tirisfal Glades"
+map = "Eastern Kingdoms"
+personality = "EDGE_LORD"
+
+[random]
+env_template = "OllamaChat.EnvCommentDanger"
+env_vars = { creature_name = "Scarlet Initiate", level_delta = 4 }

@@ -1,0 +1,23 @@
+id = "event-death"
+path = "event"
+notes = "A nearby player dies."
+[bot]
+name = "Nazruk"
+level = 36
+class = "rogue"
+race = "Orc"
+gender = "Male"
+role = "assasination rogue"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Hillsbrad Fields"
+zone = "Hillsbrad Foothills"
+map = "Eastern Kingdoms"
+personality = "PARANOID"
+
+[event]
+actor_name = "Wick"
+kind = "died"
+event_detail = ""

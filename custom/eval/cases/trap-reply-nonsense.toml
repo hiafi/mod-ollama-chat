@@ -1,0 +1,33 @@
+id = "trap-reply-nonsense"
+path = "reply"
+notes = "A message with no content."
+message = "."
+
+[bot]
+name = "Pell"
+level = 11
+class = "paladin"
+race = "Human"
+gender = "Male"
+role = "holy paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Westfall"
+zone = "Westfall"
+map = "Eastern Kingdoms"
+personality = "FOOL"
+
+[player]
+name = "Wren"
+level = 11
+class = "rogue"
+race = "Human"
+gender = "Female"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 4.0

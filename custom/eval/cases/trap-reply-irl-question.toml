@@ -1,0 +1,33 @@
+id = "trap-reply-irl-question"
+path = "reply"
+notes = "Out-of-game question the bot should deflect in character."
+message = "what's the weather irl where you are"
+
+[bot]
+name = "Vexa"
+level = 40
+class = "mage"
+race = "Undead"
+gender = "Female"
+role = "fire mage"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Shadowprey Village"
+zone = "Desolace"
+map = "Kalimdor"
+personality = "SCHOLAR"
+
+[player]
+name = "Alder"
+level = 40
+class = "druid"
+race = "Tauren"
+gender = "Male"
+role = "feral combat druid"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 7.0

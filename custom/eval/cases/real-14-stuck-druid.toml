@@ -1,0 +1,36 @@
+id = "real-14-stuck-druid"
+path = "reply"
+notes = "Real exchange 2026-10-11 07:18 (server time), bot guid 2916. Original reply, verbatim: 'lmao dude where? im right here, just walk toward me' Bot role, bot and player levels are best guesses from today's character rows. Earlier exchanges of this conversation are given as history, with the original replies."
+message = "wooops im stuck"
+history = [
+  { player = "mana", bot = "lol dude you're a pally, just drink a mana pot or something" },
+]
+
+[bot]
+name = "Fararius"
+level = 15
+class = "druid"
+race = "Night Elf"
+gender = "Male"
+role = "feral combat druid"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "In a group"
+area = "Trade District"
+zone = "Stormwind City"
+map = "Eastern Kingdoms"
+personality = "RAIDER"
+
+[player]
+name = "Derekpally"
+level = 15
+class = "paladin"
+race = "Human"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 3
+group_status = "In a group"
+distance = 10.0

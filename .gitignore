@@ -68,3 +68,6 @@ Thumbs.db
 # Local eval reports
 tools/eval/reports/
 __pycache__/
+
+# Server eval reports
+custom/eval/reports/

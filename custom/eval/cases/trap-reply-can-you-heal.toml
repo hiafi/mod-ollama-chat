@@ -1,0 +1,33 @@
+id = "trap-reply-can-you-heal"
+path = "reply"
+notes = "Playerbot command question: a non-healer asked to heal."
+message = "can you heal me?"
+
+[bot]
+name = "Kerra"
+level = 14
+class = "warlock"
+race = "Undead"
+gender = "Female"
+role = "affliction warlock"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "The Sepulcher"
+zone = "Silverpine Forest"
+map = "Eastern Kingdoms"
+personality = "GRUMPY_VETERAN"
+
+[player]
+name = "Dunn"
+level = 14
+class = "warrior"
+race = "Orc"
+gender = "Male"
+role = "arms warrior"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

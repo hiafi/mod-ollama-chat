@@ -1,0 +1,33 @@
+id = "trap-reply-rage-mechanic"
+path = "reply"
+notes = "Class-mechanic question: rage generation."
+message = "how does rage actually work? it keeps running out"
+
+[bot]
+name = "Dagrim"
+level = 22
+class = "warrior"
+race = "Dwarf"
+gender = "Male"
+role = "protection warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Menethil Harbor"
+zone = "Wetlands"
+map = "Eastern Kingdoms"
+personality = "MENTOR"
+
+[player]
+name = "Nia"
+level = 20
+class = "warrior"
+race = "Human"
+gender = "Female"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 2.0

@@ -1,0 +1,33 @@
+id = "real-01-quest-invite"
+path = "reply"
+notes = "Real exchange 2026-10-10 10:19 (server time), bot guid 2056. Original reply, verbatim: 'yo sure, im down. lets grind some quests together lol' Bot 2056 was deleted in the 2026-10-10 bot wipe: its name, class and level are RECONSTRUCTED (human, low level, Northshire/Elwynn) and so is the player's level. Bot role, bot and player levels are best guesses from today's character rows."
+message = "anyone want to quest?"
+
+[bot]
+name = "Aldric"
+level = 5
+class = "warrior"
+race = "Human"
+gender = "Male"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "Solo"
+area = "Northshire Valley"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "CASUAL"
+
+[player]
+name = "Leetmage"
+level = 5
+class = "mage"
+race = "Human"
+gender = "Female"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "Solo"
+distance = 5.0

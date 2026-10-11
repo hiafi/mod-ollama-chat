@@ -1,0 +1,22 @@
+id = "random-mulgore-questobjective"
+path = "random"
+notes = "Horde starting zone (tauren), level 1-10, quest in progress."
+[bot]
+name = "Tahsa"
+level = 5
+class = "hunter"
+race = "Tauren"
+gender = "Male"
+role = "marksmanship hunter"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Camp Narache"
+zone = "Mulgore"
+map = "Kalimdor"
+personality = "ANCIENT_WISE_ONE"
+
+[random]
+env_template = "OllamaChat.EnvCommentQuestObjective"
+env_vars = { quest_name = "Rites of the Earthmother", objective = "speak with Seer Graytongue" }

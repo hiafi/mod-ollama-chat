@@ -1,0 +1,22 @@
+id = "random-barrens-unfinished-quest"
+path = "random"
+notes = "Horde level 20-30, an unfinished quest."
+[bot]
+name = "Zulwa"
+level = 27
+class = "priest"
+race = "Troll"
+gender = "Female"
+role = "discipline priest"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 22
+area = "The Crossroads"
+zone = "The Barrens"
+map = "Kalimdor"
+personality = "MENTOR"
+
+[random]
+env_template = "OllamaChat.EnvCommentUnfinishedQuest"
+env_vars = { quest_name = "Lost in Battle" }

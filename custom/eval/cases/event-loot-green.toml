@@ -1,0 +1,23 @@
+id = "event-loot-green"
+path = "event"
+notes = "Someone picks up a green item."
+[bot]
+name = "Sylwen"
+level = 22
+class = "hunter"
+race = "Night Elf"
+gender = "Female"
+role = "marksmanship hunter"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Auberdine"
+zone = "Darkshore"
+map = "Kalimdor"
+personality = "LONE_WOLF"
+
+[event]
+actor_name = "Pip"
+kind = "got_item"
+event_detail = "Gloves of the Moon"

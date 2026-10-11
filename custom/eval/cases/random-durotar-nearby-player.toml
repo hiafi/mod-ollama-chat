@@ -1,0 +1,22 @@
+id = "random-durotar-nearby-player"
+path = "random"
+notes = "Horde starting zone, level 1-10, a player standing nearby."
+[bot]
+name = "Gorak"
+level = 8
+class = "shaman"
+race = "Orc"
+gender = "Male"
+role = "elemental shaman"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Valley of Trials"
+zone = "Durotar"
+map = "Kalimdor"
+personality = "HYPE_MAN"
+
+[random]
+env_template = "OllamaChat.EnvCommentNearbyPlayer"
+env_vars = { player_name = "Seraphine", player_class = "mage", player_race = "Human", player_level = 8, player_state = "passing by", level_gap = 0 }

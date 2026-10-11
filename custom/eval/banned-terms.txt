@@ -1,0 +1,29 @@
+# Content that does not exist on this realm: a vanilla-era world run by mod-progression (currently Phase 2: Dire Maul,
+# Azuregos, Kazzak, AV and WSG are open; BWL, AQ and Naxxramas are not yet), with Death Knights and the TBC races
+# (Blood Elf, Draenei) available, plus the dungeon finder and dual spec.
+# One term (word or phrase) per line, matched case-insensitively as whole words, so list plurals separately. '#' starts a comment.
+# Used by tools/eval/run_eval.py --banned-terms to count replies that talk about things players here cannot see.
+# Realm facts confirmed by the realm owner, 2026-10-11. Re-check this list whenever the progression phase changes.
+
+Northrend
+Lich King
+ICC
+Icecrown
+Ulduar
+# Naxxramas exists in vanilla (40-man) but is not open in Phase 2, and the 25-man version is the WotLK one. Phrase only.
+Naxxramas 25
+flying mount
+cold weather flying
+# Flying is not available anywhere on this realm; the bare word is too common to ban ("flying machine", "flight path").
+# Arena (the PvP mode) does not exist here. "arena" alone may be a place name in some zones, so this is a soft signal.
+arena
+arenas
+Dalaran
+Outland
+achievement points
+# "heroic" as a dungeon difficulty is TBC+. The word also appears in ordinary speech ("heroic effort"),
+# so treat hits as prompts to read the reply, not as automatic failures.
+heroic
+# Deliberately NOT banned (realm owner, 2026-10-11): Blackwing Lair, BWL, Ahn'Qiraj, AQ20, AQ40, Naxxramas.
+# They are closed in Phase 2, but the bots may look forward to them. A bot claiming to have cleared one is wrong
+# today, so read hits by eye if you grep for them; they are not counted.
