@@ -28,7 +28,11 @@ public:
     bool Initialize();
 
     // Retrieve relevant information based on a query
-    std::vector<RAGResult> RetrieveRelevantInfo(const std::string& query, uint32_t maxResults = 3, float similarityThreshold = 0.3f);
+    // Entries are dropped below similarityThreshold on the raw score. When locationBoost > 0, an entry that
+    // mentions any of locationNames (case-insensitive substring of title, keywords or content) is ranked
+    // as raw * (1 + locationBoost); the boost never lets a below-threshold entry in.
+    std::vector<RAGResult> RetrieveRelevantInfo(const std::string& query, uint32_t maxResults = 3, float similarityThreshold = 0.3f,
+                                                const std::vector<std::string>& locationNames = {}, float locationBoost = 0.0f);
 
     // Get formatted RAG information for prompt inclusion
     std::string GetFormattedRAGInfo(const std::vector<RAGResult>& results);

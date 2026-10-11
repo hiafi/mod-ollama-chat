@@ -1960,7 +1960,15 @@ std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* pl
     // Retrieve RAG information if enabled
     std::string ragInfo;
     if (g_EnableRAG && g_RAGSystem) {
-        auto ragResults = g_RAGSystem->RetrieveRelevantInfo(playerMessage, g_RAGMaxRetrievedItems, g_RAGSimilarityThreshold);
+        std::vector<std::string> ragLocations;
+        if (g_RAGLocationBoost > 0.0f) {
+            if (!botZoneName.empty() && botZoneName != "UnknownZone")
+                ragLocations.push_back(botZoneName);
+            if (!botAreaName.empty() && botAreaName != "UnknownArea")
+                ragLocations.push_back(botAreaName);
+        }
+        auto ragResults = g_RAGSystem->RetrieveRelevantInfo(playerMessage, g_RAGMaxRetrievedItems, g_RAGSimilarityThreshold,
+                                                            ragLocations, g_RAGLocationBoost);
         std::string ragContent = g_RAGSystem->GetFormattedRAGInfo(ragResults);
         if (!ragContent.empty()) {
             ragInfo = SafeFormat(g_RAGPromptTemplate, fmt::arg("rag_info", ragContent));

@@ -1042,6 +1042,16 @@ OllamaChat.RAGMaxRetrievedItems = 3
 #     Default:     0.3
 OllamaChat.RAGSimilarityThreshold = 0.3
 
+# OllamaChat.RAGLocationBoost
+#     Description: Ranking boost for RAG entries that mention the bot's current zone or area name (in their
+#                  title, keywords or content). A matching entry is ranked as score * (1 + boost), so with 0.5
+#                  an entry scoring 0.4 outranks another scoring 0.55. The similarity threshold is still applied
+#                  to the unboosted score, so the boost only reorders entries that already qualify.
+#                  Useful when entries for the same topic exist in several zones ("where are the kobolds").
+#                  0 disables the boost.
+#     Default:     0.0 (disabled)
+OllamaChat.RAGLocationBoost = 0.0
+
 
 
 # OllamaChat.RAGPromptTemplate
