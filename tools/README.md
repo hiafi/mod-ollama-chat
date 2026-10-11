@@ -1,11 +1,13 @@
 # Prompt tooling
 
-Two standard-library Python scripts (Python 3.11+, no pip installs) for people who tune this module's prompts.
+Standard-library Python scripts (Python 3.11+, no pip installs) for people who tune this module's prompts.
 
 * `build_conf.py` builds your live config from the shipped `conf/mod_ollama_chat.conf.dist` plus a small TOML
   file holding only the settings you changed.
 * `eval/run_eval.py` renders prompts exactly the way the C++ does, sends them to the model, and writes a
   side-by-side report of two override sets, so a prompt change can be judged before it goes live.
+* `personalities_to_sql.py` turns a personalities TOML file (the format `run_eval.py --personalities` reads) into
+  an SQL file for the personality table.
 
 ## Why overrides instead of editing the config
 
@@ -80,6 +82,33 @@ failures listed per case) and `raw.jsonl` to `tools/eval/reports/<timestamp>/` (
 regressions - the opener share, opener variety, length, banned terms, near-duplicates and failures. You are the judge.
 
 Full details, the case format and the list of known differences from the C++ are in [eval/README.md](eval/README.md).
+
+## personalities_to_sql.py
+
+```sh
+python3 tools/personalities_to_sql.py personalities.toml --out data/sql/characters/2026_10_11_personalities.sql \
+    [--source-note "text"]
+```
+
+Writes one multi-row `REPLACE INTO mod_ollama_chat_personality_templates (`key`, `prompt`, `manual_only`) VALUES ...`
+sorted by key, under a "generated, do not edit" header. `REPLACE` is used because it works on MySQL and MariaDB alike
+(`ON DUPLICATE KEY ... VALUES()` is deprecated on MySQL 8 and the alias form is not in MariaDB). The table's `key` is
+`VARCHAR(64) PRIMARY KEY` with no foreign keys, so a replaced row is simply rewritten.
+
+* **No DELETE.** A key missing from the file keeps its row in the database. To retire a personality, mark it
+  `manual_only = true` (the module then never assigns it at random).
+* Strings: `\` becomes `\\`, `'` becomes `''`. NUL and every other control character (including newline) is an error.
+* Rejected, with an error naming the key: a key not matching `^[A-Z][A-Z0-9_]{0,63}$`, an empty prompt, a `"` in a
+  prompt (one rule across this module's config tooling). Braces are allowed: the prompt reaches `fmt` as an argument
+  value (`fmt::arg("bot_personality", ...)`), never as part of a format string.
+* The output parses back through `eval/sql_to_personalities.py` to the same key to (prompt, manual_only) map.
+
+**Where the SQL must live.** The core updater scans `modules/<mod>/data/sql/<dir>/` for directories whose name
+contains `characters` (e.g. `data/sql/characters/`), recurses up to 10 levels, picks up every `*.sql`, and applies
+each as a `MODULE` update recorded in the `updates` table. File names must be unique across all of them. An
+already-applied file whose content changes (SHA-1 of the file differs from the stored hash) is **applied again** on
+the next `ac-db-import`/worldserver start (`UpdateFetcher.cpp`, "Reapplying update ... (it changed)"), and the
+stored hash is replaced. Since the generated SQL is idempotent, regenerating the same file in place is safe.
 
 ## Tests
 

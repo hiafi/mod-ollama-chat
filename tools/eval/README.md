@@ -6,7 +6,8 @@ reports baseline against candidate. Overview and quick start: [../README.md](../
 
 ```
 run_eval.py --dist <conf.dist> --candidate <overrides.toml> [--baseline <overrides.toml>]
-            --cases <dir> [--personalities <file.toml>] [--rag-dir <dir>] [--banned-terms <file>]
+            --cases <dir> [--personalities <file.toml>] [--baseline-personalities <file.toml>]
+            [--sweep-personalities [all|KEY,KEY,...]] [--rag-dir <dir>] [--banned-terms <file>]
             [--samples 3] [--max-calls 300] [--concurrency 4] [--out <dir>] [--api-key-env NAME]
             [--openers lol,lmao,...] [--dry-run] [--yes]
 ```
@@ -37,7 +38,7 @@ history = [ { player = "...", bot = "..." } ]                    # reply only, o
   placeholder. Only the fields the effective templates actually use are required.
 * `role` and `class`/`race` are the strings the module would print ("holy priest", "Night Elf" - race is Title Case, as the server sends it).
 * `personality` is a key in `--personalities` (default `personalities-stock.toml`, generated from the module's SQL with
-  `sql_to_personalities.py`). When `EnableRPPersonalities = 0` the default personality prompt is used instead, as in
+  `sql_to_personalities.py`; see "Personalities" below). When `EnableRPPersonalities = 0` the default personality prompt is used instead, as in
   the module.
 * `[random]`: give the topic text as `environment_info`, or name an `EnvComment*` key and its variables:
   `env_template = "OllamaChat.EnvCommentZoneLandmark"`, `env_vars = { area_name = "...", zone_name = "..." }`.
@@ -56,6 +57,33 @@ history = [ { player = "...", bot = "..." } ]                    # reply only, o
   `sentiment` (float), `roleplay_voice` (text, required when `Roleplay.Enable = 1`).
 * Anything random is drawn from an RNG seeded by case id + sample index (+ purpose), so baseline and candidate get the
   same picks and a rerun gives the same prompts.
+
+## Personalities
+
+The `--personalities` file maps key to prompt. Each value is a plain string (`manual_only = false`) or an inline
+table; a trailing `# manual_only` comment is not read, because a TOML parser cannot see comments:
+
+```toml
+CASUAL = "Relaxed, types in lowercase..."
+GLITCHED_AI = { prompt = "Respond in fragmented...", manual_only = true }
+```
+
+A table without `prompt`, with an unknown field, or with a non-string prompt is an error naming the key.
+`sql_to_personalities.py` writes this form for `manual_only = 1` rows.
+
+* `--baseline-personalities <file>`: the baseline variant uses this file, the candidate uses `--personalities`.
+  Omitted, both use `--personalities`. The report header names both files.
+* `--sweep-personalities [all|KEY,KEY,...]`: render each case once per key, replacing the case's own `[bot]
+  personality`. `all` is every key of the candidate file that is not `manual_only` (the random rotation players meet);
+  a list is taken exactly, manual keys included, and an unknown key is an error. The baseline gets the same key from
+  the baseline file; if it lacks it, the baseline uses `DefaultPersonalityPrompt` under the name `default`, as the module
+  does for an unknown key, and the report says so. Calls = cases x keys x samples x variants, and `--max-calls` and the
+  cost estimate apply to that total. The RNG seed includes the key, so baseline and candidate roll the same dice for a
+  given (case, key, sample). `EnableRPPersonalities` is forced on for both variants (a note is printed), since otherwise
+  every key would render the default prompt. `report.md` keeps the overall metrics table, then one section per key: its
+  prompt (baseline and candidate if they differ), that key's metrics per variant (`slang_open_pct`, `words_mean`,
+  `distinct_opener_ratio`, `near_dup_pct`), then each case's samples side by side. `raw.jsonl` rows carry a
+  `personality` field (null outside sweep mode). `--dry-run` writes `<case>-<KEY>-<variant>-<sample>.txt`.
 
 ## What is mirrored
 

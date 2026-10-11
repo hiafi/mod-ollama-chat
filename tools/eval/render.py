@@ -181,6 +181,10 @@ class CaseView:
     def __init__(self, case: Mapping[str, Any], cid: str):
         self.case = case
         self.id = cid
+        # Sweep mode renders one case once per personality; the key joins the seed so baseline and
+        # candidate still get the same dice for the same (case, key, sample).
+        salt = case.get("_seed_salt")
+        self.seed = f"{cid}|{salt}" if salt else cid
 
     def section(self, name: str) -> Mapping[str, Any]:
         sec = self.case.get(name)
@@ -425,7 +429,7 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
         prompt += snap
     prompt += build_memory_section(cfg, view, about_name=player_name)
     prompt += build_roleplay_voice(cfg, view)
-    prompt += build_gesture_prompt(cfg, rng_for(view.id, sample, "gesture"))
+    prompt += build_gesture_prompt(cfg, rng_for(view.seed, sample, "gesture"))
 
     return Rendered(prompt, cfg.text("SystemPrompt", ""), "reply", rag_hits,
                     f"{_summary(view)}; {player_name} says: {message!r}", FORMAT_ERROR in prompt)
@@ -443,7 +447,7 @@ def pick_env_text(cfg: Config, view: CaseView, sample: int) -> str:
     options = cfg.env_list(short)
     if not options:
         raise CaseError(f"case '{view.id}': {tpl_key} is empty or unknown in the config")
-    chosen = options[rng_for(view.id, sample, "env").randrange(len(options))]
+    chosen = options[rng_for(view.seed, sample, "env").randrange(len(options))]
     if ALLOWED_PLACEHOLDERS.get("OllamaChat." + short) == set():
         return chosen                     # plain lists (e.g. the guild raid/endgame topics) are used unformatted
     env_vars = rnd.get("env_vars") or {}
@@ -473,7 +477,7 @@ def pick_variation(cfg: Config, view: CaseView, sample: int) -> str:
                       and bool(cfg.pipe_list("Roleplay.PromptVariations")))
     statements = cfg.pipe_list("Roleplay.PromptVariations" if roleplay_lists else "RandomChatterPromptVariations")
     questions = cfg.pipe_list("Roleplay.QuestionVariations" if roleplay_lists else "RandomChatterQuestionVariations")
-    rng = rng_for(view.id, sample, "variation")
+    rng = rng_for(view.seed, sample, "variation")
     roll, pick = rng.randint(0, 99), rng.random()
     if statements and questions:
         chosen = questions if roll < cfg.integer("RandomChatterQuestionChance", 35) else statements
@@ -499,7 +503,7 @@ def render_random(cfg: Config, view: CaseView, personalities: Mapping[str, str],
 
     prompt += build_memory_section(cfg, view, about_name=None)
     prompt += build_roleplay_voice(cfg, view)
-    prompt += build_gesture_prompt(cfg, rng_for(view.id, sample, "gesture"))
+    prompt += build_gesture_prompt(cfg, rng_for(view.seed, sample, "gesture"))
     return Rendered(prompt, cfg.text("SystemPrompt", ""), "random", [],
                     f"{_summary(view)}; topic: {args['environment_info']}", FORMAT_ERROR in prompt)
 
@@ -564,7 +568,7 @@ def render_event(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     prompt = safe_format(cfg.text("EventChatterPromptTemplate"), args, f"{where} EventChatterPromptTemplate")
     prompt += build_memory_section(cfg, view, about_name=None)
     prompt += build_roleplay_voice(cfg, view)
-    prompt += build_gesture_prompt(cfg, rng_for(view.id, sample, "gesture"))
+    prompt += build_gesture_prompt(cfg, rng_for(view.seed, sample, "gesture"))
     return Rendered(prompt, cfg.text("SystemPrompt", ""), "event", [],
                     f"{_summary(view)}; event: {ev.get('actor_name')} {args['event_type']} {ev.get('event_detail')}",
                     FORMAT_ERROR in prompt)
