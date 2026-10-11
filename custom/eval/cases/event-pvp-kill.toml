@@ -1,0 +1,23 @@
+id = "event-pvp-kill"
+path = "event"
+notes = "A player kills an enemy-faction player."
+[bot]
+name = "Tilda"
+level = 52
+class = "paladin"
+race = "dwarf"
+gender = "Female"
+role = "retribution paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Light's Hope Chapel"
+zone = "Eastern Plaguelands"
+map = "Eastern Kingdoms"
+personality = "PVP_HARDCORE"
+
+[event]
+actor_name = "Ironbeard"
+event_type = "defeated player"
+event_detail = "Skullcrusha"

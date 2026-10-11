@@ -1,0 +1,23 @@
+id = "event-levelup-mid"
+path = "event"
+notes = "A guildmate-sized level-up at 30."
+[bot]
+name = "Rokhan"
+level = 31
+class = "shaman"
+race = "orc"
+gender = "Male"
+role = "enhancement shaman"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Orgrimmar"
+zone = "Durotar"
+map = "Kalimdor"
+personality = "HYPE_MAN"
+
+[event]
+actor_name = "Thrall's Fist"
+event_type = "leveled up"
+event_detail = "30"

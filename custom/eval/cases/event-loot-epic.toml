@@ -1,0 +1,23 @@
+id = "event-loot-epic"
+path = "event"
+notes = "Someone picks up an epic at 60."
+[bot]
+name = "Havric"
+level = 60
+class = "warrior"
+race = "human"
+gender = "Male"
+role = "protection warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "In a group"
+gold = 2
+area = "Blackrock Depths"
+zone = "Blackrock Mountain"
+map = "Eastern Kingdoms"
+personality = "RAIDER"
+
+[event]
+actor_name = "Ellara"
+event_type = "got item"
+event_detail = "Thunderfury, Blessed Blade of the Windseeker"

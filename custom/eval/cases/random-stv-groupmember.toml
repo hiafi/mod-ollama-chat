@@ -1,0 +1,22 @@
+id = "random-stv-groupmember"
+path = "random"
+notes = "Alliance level 40-50, in a group."
+[bot]
+name = "Fenwick"
+level = 44
+class = "rogue"
+race = "gnome"
+gender = "Male"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "In a group"
+gold = 60
+area = "Booty Bay"
+zone = "Stranglethorn Vale"
+map = "Eastern Kingdoms"
+personality = "TRICKSTER"
+
+[random]
+env_template = "OllamaChat.EnvCommentGroupMember"
+env_vars = { member_name = "Halvar", member_class = "priest", member_state = "fighting", member_level = 45 }

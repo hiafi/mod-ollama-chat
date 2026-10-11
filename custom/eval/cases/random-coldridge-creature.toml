@@ -1,0 +1,22 @@
+id = "random-coldridge-creature"
+path = "random"
+notes = "Alliance starting zone (dwarf), level 1-10, creature nearby."
+[bot]
+name = "Brunhild"
+level = 6
+class = "hunter"
+race = "dwarf"
+gender = "Female"
+role = "beast mastery hunter"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Coldridge Valley"
+zone = "Dun Morogh"
+map = "Eastern Kingdoms"
+personality = "GRUMPY_VETERAN"
+
+[random]
+env_template = "OllamaChat.EnvCommentCreature"
+env_vars = { creature_name = "Frostmane Troll Whelp", creature_level = 5, level_delta = -1 }

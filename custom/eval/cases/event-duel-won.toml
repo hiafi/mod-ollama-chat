@@ -1,0 +1,23 @@
+id = "event-duel-won"
+path = "event"
+notes = "A duel is won."
+[bot]
+name = "Grimtooth"
+level = 29
+class = "warlock"
+race = "undead"
+gender = "Male"
+role = "destruction warlock"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Brill"
+zone = "Tirisfal Glades"
+map = "Eastern Kingdoms"
+personality = "WANNABE_VILLAIN"
+
+[event]
+actor_name = "Sable"
+event_type = "won duel against"
+event_detail = "Mordo"

@@ -1,0 +1,22 @@
+id = "random-brd-dungeon"
+path = "random"
+notes = "Alliance level 60, inside a dungeon."
+[bot]
+name = "Thessaly"
+level = 60
+class = "mage"
+race = "human"
+gender = "Female"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "In a group"
+gold = 340
+area = "Blackrock Depths"
+zone = "Blackrock Mountain"
+map = "Eastern Kingdoms"
+personality = "SCHOLAR"
+
+[random]
+env_template = "OllamaChat.EnvCommentDungeon"
+env_vars = { dungeon_name = "Blackrock Depths" }

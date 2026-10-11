@@ -1,0 +1,15 @@
+# Server overrides for mod-ollama-chat. Only the keys we change from conf/mod_ollama_chat.conf.dist.
+# Build the live config with:
+#   python3 tools/build_conf.py --dist conf/mod_ollama_chat.conf.dist --overrides custom/overrides.toml \
+#       --out <repo>/env/dist/etc/modules/mod_ollama_chat.conf
+
+# Hosted API instead of a local Ollama: no GPU on this host.
+"OllamaChat.Provider" = "anthropic"
+# The Anthropic Messages endpoint (the key comes from the AC_OLLAMA_CHAT_API_KEY container env var, not this file).
+"OllamaChat.Url" = "https://api.anthropic.com/v1/messages"
+# Cheapest current model that holds a persona; ~1.5k input / ~40 output tokens per reply.
+"OllamaChat.Model" = "claude-haiku-4-5-20251001"
+# Two in-flight requests are plenty for one human player and keep us under the API rate limit.
+"OllamaChat.WorkerThreads" = 2
+# Short queue: a late chat line is worse than a dropped one.
+"OllamaChat.MaxQueueDepth" = 16

@@ -1,0 +1,23 @@
+id = "event-quest-complete"
+path = "event"
+notes = "A nearby player turns in a quest."
+[bot]
+name = "Lorelai"
+level = 15
+class = "druid"
+race = "night elf"
+gender = "Female"
+role = "restoration druid"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Lakeshire"
+zone = "Redridge Mountains"
+map = "Eastern Kingdoms"
+personality = "CASUAL"
+
+[event]
+actor_name = "Brannoc"
+event_type = "completed quest"
+event_detail = "Murloc Poachers"

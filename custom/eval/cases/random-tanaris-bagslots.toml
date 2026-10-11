@@ -1,0 +1,22 @@
+id = "random-tanaris-bagslots"
+path = "random"
+notes = "Horde level 40-50, near a full bag."
+[bot]
+name = "Kragnok"
+level = 47
+class = "warrior"
+race = "orc"
+gender = "Male"
+role = "fury warrior"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 120
+area = "Gadgetzan"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "LOOTGOBLIN"
+
+[random]
+env_template = "OllamaChat.EnvCommentBagSlots"
+env_vars = { bag_slots = 2 }

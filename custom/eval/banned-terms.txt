@@ -1,0 +1,28 @@
+# Content that does not exist on this Classic realm (vanilla-era world; nothing from later expansions).
+# One term (word or phrase) per line, matched case-insensitively as whole words, so list plurals separately. '#' starts a comment.
+# Used by tools/eval/run_eval.py --banned-terms to count replies that talk about things players here cannot see.
+
+Northrend
+Lich King
+ICC
+Icecrown
+Ulduar
+# Naxxramas exists in vanilla (40-man); the 25-man version is the WotLK one. Phrase only.
+Naxxramas 25
+dungeon finder
+LFD
+flying mount
+cold weather flying
+# Arena (the PvP mode) is TBC+. "arena" alone may be a place name in some zones, so this is a soft signal.
+arena
+arenas
+Dalaran
+Outland
+Blood Elf
+Blood Elves
+Draenei
+achievement points
+dual spec
+# "heroic" as a dungeon difficulty is TBC+. The word also appears in ordinary speech ("heroic effort"),
+# so treat hits as prompts to read the reply, not as automatic failures.
+heroic

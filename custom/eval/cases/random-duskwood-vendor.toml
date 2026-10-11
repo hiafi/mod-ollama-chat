@@ -1,0 +1,22 @@
+id = "random-duskwood-vendor"
+path = "random"
+notes = "Alliance level 20-30, vendor nearby."
+[bot]
+name = "Corwen"
+level = 24
+class = "paladin"
+race = "human"
+gender = "Male"
+role = "retribution paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 18
+area = "Darkshire"
+zone = "Duskwood"
+map = "Eastern Kingdoms"
+personality = "TRADER"
+
+[random]
+env_template = "OllamaChat.EnvCommentVendor"
+env_vars = { vendor_name = "Innkeeper Trelayne" }

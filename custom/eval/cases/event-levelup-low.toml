@@ -1,0 +1,23 @@
+id = "event-levelup-low"
+path = "event"
+notes = "A nearby player reaches level 10."
+[bot]
+name = "Maeve"
+level = 9
+class = "priest"
+race = "human"
+gender = "Female"
+role = "holy priest"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "MENTOR"
+
+[event]
+actor_name = "Tobias"
+event_type = "leveled up"
+event_detail = "10"

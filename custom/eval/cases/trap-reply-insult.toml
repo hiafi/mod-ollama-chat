@@ -1,0 +1,33 @@
+id = "trap-reply-insult"
+path = "reply"
+notes = "An insult/troll message."
+message = "ur trash lol uninstall the game"
+
+[bot]
+name = "Orsa"
+level = 33
+class = "hunter"
+race = "tauren"
+gender = "Female"
+role = "beast mastery hunter"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Camp Taurajo"
+zone = "The Barrens"
+map = "Kalimdor"
+personality = "RAGER"
+
+[player]
+name = "xXSlayerXx"
+level = 33
+class = "rogue"
+race = "orc"
+gender = "Male"
+role = "combat rogue"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 12.0

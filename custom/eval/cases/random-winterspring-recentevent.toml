@@ -1,0 +1,22 @@
+id = "random-winterspring-recentevent"
+path = "random"
+notes = "Horde level 60, witnessed something happen."
+[bot]
+name = "Urza"
+level = 60
+class = "hunter"
+race = "troll"
+gender = "Female"
+role = "survival hunter"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 410
+area = "Everlook"
+zone = "Winterspring"
+map = "Kalimdor"
+personality = "RAIDER"
+
+[random]
+env_template = "OllamaChat.EnvCommentRecentEvent"
+env_vars = { event_text = "Drogg cut down a frostsaber in a fight" }
