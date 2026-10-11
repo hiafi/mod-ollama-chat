@@ -6,8 +6,10 @@ upstream); this directory exists only on `server/overlay`.
 | path | what |
 |---|---|
 | `overrides.toml` | the keys we change from `conf/mod_ollama_chat.conf.dist`, one reason comment each. The live config is built from it |
-| `eval/cases/` | eval cases: hand-made situations (`event-*`, `random-*`, `trap-reply-*`) and 16 real replies from the 2026-10-10/11 playtest (`real-*`, with their history) |
+| `eval/cases/` | eval cases: hand-made situations (`event-*`, `random-*`, `trap-reply-*`, and `q3-*` grounding questions whose notes hold the correct answer) and 16 real replies from the 2026-10-10/11 playtest (`real-*`, with their history) |
 | `eval/personalities.toml` | our editable copy of the personality prompts (identical to the live table on 2026-10-11; Q2 changes it) |
+| `rag/` | grounding facts for bot chat (Q3-B): `quests_*.json` and `npcs_*.json` generated from the world DB by `tools/rag/build_world_rag.py`, `playerbot_commands.json` (hand-written; each entry's tags cite the mod-playerbots source file:line), `server_facts.json` (realm facts; add more here) |
+| `eval/rag-probes.toml`, `eval/rag_probe.py` | retrieval-only check of `rag/` (no API calls): top entries and scores per message, and a threshold sweep |
 | `eval/banned-terms.txt` | content that does not exist on this realm; counted as `banned_hits` |
 | `eval/reports/` | eval output (gitignored) |
 

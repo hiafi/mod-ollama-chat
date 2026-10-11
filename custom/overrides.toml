@@ -110,3 +110,31 @@ whether anyone wants to group up for it.|Ask what others think of it.|Ask a quic
 
 # 'leveled up 30' read like a mistranslation; the detail is the new level.
 "OllamaChat.EventTypeLeveledUp" = "reached level"
+
+# ---------------------------------------------------------------------------------------------------
+# Q3-B grounding facts (.agents/plans/llm-chat-quality). Generated quest and NPC facts, the playerbot command list and
+# the realm facts, in custom/rag/ (python3 tools/rag/build_world_rag.py regenerates the first two). Needs the sparse
+# scorer and common-word filter commits in src/mod-ollama-chat_rag.cpp (worldserver rebuild): with the stock dense
+# scorer 4300 entries cost about 1.6 s per reply on the world thread.
+# ---------------------------------------------------------------------------------------------------
+
+# Retrieval on: bots invented directions and commands because they knew nothing about this world.
+"OllamaChat.EnableRAG" = true
+# The module directory is bind-mounted into the worldserver container at /azerothcore/modules.
+"OllamaChat.RAGDataPath" = "/azerothcore/modules/mod-ollama-chat/custom/rag/"
+# Drop is/the/where/you from entries and queries: without it chit-chat matches long entries on function words alone.
+"OllamaChat.RAGIgnoreCommonWords" = true
+# One fact: the second and third hits are usually sibling entries (other trainers, other zones) that read as answers.
+# On the probes, top-1 finds 27 of 34 answerable questions and top-3 only 28, with 0.09 against 0.74 unrelated entries.
+"OllamaChat.RAGMaxRetrievedItems" = 1
+# Chosen on custom/eval/rag-probes.toml with the filter on and one fact: 9 of 10 chit-chat messages retrieve nothing and
+# 27 of 34 answerable questions get the right fact. Below 0.30 chit-chat starts matching entries; above 0.40 the right
+# fact is lost. Single-word messages that are also quest names (mana) still match.
+"OllamaChat.RAGSimilarityThreshold" = 0.35
+# The stock template asks for detailed answers, against the system prompt's short lines; this one also stops the extras
+# the model added in the first live eval (a cave east of here, by the barracks) when the fact only names a valley.
+"OllamaChat.RAGPromptTemplate" = """
+Facts from this world (use one only if it answers what was asked, in your own short words. Add no directions,
+buildings or landmarks that the fact does not state, and if none answers the question say you do not know instead
+of guessing): {rag_info}
+"""

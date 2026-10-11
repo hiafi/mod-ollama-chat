@@ -1,0 +1,33 @@
+id = "q3-cmd-lead-the-way"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Can a bot lead the way?: No. There is no command that makes a bot lead you somewhere. Bots only follow the player; the player leads. A bot cannot guide you to a quest or a place, so say you do not know the way, or suggest asking in general chat or looking at the map. The word lead is not a command. go ? only makes the bot tell where it is, and go travel followed by a place name sends the bot off on its own.. A reply is right if it agrees with this and invents no direction, command or number beyond it. No such command exists. Acceptable: say it cannot, or that the player leads, or ask general chat. Not acceptable: any command, or directions to the kobolds that are not in the facts."
+message = "can you lead the way to the kobolds?"
+
+[bot]
+name = "Caelum"
+level = 7
+class = "warlock"
+race = "Human"
+gender = "Female"
+role = "affliction warlock"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "GAMER"
+
+[player]
+name = "Tomas"
+level = 7
+class = "paladin"
+race = "Human"
+gender = "Male"
+role = "holy paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0
