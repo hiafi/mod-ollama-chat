@@ -7,9 +7,11 @@
 "OllamaChat.Provider" = "anthropic"
 # The Anthropic Messages endpoint (the key comes from the AC_OLLAMA_CHAT_API_KEY container env var, not this file).
 "OllamaChat.Url" = "https://api.anthropic.com/v1/messages"
-# Cheapest current model that holds a persona; ~1.5k input / ~40 output tokens per reply.
+# Cheapest current model that holds a persona; ~200 input / ~30 output tokens per reply with the stock prompts, measured.
 "OllamaChat.Model" = "claude-haiku-4-5-20251001"
 # Two in-flight requests are plenty for one human player and keep us under the API rate limit.
 "OllamaChat.WorkerThreads" = 2
 # Short queue: a late chat line is worse than a dropped one.
 "OllamaChat.MaxQueueDepth" = 16
+# Personalities on: the single default voice made every bot sound the same.
+"OllamaChat.EnableRPPersonalities" = true

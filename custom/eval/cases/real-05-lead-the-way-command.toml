@@ -1,0 +1,33 @@
+id = "real-05-lead-the-way-command"
+path = "reply"
+notes = "Real exchange 2026-10-10 10:46 (server time), bot guid 1786. Original reply, verbatim: \"Pinish dude, just click me and it'll work lol\" Bot 1786 was deleted in the 2026-10-10 bot wipe: its name, class and level are RECONSTRUCTED (human, low level, Northshire/Elwynn) and so is the player's level. Bot role, bot and player levels are best guesses from today's character rows."
+message = "whats the command to have you lead the way?"
+
+[bot]
+name = "Tavian"
+level = 3
+class = "paladin"
+race = "Human"
+gender = "Male"
+role = "holy paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "Solo"
+area = "Northshire Valley"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "MENTOR"
+
+[player]
+name = "Leetmage"
+level = 6
+class = "mage"
+race = "Human"
+gender = "Female"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "Solo"
+distance = 5.0

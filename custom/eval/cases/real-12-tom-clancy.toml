@@ -1,0 +1,33 @@
+id = "real-12-tom-clancy"
+path = "reply"
+notes = "Real exchange 2026-10-11 07:08 (server time), bot guid 2536. Original reply, verbatim: \"lol sure dude, and im actually blizzard's ceo\" Bot role, bot and player levels are best guesses from today's character rows."
+message = "I am actually tom clancy"
+
+[bot]
+name = "Demanus"
+level = 1
+class = "warlock"
+race = "Human"
+gender = "Male"
+role = "affliction warlock"
+faction = "Alliance"
+guild = "No Guild"
+gold = 2
+group_status = "Solo"
+area = "Northshire Valley"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "GAMER"
+
+[player]
+name = "Derekpally"
+level = 8
+class = "paladin"
+race = "Human"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 3
+group_status = "Solo"
+distance = 10.0
