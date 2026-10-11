@@ -51,6 +51,8 @@ It stops with a non-zero exit and writes nothing if:
 * an override key is not a real line in the `.dist` (renamed or removed upstream; a key that exists only as a
   commented-out example is reported as such), or appears more than once there;
 * a string contains `"`, or a newline survives folding;
+* a template uses a format spec (`{name:d}`) or conversion (`{name!r}`): the module only ever passes plain values, and
+  a spec the formatter dislikes turns the whole prompt into `[Format Error]`;
 * a template uses a `{placeholder}` the C++ does not pass for that key, or has a stray or unbalanced brace.
   The allowed names come from the `SafeFormat(...)` call sites and live in `ALLOWED_PLACEHOLDERS`; a test checks
   that the shipped `.dist` stays inside that table. `OllamaChat.SystemPrompt` is never formatted, so a `{name}` in it

@@ -107,6 +107,20 @@ class TomlFoldTests(unittest.TestCase):
         self.assertFalse(r.warnings)
 
 
+class FormatSpecTests(unittest.TestCase):
+    def test_format_spec_rejected(self):
+        r = build({"OllamaChat.ChatPromptTemplate": "level {bot_level:d}"})
+        self.assertTrue(any("format spec" in e and "bot_level" in e for e in r.errors), r.errors)
+
+    def test_conversion_rejected(self):
+        r = build({"OllamaChat.ChatPromptTemplate": "name {bot_name!r}"})
+        self.assertTrue(any("conversion" in e for e in r.errors), r.errors)
+
+    def test_plain_placeholder_still_fine(self):
+        r = build({"OllamaChat.ChatPromptTemplate": "name {bot_name} {{literal}}"})
+        self.assertFalse(r.errors, r.errors)
+
+
 class ReplaceTests(unittest.TestCase):
     def test_replaced_in_place_keeping_comments_and_order(self):
         r = build({"OllamaChat.Provider": "anthropic", "OllamaChat.WorkerThreads": 2})

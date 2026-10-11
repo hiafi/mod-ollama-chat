@@ -190,6 +190,9 @@ def parse_template(template: str) -> tuple[list[Token], list[str]]:
             name, _, spec = body.partition(":")
             if "{" in body:
                 errors.append(f"nested or stray '{{' inside a replacement field at offset {i}: {template[i:close + 1]!r}")
+            elif "!" in name:
+                errors.append(f"conversion in {{{body}}} at offset {i}: '!' conversions are not supported "
+                              f"(write plain {{name}})")
             elif not name:
                 errors.append(f"empty placeholder '{{}}' at offset {i} (the module only passes named arguments)")
             elif not _IDENT.match(name):
@@ -337,6 +340,11 @@ def validate_placeholders(key: str, stock_value: str, new_value: str) -> list[st
 
     for e in parse_errors:
         errs.append(f"{key}: {e} (the whole prompt would become '[Format Error]')")
+    for tok in parse_template(new_value)[0]:
+        if tok.kind == "field" and tok.spec:
+            errs.append(f"{key}: format spec in {{{tok.text}:{tok.spec}}} is rejected: every placeholder here is "
+                        f"passed as plain text or a bare number, and a spec such as ':d' makes the formatter "
+                        f"throw, which turns the whole prompt into '[Format Error]'. Write plain {{{tok.text}}}")
     if key not in ALLOWED_PLACEHOLDERS and not stock_set and new_set:
         errs.append(f"{key}: the stock value has no placeholders, so the module does not format it; "
                     f"{sorted(new_set)} would be sent literally (or break the format)")
