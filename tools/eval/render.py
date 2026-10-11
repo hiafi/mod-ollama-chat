@@ -591,8 +591,9 @@ def render_case(cfg: Config, case: Mapping[str, Any], personalities: Mapping[str
 
 
 def load_rag(cfg: Config, rag_dir: Path | None, module_root: Path) -> RagSystem | None:
+    common = cfg.boolean("RAGIgnoreCommonWords", False)
     if rag_dir is not None:
-        return RagSystem.from_directory(rag_dir)
+        return RagSystem.from_directory(rag_dir, common)
     if not cfg.boolean("EnableRAG", False):
         return None
     path = Path(cfg.text("RAGDataPath", "rag/"))
@@ -603,4 +604,4 @@ def load_rag(cfg: Config, rag_dir: Path | None, module_root: Path) -> RagSystem 
         fallback = module_root / "data" / "rag"
         if fallback.is_dir():
             path = fallback
-    return RagSystem.from_directory(path)
+    return RagSystem.from_directory(path, common)
