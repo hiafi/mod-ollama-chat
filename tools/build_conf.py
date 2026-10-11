@@ -22,7 +22,11 @@ Overrides file (TOML)
     \"\"\"
 
 Strings are folded to one line (a run of whitespace containing a real newline
-becomes one space). A two-character backslash-n stays as it is.
+becomes one space; at the two ends such a run is dropped, but a plain edge space is
+kept and the value is written in quotes). In TOML ``"..."`` and multi-line basic strings
+a ``\\n`` escape IS a real newline, so it folds to a space. To pass the two characters
+backslash and n through (stock templates use them as separators), write the value as a
+literal ``'''...'''`` string or as ``\\\\n``.
 
 What is validated (nothing is written if any check fails)
 ---------------------------------------------------------
@@ -101,13 +105,22 @@ def parse_conf_text(text: str) -> dict[str, str]:
 
 
 def fold(value: str) -> str:
-    """Collapse each whitespace run that contains a newline to a single space, then strip.
+    """Fold a multi-line string to the single line the config format needs.
 
-    A backslash followed by the letter n (two characters) is left alone: some
-    stock templates use it and the module passes it through untouched.
+    * A whitespace run that contains a newline becomes one space.
+    * At the two ends, only a whitespace run that contains a newline is dropped (so the
+      newline after an opening triple quote and before the closing one vanish), while a
+      deliberate edge space survives; ``build`` then writes such a value inside quotes.
+
+    Mind how TOML spells the escape: in ``"..."`` and multi-line basic strings a ``\\n`` is a real
+    newline, which this function folds into a space. To keep the two characters
+    backslash and n (stock templates use them as separators) write ``'''...'''`` or ``\\\\n``.
     """
-    folded = re.sub(r"\s+", lambda m: " " if "\n" in m.group(0) else m.group(0), value)
-    return folded.strip()
+    for pattern in (r"\A\s+", r"\s+\Z"):
+        m = re.search(pattern, value)
+        if m and "\n" in m.group(0):
+            value = value[: m.start()] + value[m.end():]
+    return re.sub(r"\s+", lambda m: " " if "\n" in m.group(0) else m.group(0), value)
 
 
 def render_value(value) -> str:
@@ -349,9 +362,9 @@ class BuildResult:
 
 
 def _needs_quotes(dl: DistLine, new_text: str) -> bool:
-    # Keep the quoting style the .dist used for that line. Quotes are deleted
-    # by the parser, so this only matters for leading/trailing whitespace
-    # (trimmed before the quotes go) and for readability.
+    # Keep the quoting style the .dist used for that line. The parser trims the line
+    # and only then deletes the quotes, so quoting is what lets a deliberate leading
+    # or trailing space reach the module.
     if dl.raw_value.startswith('"') or dl.raw_value == "":
         return True
     return new_text != new_text.strip()
@@ -398,6 +411,10 @@ def build(dist_text: str, overrides: dict[str, object]) -> BuildResult:
                 continue
             stock = conf_value(occ[0].raw_value)
             res.errors.extend(validate_placeholders(key, stock, text))
+            if "\\n" in stock and "\\n" not in text:
+                res.warnings.append(
+                    f"{key}: stock value uses a literal \\n separator; yours has none - did TOML turn it into "
+                    f"a newline? use '''...''' or \\\\n")
         dl = occ[0]
         out_value = f'"{text}"' if (isinstance(value, str) and _needs_quotes(dl, text)) else text
         lines[dl.index] = f"{dl.indent}{key} = {out_value}"

@@ -33,8 +33,13 @@ python3 tools/build_conf.py --dist conf/mod_ollama_chat.conf.dist \
     --overrides my-overrides.toml --out /path/to/etc/modules/mod_ollama_chat.conf
 ```
 
-* Strings are folded to one line: a run of whitespace that contains a newline becomes one space.
-  A two-character `\n` is left alone (some stock templates use it).
+* Strings are folded to one line: a run of whitespace that contains a newline becomes one space. At the two
+  ends only such a run is dropped, so a deliberate leading or trailing space survives (the value is then written
+  in quotes; the config parser trims the line before it deletes the quotes). Some stock templates use the two
+  characters backslash and `n` as a separator and the module passes them through. **In TOML, `\n` inside `"..."`
+  or `"""..."""` is a real newline** and folds to a space. To keep the two characters, write the value as a
+  literal string (`'''...'''`) or as `\\n`. When the stock value has a literal `\n` and your value has none,
+  `build_conf.py` prints a warning.
 * `--check` validates and writes nothing; it also lists `.dist` keys that are new since the last build
   (it keeps the previous list next to the output as `<out>.keys`). Run it after updating the module.
 * `--diff` prints a unified diff between the current `--out` and what would be written, and writes nothing.

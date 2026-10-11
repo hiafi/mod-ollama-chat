@@ -3,6 +3,7 @@
 import subprocess
 import sys
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 
@@ -45,11 +46,65 @@ class FoldTests(unittest.TestCase):
     def test_backslash_n_is_untouched(self):
         self.assertEqual(bc.fold(r"line\nnext"), r"line\nnext")
 
+    def test_edge_space_without_newline_is_kept(self):
+        self.assertEqual(bc.fold(" lead and trail "), " lead and trail ")
+
+    def test_edge_runs_with_newline_are_dropped(self):
+        self.assertEqual(bc.fold("\n  text\n"), "text")
+        self.assertEqual(bc.fold(" \n text \n "), "text")
+
     def test_values(self):
         self.assertEqual(bc.render_value(True), "1")
         self.assertEqual(bc.render_value(False), "0")
         self.assertEqual(bc.render_value(2), "2")
         self.assertEqual(bc.render_value(0.5), "0.5")
+
+
+class TomlFoldTests(unittest.TestCase):
+    """Folding as the user meets it: TOML text -> tomllib -> build -> value the module loads."""
+
+    DIST2 = ('OllamaChat.Line = "{a}\\n{b}\\n"\n'
+             'OllamaChat.Mem = " Things you remember:\\n{memories}"\n'
+             'OllamaChat.Memory.PromptTemplate = " Things you remember:\\n{memories}"\n')
+
+    def loaded(self, toml_text, key="OllamaChat.Line", dist=None):
+        data = tomllib.loads(toml_text)
+        r = bc.build(dist or self.DIST2, data)
+        self.assertFalse(r.errors, r.errors)
+        return bc.parse_conf_text(r.text)[key], r
+
+    def test_basic_multiline_backslash_n_becomes_a_space(self):
+        # In a TOML """ string, \n is a real newline, so it folds to a space (documented behaviour).
+        v, _ = self.loaded('"OllamaChat.Line" = """{a}\\n{b}"""\n')
+        self.assertEqual(v, "{a} {b}")
+
+    def test_literal_multiline_keeps_the_two_characters(self):
+        v, r = self.loaded("\"OllamaChat.Line\" = '''{a}\\n{b}\\n'''\n")
+        self.assertEqual(v, "{a}\\n{b}\\n")
+        self.assertFalse(r.warnings)
+
+    def test_escaped_backslash_n_keeps_the_two_characters(self):
+        v, _ = self.loaded('"OllamaChat.Line" = "{a}\\\\n{b}\\\\n"\n')
+        self.assertEqual(v, "{a}\\n{b}\\n")
+
+    def test_leading_space_is_kept_and_quoted(self):
+        v, r = self.loaded('"OllamaChat.Mem" = " Block:{memories}"\n', "OllamaChat.Mem")
+        self.assertEqual(v, " Block:{memories}")
+        self.assertIn('OllamaChat.Mem = " Block:{memories}"', r.text)
+
+    def test_delimiter_newlines_vanish_but_edge_space_stays(self):
+        v, _ = self.loaded('"OllamaChat.Mem" = """\n Block\n"""\n', "OllamaChat.Mem")
+        self.assertEqual(v, " Block")
+
+    def test_warns_when_stock_separator_is_lost(self):
+        _, r = self.loaded('"OllamaChat.Line" = """{a}\\n{b}"""\n')
+        self.assertTrue(any("literal \\n separator" in w and "did TOML turn it into a newline" in w
+                            for w in r.warnings), r.warnings)
+
+    def test_no_warning_when_stock_has_no_separator(self):
+        _, r = self.loaded('"OllamaChat.Plain" = "a\\nb"\n', "OllamaChat.Plain",
+                           dist="OllamaChat.Plain = plain\n")
+        self.assertFalse(r.warnings)
 
 
 class ReplaceTests(unittest.TestCase):
