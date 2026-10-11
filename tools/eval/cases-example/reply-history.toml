@@ -1,0 +1,36 @@
+id = "example-reply-history"
+path = "reply"
+notes = "A follow-up question; the earlier exchange goes in the prompt as chat history."
+message = "and where did you get that sword?"
+history = [
+  { player = "nice gear, what level are you?", bot = "Level 20 and still hunting for better boots." },
+]
+
+[bot]
+name = "Mirelle"
+level = 20
+class = "rogue"
+race = "night elf"
+gender = "Female"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "In a group"
+gold = 12
+area = "Auberdine"
+zone = "Darkshore"
+map = "Kalimdor"
+personality = "TRICKSTER"
+
+[player]
+name = "Corvin"
+level = 21
+class = "priest"
+race = "human"
+gender = "Male"
+role = "holy priest"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "In a group"
+gold = 30
+distance = 4.0

@@ -1,0 +1,21 @@
+id = "example-event-levelup"
+path = "event"
+notes = "A nearby player levels up."
+
+[bot]
+name = "Zulnaka"
+level = 28
+class = "shaman"
+race = "troll"
+gender = "Female"
+role = "enhancement shaman"
+faction = "Horde"
+area = "Splintertree Post"
+zone = "Ashenvale"
+map = "Kalimdor"
+personality = "CASUAL"
+
+[event]
+actor_name = "Grogg"
+event_type = "leveled up"
+event_detail = "29"

@@ -1,0 +1,33 @@
+id = "example-reply-greeting"
+path = "reply"
+notes = "Plain greeting from a nearby player; checks tone and length."
+message = "hey, how's the questing going?"
+
+[bot]
+name = "Thalrin"
+level = 12
+class = "warrior"
+race = "dwarf"
+gender = "Male"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 3
+area = "Kharanos"
+zone = "Dun Morogh"
+map = "Eastern Kingdoms"
+personality = "CASUAL"
+
+[player]
+name = "Aveline"
+level = 12
+class = "mage"
+race = "human"
+gender = "Female"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 5
+distance = 8.5

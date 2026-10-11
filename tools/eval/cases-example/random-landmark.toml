@@ -1,0 +1,20 @@
+id = "example-random-landmark"
+path = "random"
+notes = "Ambient line about the surroundings; the topic text comes from a stock EnvComment template."
+
+[bot]
+name = "Brannic"
+level = 35
+class = "paladin"
+race = "human"
+gender = "Male"
+role = "holy paladin"
+faction = "Alliance"
+area = "Stromgarde Keep"
+zone = "Arathi Highlands"
+map = "Eastern Kingdoms"
+personality = "HEROIC_LEADER"
+
+[random]
+env_template = "OllamaChat.EnvCommentZoneLandmark"
+env_vars = { area_name = "Stromgarde Keep", zone_name = "Arathi Highlands" }
