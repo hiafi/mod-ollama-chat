@@ -363,6 +363,48 @@ class RenderTests(unittest.TestCase):
         r = render.render_case(cfg, self.reply_case(), {}, None, 0)
         self.assertTrue(r.format_error)
 
+    def test_format_error_inside_a_sub_template_is_flagged(self):
+        for key in ("ChatExtraInfoTemplate", "ChatHistoryLineTemplate"):
+            with self.subTest(key=key):
+                cfg = render.Config({**self.conf, "OllamaChat." + key: "{nope}", "OllamaChat.GestureChance": "0",
+                                     "OllamaChat.ChatPromptTemplate": "A {extra_info} {chat_history}"})
+                case = self.reply_case(history=[{"player": "a", "bot": "b"}])
+                r = render.render_case(cfg, case, {}, None, 0)
+                self.assertIn("[Format Error]", r.prompt)
+                self.assertTrue(r.format_error)
+
+    def test_topic_template_that_fails_to_format_is_a_case_error(self):
+        cfg = render.Config({**self.conf, "OllamaChat.EnvCommentVendor": "Talk about {nope}",
+                             "OllamaChat.RandomChatterPromptTemplate": "T {environment_info}"})
+        case = dict(id="r", path="random", bot=self.BOT,
+                    random=dict(env_template="OllamaChat.EnvCommentVendor", env_vars={"vendor_name": "x"}))
+        with self.assertRaises(render.CaseError) as ctx:
+            render.render_case(cfg, case, {}, None, 0)
+        self.assertIn("drops such a topic", str(ctx.exception))
+
+    def test_unformatted_guild_topic_keeps_braces(self):
+        cfg = render.Config({**self.conf, "OllamaChat.GuildEnvCommentGuildRaid": "Raid {{x}} time",
+                             "OllamaChat.RandomChatterPromptTemplate": "{environment_info}",
+                             "OllamaChat.GestureChance": "0", "OllamaChat.RandomChatterPromptVariations": "",
+                             "OllamaChat.RandomChatterQuestionVariations": ""})
+        case = dict(id="r", path="random", bot=self.BOT,
+                    random=dict(env_template="OllamaChat.GuildEnvCommentGuildRaid"))
+        self.assertEqual(render.render_case(cfg, case, {}, None, 0).prompt, "Raid {{x}} time")
+
+    def test_boolean_parsing_matches_string_to_bool(self):
+        for text, default, expected in [("1", False, True), ("y", False, True), ("On", False, True),
+                                        ("YES", False, True), ("true", False, True), ("0", True, False),
+                                        ("n", True, False), ("off", True, False), ("no", True, False),
+                                        ("false", True, False), ("garbage", True, True), ("garbage", False, False),
+                                        ("", True, True)]:
+            with self.subTest(text=text, default=default):
+                self.assertEqual(render.Config({"OllamaChat.X": text}).boolean("X", default), expected)
+
+    def test_empty_chat_template_is_a_case_error(self):
+        cfg = render.Config({**self.conf, "OllamaChat.ChatPromptTemplate": ""})
+        with self.assertRaises(render.CaseError):
+            render.render_case(cfg, self.reply_case(), {}, None, 0)
+
     def test_personality_only_when_enabled(self):
         pers = {"CASUAL": "Chill."}
         cfg_on = render.Config({**self.conf, "OllamaChat.EnableRPPersonalities": "1",

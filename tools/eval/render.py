@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping
 
-from build_conf import parse_template
+from build_conf import ALLOWED_PLACEHOLDERS, parse_template
 from rag import RagSystem
 
 
@@ -59,10 +59,13 @@ class Config:
         return self.raw(key, default)
 
     def boolean(self, key: str, default: bool) -> bool:
-        v = self.values.get("OllamaChat." + key)
-        if v is None or v == "":
-            return default
-        return v.strip().lower() in ("1", "true", "yes", "on")
+        # AzerothCore StringTo<bool>: 1/y/on/yes/true and 0/n/off/no/false; anything else -> the default
+        v = (self.values.get("OllamaChat." + key) or "").strip().lower()
+        if v in ("1", "y", "on", "yes", "true"):
+            return True
+        if v in ("0", "n", "off", "no", "false"):
+            return False
+        return default
 
     def integer(self, key: str, default: int) -> int:
         v = self.values.get("OllamaChat." + key)
@@ -359,6 +362,9 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     if not isinstance(message, str) or not message:
         raise CaseError(f"{where}: reply cases need a 'message'")
 
+    if not cfg.text("ChatPromptTemplate"):
+        raise CaseError(f"{where}: ChatPromptTemplate is empty; the module sends nothing in that case")
+
     personality = personality_for(cfg, view, personalities)
     player_name = player.get("name", MISSING)
     if player_name is MISSING:
@@ -422,7 +428,7 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     prompt += build_gesture_prompt(cfg, rng_for(view.id, sample, "gesture"))
 
     return Rendered(prompt, cfg.text("SystemPrompt", ""), "reply", rag_hits,
-                    f"{_summary(view)}; {player_name} says: {message!r}", prompt.startswith(FORMAT_ERROR))
+                    f"{_summary(view)}; {player_name} says: {message!r}", FORMAT_ERROR in prompt)
 
 
 def pick_env_text(cfg: Config, view: CaseView, sample: int) -> str:
@@ -438,12 +444,24 @@ def pick_env_text(cfg: Config, view: CaseView, sample: int) -> str:
     if not options:
         raise CaseError(f"case '{view.id}': {tpl_key} is empty or unknown in the config")
     chosen = options[rng_for(view.id, sample, "env").randrange(len(options))]
+    if ALLOWED_PLACEHOLDERS.get("OllamaChat." + short) == set():
+        return chosen                     # plain lists (e.g. the guild raid/endgame topics) are used unformatted
     env_vars = rnd.get("env_vars") or {}
     tokens, errors = parse_template(chosen)
     if errors:
-        return FORMAT_ERROR
+        raise CaseError(f"case '{view.id}': {tpl_key} option {chosen!r} fails to format ({'; '.join(errors)}); "
+                        f"the module drops such a topic, so it would never be chosen")
+    known = ALLOWED_PLACEHOLDERS.get("OllamaChat." + short)
+    unknown = sorted({t.text for t in tokens if t.kind == "field"} - known) if known is not None else []
+    if unknown:
+        raise CaseError(f"case '{view.id}': {tpl_key} option {chosen!r} uses {unknown}, which the module does not "
+                        f"pass; it fails to format and the module drops such a topic, so it would never be chosen")
     args = {t.text: env_vars.get(t.text, MISSING) for t in tokens if t.kind == "field"}
-    return safe_format(chosen, args, f"case '{view.id}' {tpl_key}")
+    text = safe_format(chosen, args, f"case '{view.id}' {tpl_key}")
+    if text == FORMAT_ERROR:
+        raise CaseError(f"case '{view.id}': {tpl_key} option {chosen!r} fails to format; "
+                        f"the module drops such a topic, so it would never be chosen")
+    return text
 
 
 def pick_variation(cfg: Config, view: CaseView, sample: int) -> str:
@@ -483,7 +501,7 @@ def render_random(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     prompt += build_roleplay_voice(cfg, view)
     prompt += build_gesture_prompt(cfg, rng_for(view.id, sample, "gesture"))
     return Rendered(prompt, cfg.text("SystemPrompt", ""), "random", [],
-                    f"{_summary(view)}; topic: {args['environment_info']}", prompt.startswith(FORMAT_ERROR))
+                    f"{_summary(view)}; topic: {args['environment_info']}", FORMAT_ERROR in prompt)
 
 
 # Event kind (what a case names) -> the config key whose value is the event type text, as
@@ -549,7 +567,7 @@ def render_event(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     prompt += build_gesture_prompt(cfg, rng_for(view.id, sample, "gesture"))
     return Rendered(prompt, cfg.text("SystemPrompt", ""), "event", [],
                     f"{_summary(view)}; event: {ev.get('actor_name')} {args['event_type']} {ev.get('event_detail')}",
-                    prompt.startswith(FORMAT_ERROR))
+                    FORMAT_ERROR in prompt)
 
 
 def render_case(cfg: Config, case: Mapping[str, Any], personalities: Mapping[str, str],

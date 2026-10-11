@@ -90,6 +90,9 @@ processed reply, token usage, latency, status, error and - for the reply path - 
   round trip, `4.0` prints as `4`, fixed notation for decimal exponents -4 to 15 as {fmt} does).
 * **Roleplay mode** is not reimplemented: with `Roleplay.Enable = 1` the case must supply `roleplay_voice`, and the
   roleplay meta-term reply filter (`Roleplay_FilterMetaTerms`) is not applied.
+* **`MaxConversationHistory = 0`**: the C++ keeps no entries but still emits the history header and footer;
+  this keeps at least one. **`Roleplay.PromptVariations` / `QuestionVariations`** are split without trimming and
+  without the built-in fallbacks the C++ applies when the list is empty (only matters with roleplay on).
 * **Guild chatter** templates (`GuildEnvComment*`, guild events) are not rendered.
 * **RAG**: file order is sorted by name and the vocabulary sorted, where the C++ takes directory order and hash order;
   results do not depend on either, apart from the order of exactly tied scores. The C++ uses `float` accumulators,
