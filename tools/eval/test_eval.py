@@ -384,6 +384,19 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(render.f32_repr(0.05), "0.05")
         self.assertEqual(render.f32_repr(-1.0), "-1")
 
+    def test_float_fixed_vs_scientific_boundaries(self):
+        # {fmt} prints the shortest round-trip digits in fixed notation when the decimal exponent E
+        # of the first digit is -4 <= E < 16, else in scientific notation with a 2-digit exponent.
+        # Expected strings below follow that rule (10 -> E=1, 0.0001 -> E=-4, 1e-5 -> E=-5, 1e16 -> E=16).
+        for value, expected in [(10, "10"), (20, "20"), (30, "30"), (40, "40"), (100, "100"), (1200, "1200"),
+                                (0.0001, "0.0001"), (1e-5, "1e-05"), (1e16, "1e+16"), (12.5, "12.5"),
+                                (1e15, "1000000000000000"), (0.00012, "0.00012"), (-20, "-20"), (0, "0")]:
+            with self.subTest(value=value):
+                self.assertEqual(render.f32_repr(float(value)), expected)
+
+    def test_round_distance_renders_in_prompt(self):
+        self.assertEqual(render._stringify(20.0), "20")
+
 
 if __name__ == "__main__":
     unittest.main()

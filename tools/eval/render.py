@@ -105,17 +105,35 @@ DEFAULT_SENTIMENT_TEMPLATE = ("Your relationship sentiment with {player_name} is
 
 
 def f32_repr(x: float) -> str:
-    """How fmt prints a float: shortest text that round-trips as float32; integral values without '.0'."""
+    """How fmt prints a float: shortest text that round-trips as float32.
+
+    {fmt} writes the shortest round-trip digits in fixed notation when the decimal
+    exponent E of the first digit satisfies -4 <= E < 16, otherwise in scientific
+    notation (``1e+16``, ``1e-05``). Integral values print without ``.0``.
+    """
     packed = struct.unpack("f", struct.pack("f", float(x)))[0]
+    if packed != packed or packed in (float("inf"), float("-inf")):
+        return {"nan": "nan", "inf": "inf", "-inf": "-inf"}[repr(packed)]
+    if packed == 0:
+        return "-0" if str(packed).startswith("-") else "0"
     for digits in range(1, 10):
-        s = f"{packed:.{digits}g}"
-        if struct.unpack("f", struct.pack("f", float(s)))[0] == packed:
+        sci = f"{packed:.{digits - 1}e}"
+        if struct.unpack("f", struct.pack("f", float(sci)))[0] == packed:
             break
-    if "e" in s:
-        return s
-    if "." in s:
-        s = s.rstrip("0").rstrip(".")
-    return s
+    mantissa, _, exp_text = sci.partition("e")
+    exponent = int(exp_text)
+    if not -4 <= exponent < 16:
+        return sci
+    sign = "-" if mantissa.startswith("-") else ""
+    digit_str = mantissa.lstrip("-").replace(".", "")
+    if exponent >= 0:
+        int_part = digit_str[: exponent + 1].ljust(exponent + 1, "0")
+        frac_part = digit_str[exponent + 1:]
+    else:
+        int_part = "0"
+        frac_part = "0" * (-exponent - 1) + digit_str
+    frac_part = frac_part.rstrip("0")
+    return sign + int_part + ("." + frac_part if frac_part else "")
 
 
 def _stringify(v: Any) -> str:
