@@ -28,6 +28,7 @@ sys.path.insert(0, str(HERE.parent))
 import api                                   # noqa: E402
 import build_conf                            # noqa: E402
 import metrics                               # noqa: E402
+import personalities as personalities_mod    # noqa: E402
 import postprocess                           # noqa: E402
 import render                                # noqa: E402
 
@@ -59,6 +60,8 @@ class Variant:
     overrides: dict
     cfg: render.Config
     settings: api.Settings
+    personalities: dict[str, str]
+    personalities_file: Path
 
 
 @dataclass
@@ -72,6 +75,8 @@ class Job:
     emote: str = ""
     skipped: str = ""
     crashed: str = ""
+    personality: str = ""       # sweep mode: the key this job was swept over (candidate's name for it)
+    note: str = ""              # sweep mode: e.g. the baseline fell back to the default prompt
 
 
 def load_cases(directory: Path) -> list[dict]:
@@ -92,6 +97,36 @@ def load_cases(directory: Path) -> list[dict]:
         case["_file"] = f.name
         cases.append(case)
     return cases
+
+
+def expand_sweep(spec: str, personalities: personalities_mod.Personalities) -> list[str]:
+    """Keys a --sweep-personalities value stands for. ``all`` = every non-manual_only key."""
+    if spec.strip() == "all":
+        keys = [k for k, (_p, manual) in personalities.items() if not manual]
+        if not keys:
+            raise ValueError("--sweep-personalities all: the candidate file has no non-manual_only personalities")
+        return keys
+    keys = [k.strip() for k in spec.split(",") if k.strip()]
+    if not keys:
+        raise ValueError("--sweep-personalities: no keys given")
+    unknown = [k for k in keys if k not in personalities]
+    if unknown:
+        raise ValueError(f"--sweep-personalities: not in the candidate personalities file: {', '.join(unknown)}")
+    return list(dict.fromkeys(keys))
+
+
+def sweep_case(case: dict, key: str) -> dict:
+    """The case with its personality replaced. The key also joins the RNG seed (see render.CaseView)."""
+    return {**case, "bot": {**(case.get("bot") or {}), "personality": key}, "_seed_salt": key}
+
+
+def baseline_key_for(key: str, baseline: dict[str, str]) -> tuple[str, str]:
+    """(personality name to render, report note). A key the baseline file lacks gets the module's fallback:
+    GetPersonalityPromptAddition returns DefaultPersonalityPrompt for an unknown key."""
+    if key in baseline:
+        return key, ""
+    return "default", (f"baseline has no '{key}'; it uses DefaultPersonalityPrompt (name `default`), "
+                       f"as the module does for an unknown key")
 
 
 def md_cell(text: str) -> str:
@@ -115,7 +150,7 @@ def failure_of(j: Job) -> str:
 def raw_record(j: Job) -> dict:
     r = j.result
     return {
-        "case": j.case["id"], "variant": j.variant.name, "sample": j.sample,
+        "case": j.case["id"], "variant": j.variant.name, "sample": j.sample, "personality": j.personality or None,
         "prompt_hash": sha(j.rendered.prompt), "system_hash": sha(j.rendered.system_prompt),
         "raw": r.text if r else None, "processed": j.processed or None, "emote": j.emote or None,
         "input_tokens": r.input_tokens if r else None, "output_tokens": r.output_tokens if r else None,
@@ -146,7 +181,64 @@ def execute(job: Job) -> Job:
     return job
 
 
-def build_report(jobs: list[Job], cases: list[dict], variants: list[Variant], args, openers, banned, stamp: str) -> str:
+def case_block(case: dict, cjobs: list[Job], args, level: str) -> list[str]:
+    md: list[str] = []
+    first = cjobs[0].rendered
+    md.append(f"{level} {case['id']}  ({case['path']})\n")
+    if case.get("notes"):
+        md.append(f"_Notes:_ {case['notes']}\n")
+    md.append(f"_Situation:_ {first.summary}\n")
+    md.append("| # | baseline | candidate |")
+    md.append("|---|---|---|")
+    for s in range(args.samples):
+        cells = []
+        for name in ("baseline", "candidate"):
+            j = next(x for x in cjobs if x.sample == s and x.variant.name == name)
+            f = failure_of(j)
+            cells.append(f"**FAILED:** {md_cell(f)}" if f else md_cell(j.processed))
+        md.append(f"| {s + 1} | {cells[0]} | {cells[1]} |")
+    rag_hits = {tuple((h['id'], h['score']) for h in x.rendered.rag) for x in cjobs if x.rendered.rag}
+    for hits in sorted(rag_hits):
+        md.append(f"\nRAG retrieved: {', '.join(f'{i} ({sc})' for i, sc in hits)}")
+    md.append("")
+    return md
+
+
+SWEEP_METRICS = ["replies", "slang_open_pct", "words_mean", "distinct_opener_ratio", "near_dup_pct"]
+
+
+def personality_section(key: str, jobs: list[Job], cases: list[dict], variants: list[Variant],
+                        args, openers, banned) -> list[str]:
+    kjobs = [j for j in jobs if j.personality == key]
+    md = [f"### {key}\n"]
+    base_p = variants[0].personalities.get(key)
+    cand_p = variants[1].personalities.get(key)
+    note = next((j.note for j in kjobs if j.note), "")
+    if note:
+        md.append(f"_Note:_ {note}\n")
+    if base_p is not None and base_p != cand_p:
+        md.append(f"_Prompt, baseline:_ {base_p}\n")
+        md.append(f"_Prompt, candidate:_ {cand_p}\n")
+    else:
+        md.append(f"_Prompt:_ {cand_p}\n")
+    st = {}
+    for v in variants:
+        vj = [j for j in kjobs if j.variant is v]
+        st[v.name] = metrics.compute([j.processed for j in vj if not failure_of(j)],
+                                     sum(1 for j in vj if failure_of(j)), openers, banned)
+    md.append("| metric | baseline | candidate |")
+    md.append("|---|---|---|")
+    for m in SWEEP_METRICS:
+        md.append(f"| {m} | {st['baseline'][m]} | {st['candidate'][m]} |")
+    md.append("")
+    for case in cases:
+        cjobs = [j for j in kjobs if j.case["id"] == case["id"]]
+        md.extend(case_block(case, cjobs, args, "####"))
+    return md
+
+
+def build_report(jobs: list[Job], cases: list[dict], variants: list[Variant], args, openers, banned, stamp: str,
+                 sweep: list[str] | None = None) -> str:
     stats = {}
     for v in variants:
         vj = [j for j in jobs if j.variant is v]
@@ -160,6 +252,9 @@ def build_report(jobs: list[Job], cases: list[dict], variants: list[Variant], ar
     md: list[str] = []
     md.append(f"# Prompt eval {stamp}\n")
     md.append(f"* candidate: `{args.candidate}`  baseline: `{args.baseline or 'bare .dist'}`")
+    md.append(f"* personalities: candidate `{variants[1].personalities_file}`  baseline `{variants[0].personalities_file}`")
+    if sweep:
+        md.append(f"* personality sweep: {len(sweep)} key(s): {', '.join(sweep)}")
     md.append(f"* cases: {len(cases)}, samples: {args.samples}, calls made: {sum(1 for j in jobs if j.result)}")
     md.append("* models: " + ", ".join(f"{v.name}={v.settings.provider}/{v.settings.model}" for v in variants))
     if in_toks and out_toks:
@@ -175,27 +270,14 @@ def build_report(jobs: list[Job], cases: list[dict], variants: list[Variant], ar
         top = ", ".join(f"{t} x{n}" for t, n in stats[v]["banned_top"]) or "none"
         md.append(f"| banned top ({v}) | {top if v == 'baseline' else ''} | {top if v == 'candidate' else ''} |")
     md.append("")
-    md.append("## Cases\n")
-    for case in cases:
-        cjobs = [j for j in jobs if j.case is case]
-        first = cjobs[0].rendered
-        md.append(f"### {case['id']}  ({case['path']})\n")
-        if case.get("notes"):
-            md.append(f"_Notes:_ {case['notes']}\n")
-        md.append(f"_Situation:_ {first.summary}\n")
-        md.append("| # | baseline | candidate |")
-        md.append("|---|---|---|")
-        for s in range(args.samples):
-            cells = []
-            for name in ("baseline", "candidate"):
-                j = next(x for x in cjobs if x.sample == s and x.variant.name == name)
-                f = failure_of(j)
-                cells.append(f"**FAILED:** {md_cell(f)}" if f else md_cell(j.processed))
-            md.append(f"| {s + 1} | {cells[0]} | {cells[1]} |")
-        rag_hits = {tuple((h['id'], h['score']) for h in x.rendered.rag) for x in cjobs if x.rendered.rag}
-        for hits in sorted(rag_hits):
-            md.append(f"\nRAG retrieved: {', '.join(f'{i} ({sc})' for i, sc in hits)}")
-        md.append("")
+    if sweep:
+        md.append("## Personalities\n")
+        for key in sweep:
+            md.extend(personality_section(key, jobs, cases, variants, args, openers, banned))
+    else:
+        md.append("## Cases\n")
+        for case in cases:
+            md.extend(case_block(case, [j for j in jobs if j.case is case], args, "###"))
     return "\n".join(md)
 
 
@@ -206,7 +288,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--candidate", required=True, type=Path, help="overrides TOML under test")
     ap.add_argument("--baseline", type=Path, help="overrides TOML to compare against (default: bare .dist)")
     ap.add_argument("--cases", required=True, type=Path, help="directory of case *.toml files")
-    ap.add_argument("--personalities", type=Path, default=HERE / "personalities-stock.toml")
+    ap.add_argument("--personalities", type=Path, default=HERE / "personalities-stock.toml",
+                    help="personalities TOML for the candidate (and for the baseline unless --baseline-personalities)")
+    ap.add_argument("--baseline-personalities", type=Path, help="personalities TOML for the baseline")
+    ap.add_argument("--sweep-personalities", nargs="?", const="all", metavar="all|KEY,KEY,...",
+                    help="render each case once per personality key instead of the case's own; 'all' = every "
+                         "key of the candidate file that is not manual_only")
     ap.add_argument("--rag-dir", type=Path, help="directory of RAG *.json (default: RAGDataPath from the config)")
     ap.add_argument("--banned-terms", type=Path)
     ap.add_argument("--openers", default=",".join(metrics.DEFAULT_OPENERS),
@@ -234,31 +321,52 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    with open(args.personalities, "rb") as fh:
-        personalities = tomllib.load(fh)
+    try:
+        cand_pers = personalities_mod.load_personalities(args.personalities)
+        base_pers_file = args.baseline_personalities or args.personalities
+        base_pers = personalities_mod.load_personalities(base_pers_file)
+        sweep = expand_sweep(args.sweep_personalities, cand_pers) if args.sweep_personalities else []
+    except (ValueError, OSError, tomllib.TOMLDecodeError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
     cases = load_cases(args.cases)
     banned = metrics.load_banned_terms(args.banned_terms)
     openers = [o.strip() for o in args.openers.split(",") if o.strip()]
 
     key_cache: dict[str, str] = {}
 
-    def make_variant(name: str, overrides: dict, conf: dict) -> Variant:
+    def make_variant(name: str, overrides: dict, conf: dict, pers, pers_file: Path) -> Variant:
         cfg = render.Config(conf)
         provider = api.parse_provider(conf.get("OllamaChat.Provider", "ollama"))
         key = key_cache.setdefault(provider, api.resolve_api_key(args.api_key_env, provider))
-        return Variant(name, overrides, cfg, api.settings_from_config(conf, key))
+        return Variant(name, overrides, cfg, api.settings_from_config(conf, key),
+                       personalities_mod.prompts_only(pers), pers_file)
 
-    variants = [make_variant("baseline", base_over, base_conf), make_variant("candidate", cand_over, cand_conf)]
+    variants = [make_variant("baseline", base_over, base_conf, base_pers, base_pers_file),
+                make_variant("candidate", cand_over, cand_conf, cand_pers, args.personalities)]
+    if sweep:
+        # The sweep is meaningless with personalities off (every key would render the default prompt),
+        # and the baseline is often the bare .dist, where they are off. Turn them on for both variants.
+        for v in variants:
+            if not v.cfg.boolean("EnableRPPersonalities", False):
+                v.cfg = render.Config({**v.cfg.values, "OllamaChat.EnableRPPersonalities": "1"})
+                print(f"note: {v.name}: EnableRPPersonalities forced on for the sweep")
 
     # ---- render everything up front: a bad case should fail before any spend ----
     jobs: list[Job] = []
     try:
         rag_by_variant = {v.name: render.load_rag(v.cfg, args.rag_dir, MODULE_ROOT) for v in variants}
         for case in cases:
-            for sample in range(args.samples):
-                for v in variants:
-                    rendered = render.render_case(v.cfg, case, personalities, rag_by_variant[v.name], sample)
-                    jobs.append(Job(case, v, sample, rendered))
+            for key in sweep or [""]:
+                for sample in range(args.samples):
+                    for v in variants:
+                        c, note, name = case, "", key
+                        if sweep:
+                            name, note = (baseline_key_for(key, v.personalities) if v.name == "baseline"
+                                          else (key, ""))
+                            c = {**sweep_case(case, name), "_seed_salt": key}
+                        rendered = render.render_case(v.cfg, c, v.personalities, rag_by_variant[v.name], sample)
+                        jobs.append(Job(case, v, sample, rendered, personality=key, note=note))
     except (render.CaseError, ValueError, OSError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -271,7 +379,8 @@ def main(argv: list[str] | None = None) -> int:
     by_path: dict[str, int] = {}
     for j in jobs:
         by_path[j.rendered.path] = by_path.get(j.rendered.path, 0) + 1
-    print(f"{len(cases)} cases x {args.samples} samples x {len(variants)} variants = {len(jobs)} prompts "
+    print(f"{len(cases)} cases x {f'{len(sweep)} personalities x ' if sweep else ''}{args.samples} samples x "
+          f"{len(variants)} variants = {len(jobs)} prompts "
           f"({', '.join(f'{k}: {v}' for k, v in sorted(by_path.items()))})")
     skipped_fmt = len(jobs) - calls
     if skipped_fmt:
@@ -284,7 +393,7 @@ def main(argv: list[str] | None = None) -> int:
         pdir = run_dir / "prompts"
         pdir.mkdir(parents=True, exist_ok=True)
         for j in jobs:
-            (pdir / f"{j.case['id']}-{j.variant.name}-{j.sample}.txt").write_text(
+            (pdir / f"{j.case['id']}-{j.personality + '-' if j.personality else ''}{j.variant.name}-{j.sample}.txt").write_text(
                 (f"[system]\n{j.rendered.system_prompt}\n\n" if j.rendered.system_prompt else "") +
                 f"[user]\n{j.rendered.prompt}\n", encoding="utf-8")
         print(f"dry run: wrote {len(jobs)} prompts to {pdir}; no network calls made")
@@ -330,7 +439,7 @@ def main(argv: list[str] | None = None) -> int:
     finally:
         # Always leave a report behind, even after Ctrl-C or an unexpected error.
         (run_dir / "report.md").write_text(
-            build_report(jobs, cases, variants, args, openers, banned, stamp), encoding="utf-8")
+            build_report(jobs, cases, variants, args, openers, banned, stamp, sweep), encoding="utf-8")
 
     print(f"report: {run_dir / 'report.md'}")
     print(f"raw:    {run_dir / 'raw.jsonl'}")

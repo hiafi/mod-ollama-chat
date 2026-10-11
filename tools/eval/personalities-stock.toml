@@ -1,5 +1,5 @@
-# Personality prompts: KEY = "prompt text". A trailing '# manual_only' marks keys the module
-# never assigns at random.
+# Personality prompts: KEY = "prompt text". A key the module never assigns at random is written
+# KEY = { prompt = "prompt text", manual_only = true }.
 GAMER = "Focus on game mechanics, min-maxing, and efficiency."
 ROLEPLAYER = "Respond in-character, weaving lore into your response."
 LOOTGOBLIN = "Talk about rare loot, gold strategies, and treasure hunting."
