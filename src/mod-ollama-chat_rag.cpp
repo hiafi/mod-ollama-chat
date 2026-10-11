@@ -31,21 +31,18 @@ bool OllamaRAGSystem::Initialize()
         return false;
     }
 
-    // Build vocabulary from all entries
-    std::unordered_set<std::string> vocabSet;
-    for (const auto& entry : m_ragEntries) {
-        auto tokens = TokenizeText(PreprocessText(entry.title + " " + entry.content));
-        for (const auto& token : tokens) {
-            vocabSet.insert(token);
-        }
+    // Build the vocabulary and each entry's sparse term-frequency vector
+    for (auto& entry : m_ragEntries) {
+        std::string entryText = entry.title + " " + entry.content;
         for (const auto& keyword : entry.keywords) {
-            auto keywordTokens = TokenizeText(PreprocessText(keyword));
-            for (const auto& token : keywordTokens) {
-                vocabSet.insert(token);
-            }
+            entryText += " " + keyword;
+        }
+        entry.termFreq = BuildTermFrequencies(PreprocessText(entryText));
+        entry.norm = VectorNorm(entry.termFreq);
+        for (const auto& term : entry.termFreq) {
+            m_vocabulary.insert(term.first);
         }
     }
-    m_vocabulary.assign(vocabSet.begin(), vocabSet.end());
 
     m_initialized = true;
     LOG_INFO("server.loading", "[Ollama Chat RAG] Initialized with {} entries and {} vocabulary terms",
@@ -154,8 +151,17 @@ std::vector<RAGResult> OllamaRAGSystem::RetrieveRelevantInfo(const std::string& 
         return results;
     }
 
+    // Only terms of the vocabulary count in the query vector; the others are dropped, as in a dense vector.
+    std::unordered_map<std::string, float> queryTf;
+    for (const auto& term : BuildTermFrequencies(PreprocessText(query))) {
+        if (m_vocabulary.count(term.first)) {
+            queryTf.insert(term);
+        }
+    }
+    const float queryNorm = VectorNorm(queryTf);
+
     for (const auto& entry : m_ragEntries) {
-        float similarity = CalculateSimilarity(query, entry);
+        float similarity = CalculateSimilarity(queryTf, queryNorm, entry);
         if (similarity >= similarityThreshold) {
             results.push_back({&entry, similarity});
         }
@@ -193,19 +199,44 @@ std::string OllamaRAGSystem::GetFormattedRAGInfo(const std::vector<RAGResult>& r
     return ss.str();
 }
 
-float OllamaRAGSystem::CalculateSimilarity(const std::string& query, const RAGEntry& entry)
+float OllamaRAGSystem::CalculateSimilarity(const std::unordered_map<std::string, float>& queryTf, float queryNorm,
+                                           const RAGEntry& entry) const
 {
-    // Combine entry content with keywords for better matching
-    std::string entryText = entry.title + " " + entry.content;
-    for (const auto& keyword : entry.keywords) {
-        entryText += " " + keyword;
+    if (queryNorm == 0.0f || entry.norm == 0.0f) {
+        return 0.0f;
     }
 
-    // Simple TF-IDF like similarity using term frequency vectors
-    auto queryVector = TextToTFVector(PreprocessText(query), m_vocabulary);
-    auto entryVector = TextToTFVector(PreprocessText(entryText), m_vocabulary);
+    // Walk the smaller map and look terms up in the larger one
+    const auto& small = queryTf.size() <= entry.termFreq.size() ? queryTf : entry.termFreq;
+    const auto& large = queryTf.size() <= entry.termFreq.size() ? entry.termFreq : queryTf;
 
-    return CalculateCosineSimilarity(queryVector, entryVector);
+    float dotProduct = 0.0f;
+    for (const auto& term : small) {
+        auto it = large.find(term.first);
+        if (it != large.end()) {
+            dotProduct += term.second * it->second;
+        }
+    }
+
+    return dotProduct / (queryNorm * entry.norm);
+}
+
+std::unordered_map<std::string, float> OllamaRAGSystem::BuildTermFrequencies(const std::string& preprocessedText) const
+{
+    std::unordered_map<std::string, float> termFreq;
+    for (const auto& token : TokenizeText(preprocessedText)) {
+        termFreq[token] += 1.0f;
+    }
+    return termFreq;
+}
+
+float OllamaRAGSystem::VectorNorm(const std::unordered_map<std::string, float>& termFreq)
+{
+    float sum = 0.0f;
+    for (const auto& term : termFreq) {
+        sum += term.second * term.second;
+    }
+    return std::sqrt(sum);
 }
 
 std::string OllamaRAGSystem::PreprocessText(const std::string& text) const
@@ -232,52 +263,4 @@ std::vector<std::string> OllamaRAGSystem::TokenizeText(const std::string& text) 
         }
     }
     return tokens;
-}
-
-float OllamaRAGSystem::CalculateCosineSimilarity(const std::vector<float>& vec1, const std::vector<float>& vec2) const
-{
-    if (vec1.size() != vec2.size()) {
-        return 0.0f;
-    }
-
-    float dotProduct = 0.0f;
-    float norm1 = 0.0f;
-    float norm2 = 0.0f;
-
-    for (size_t i = 0; i < vec1.size(); ++i) {
-        dotProduct += vec1[i] * vec2[i];
-        norm1 += vec1[i] * vec1[i];
-        norm2 += vec2[i] * vec2[i];
-    }
-
-    norm1 = std::sqrt(norm1);
-    norm2 = std::sqrt(norm2);
-
-    if (norm1 == 0.0f || norm2 == 0.0f) {
-        return 0.0f;
-    }
-
-    return dotProduct / (norm1 * norm2);
-}
-
-std::vector<float> OllamaRAGSystem::TextToTFVector(const std::string& text, const std::vector<std::string>& vocabulary) const
-{
-    auto tokens = TokenizeText(text);
-    std::unordered_map<std::string, int> termFreq;
-
-    // Count term frequencies
-    for (const auto& token : tokens) {
-        termFreq[token]++;
-    }
-
-    // Create TF vector
-    std::vector<float> vector(vocabulary.size(), 0.0f);
-    for (size_t i = 0; i < vocabulary.size(); ++i) {
-        auto it = termFreq.find(vocabulary[i]);
-        if (it != termFreq.end()) {
-            vector[i] = static_cast<float>(it->second);
-        }
-    }
-
-    return vector;
 }
