@@ -429,6 +429,7 @@ extern bool        g_EnableRAG;                          // Enable/disable RAG f
 extern std::string g_RAGDataPath;                        // Path to RAG data files
 extern uint32_t    g_RAGMaxRetrievedItems;               // Max items to retrieve
 extern float       g_RAGSimilarityThreshold;             // Similarity threshold for retrieval
+extern bool        g_RAGIgnoreCommonWords;               // Drop common words (the, is, in, ...) from entries and queries
 extern std::string g_RAGPromptTemplate;                  // Template for RAG info in prompts
 
 class OllamaRAGSystem;

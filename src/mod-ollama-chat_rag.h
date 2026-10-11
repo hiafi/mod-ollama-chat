@@ -63,6 +63,7 @@ private:
 private:
     std::vector<RAGEntry> m_ragEntries;
     std::unordered_set<std::string> m_vocabulary;
+    bool m_ignoreCommonWords;
     bool m_initialized;
 };
 

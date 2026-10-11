@@ -1044,6 +1044,16 @@ OllamaChat.RAGSimilarityThreshold = 0.3
 
 
 
+# OllamaChat.RAGIgnoreCommonWords
+#     Description: Leave common words (the, is, in, where, you, ...) out of the similarity calculation, for the
+#                  entries and for the player's message. Without it a short chat message matches long entries
+#                  mostly on those words, which makes the score a poor guide to relevance and forces a high
+#                  OllamaChat.RAGSimilarityThreshold. Scores change when this is switched, so retune the threshold.
+#     Default:     0 (false)
+OllamaChat.RAGIgnoreCommonWords = 0
+
+
+
 # OllamaChat.RAGPromptTemplate
 #     Description: Template for including RAG information in bot prompts.
 #     Placeholders (named): {rag_info}

@@ -10,7 +10,22 @@
 
 namespace fs = std::filesystem;
 
-OllamaRAGSystem::OllamaRAGSystem() : m_initialized(false) {}
+namespace {
+
+// Words that say nothing about the topic. With raw term-frequency cosine they dominate the score of a short chat
+// message against a long entry, so "where is the warrior trainer in the valley" matches every entry that has is,
+// the and in. Applied to both the entries and the query when OllamaChat.RAGIgnoreCommonWords is on.
+const std::unordered_set<std::string> kCommonWords = {
+    "a", "an", "the", "to", "of", "in", "on", "for", "and", "or", "is", "are", "was", "be", "been", "am", "i", "im",
+    "you", "we", "he", "she", "it", "they", "me", "my", "your", "our", "his", "her", "its", "their", "this", "that",
+    "these", "those", "with", "at", "by", "from", "as", "do", "does", "did", "can", "could", "would", "should", "will",
+    "what", "where", "who", "how", "when", "why", "which", "there", "here", "so", "if", "not", "no", "yes", "ok",
+    "just"
+};
+
+}
+
+OllamaRAGSystem::OllamaRAGSystem() : m_ignoreCommonWords(false), m_initialized(false) {}
 
 OllamaRAGSystem::~OllamaRAGSystem() {}
 
@@ -22,6 +37,7 @@ bool OllamaRAGSystem::Initialize()
 
     m_ragEntries.clear();
     m_vocabulary.clear();
+    m_ignoreCommonWords = g_RAGIgnoreCommonWords;
 
     // Use the configured RAG data path directly
     std::string fullPath = g_RAGDataPath;
@@ -225,6 +241,9 @@ std::unordered_map<std::string, float> OllamaRAGSystem::BuildTermFrequencies(con
 {
     std::unordered_map<std::string, float> termFreq;
     for (const auto& token : TokenizeText(preprocessedText)) {
+        if (m_ignoreCommonWords && kCommonWords.count(token)) {
+            continue;
+        }
         termFreq[token] += 1.0f;
     }
     return termFreq;
