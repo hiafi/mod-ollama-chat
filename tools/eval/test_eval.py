@@ -448,5 +448,70 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(render._stringify(20.0), "20")
 
 
+class RunRobustnessTests(unittest.TestCase):
+    """run_eval keeps what was paid for: per-sample failures, incremental raw.jsonl, report in finally."""
+
+    def setUp(self):
+        import tempfile
+        import shutil
+        import run_eval
+        self.run_eval = run_eval
+        self.tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.cases = self.tmp / "cases"
+        self.cases.mkdir()
+        for name in ("reply-greeting.toml", "random-landmark.toml", "event-levelup.toml"):
+            shutil.copy(HERE / "cases-example" / name, self.cases / name)
+        (self.tmp / "cand.toml").write_text("", encoding="utf-8")
+        self.calls = 0
+        self._orig = run_eval.api.query
+        self.addCleanup(setattr, run_eval.api, "query", self._orig)
+
+    def run_main(self, fake):
+        self.run_eval.api.query = fake
+        out = self.tmp / "out"
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()):
+            rc = self.run_eval.main(["--dist", str(HERE.parents[1] / "conf" / "mod_ollama_chat.conf.dist"),
+                                     "--candidate", str(self.tmp / "cand.toml"), "--cases", str(self.cases),
+                                     "--samples", "1", "--concurrency", "1", "--yes", "--out", str(out)])
+        return rc, out
+
+    def reports(self, out):
+        run = next(out.iterdir())
+        return run / "raw.jsonl", run / "report.md"
+
+    def test_unexpected_exception_is_recorded_and_run_continues(self):
+        def fake(settings, prompt):
+            self.calls += 1
+            if self.calls == 2:
+                raise ValueError("truncated body")
+            return api.ApiResult(ok=True, text="hello there friend", status=200, input_tokens=10, output_tokens=3)
+        rc, out = self.run_main(fake)
+        self.assertEqual(rc, 0)
+        raw, report = self.reports(out)
+        import json
+        rows = [json.loads(line) for line in raw.read_text(encoding="utf-8").splitlines()]
+        self.assertEqual(len(rows), 6)
+        bad = [r for r in rows if r["error"]]
+        self.assertEqual(len(bad), 1)
+        self.assertIn("ValueError: truncated body", bad[0]["error"])
+        self.assertIn("ValueError: truncated body", report.read_text(encoding="utf-8"))
+
+    def test_report_and_partial_raw_survive_an_abort(self):
+        def fake(settings, prompt):
+            self.calls += 1
+            if self.calls == 3:
+                raise KeyboardInterrupt()
+            return api.ApiResult(ok=True, text="hello there friend", status=200)
+        with self.assertRaises(KeyboardInterrupt):
+            self.run_main(fake)
+        raw, report = self.reports(self.tmp / "out")
+        self.assertGreaterEqual(len(raw.read_text(encoding="utf-8").splitlines()), 2)
+        self.assertTrue(report.exists())
+        self.assertIn("## Metrics", report.read_text(encoding="utf-8"))
+
+
 if __name__ == "__main__":
     unittest.main()

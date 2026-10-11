@@ -71,6 +71,7 @@ class Job:
     processed: str = ""
     emote: str = ""
     skipped: str = ""
+    crashed: str = ""
 
 
 def load_cases(directory: Path) -> list[dict]:
@@ -95,6 +96,108 @@ def load_cases(directory: Path) -> list[dict]:
 
 def md_cell(text: str) -> str:
     return text.replace("|", "\\|").replace("\n", " ").strip() or "_(empty)_"
+
+
+def failure_of(j: Job) -> str:
+    if j.crashed:
+        return j.crashed
+    if j.skipped:
+        return j.skipped
+    if j.result is None:
+        return "not run (the run stopped early)"
+    if not j.result.ok:
+        return j.result.error or "request failed"
+    if not j.processed:
+        return "empty reply after clean-up"
+    return ""
+
+
+def raw_record(j: Job) -> dict:
+    r = j.result
+    return {
+        "case": j.case["id"], "variant": j.variant.name, "sample": j.sample,
+        "prompt_hash": sha(j.rendered.prompt), "system_hash": sha(j.rendered.system_prompt),
+        "raw": r.text if r else None, "processed": j.processed or None, "emote": j.emote or None,
+        "input_tokens": r.input_tokens if r else None, "output_tokens": r.output_tokens if r else None,
+        "latency_ms": r.latency_ms if r else None, "status": r.status if r else None,
+        "error": (r.error if r and not r.ok else None) or j.skipped or j.crashed or None,
+        "rag": j.rendered.rag,
+    }
+
+
+def execute(job: Job) -> Job:
+    """Run one job. Any exception becomes a recorded failure for that sample; the run goes on."""
+    try:
+        if job.rendered.format_error:
+            job.skipped = "prompt contains [Format Error]"
+            return job
+        s = job.variant.settings
+        s_local = api.Settings(**{**s.__dict__, "system_prompt": job.rendered.system_prompt})
+        job.result = api.query(s_local, job.rendered.prompt)
+        if job.result.ok:
+            cfg = job.variant.cfg
+            job.processed, job.emote = postprocess.process_llm_response(
+                job.result.text, str(job.case["bot"]["name"]),
+                strip_markdown_on=cfg.boolean("StripMarkdown", True),
+                strip_decorative_on=cfg.boolean("StripDecorativeUnicode", True),
+                max_reply_length=cfg.integer("MaxReplyLength", 240))
+    except Exception as exc:                                  # noqa: BLE001 - a lost run costs real money
+        job.crashed = f"{type(exc).__name__}: {exc}"
+    return job
+
+
+def build_report(jobs: list[Job], cases: list[dict], variants: list[Variant], args, openers, banned, stamp: str) -> str:
+    stats = {}
+    for v in variants:
+        vj = [j for j in jobs if j.variant is v]
+        replies = [j.processed for j in vj if not failure_of(j)]
+        stats[v.name] = metrics.compute(replies, sum(1 for j in vj if failure_of(j)), openers, banned)
+
+    ok_results = [j.result for j in jobs if j.result and j.result.ok]
+    in_toks = [r.input_tokens for r in ok_results if r.input_tokens is not None]
+    out_toks = [r.output_tokens for r in ok_results if r.output_tokens is not None]
+
+    md: list[str] = []
+    md.append(f"# Prompt eval {stamp}\n")
+    md.append(f"* candidate: `{args.candidate}`  baseline: `{args.baseline or 'bare .dist'}`")
+    md.append(f"* cases: {len(cases)}, samples: {args.samples}, calls made: {sum(1 for j in jobs if j.result)}")
+    md.append("* models: " + ", ".join(f"{v.name}={v.settings.provider}/{v.settings.model}" for v in variants))
+    if in_toks and out_toks:
+        md.append(f"* mean tokens per call: {sum(in_toks) / len(in_toks):.0f} in / {sum(out_toks) / len(out_toks):.0f} out")
+    md.append("")
+    md.append("## Metrics\n")
+    md.append("| metric | baseline | candidate |")
+    md.append("|---|---|---|")
+    for m in ["replies", "slang_open_pct", "distinct_opener_ratio", "words_mean", "words_stdev",
+              "near_dup_pct", "banned_hits", "failures"]:
+        md.append(f"| {m} | {stats['baseline'][m]} | {stats['candidate'][m]} |")
+    for v in ("baseline", "candidate"):
+        top = ", ".join(f"{t} x{n}" for t, n in stats[v]["banned_top"]) or "none"
+        md.append(f"| banned top ({v}) | {top if v == 'baseline' else ''} | {top if v == 'candidate' else ''} |")
+    md.append("")
+    md.append("## Cases\n")
+    for case in cases:
+        cjobs = [j for j in jobs if j.case is case]
+        first = cjobs[0].rendered
+        md.append(f"### {case['id']}  ({case['path']})\n")
+        if case.get("notes"):
+            md.append(f"_Notes:_ {case['notes']}\n")
+        md.append(f"_Situation:_ {first.summary}\n")
+        md.append("| # | baseline | candidate |")
+        md.append("|---|---|---|")
+        for s in range(args.samples):
+            cells = []
+            for name in ("baseline", "candidate"):
+                j = next(x for x in cjobs if x.sample == s and x.variant.name == name)
+                f = failure_of(j)
+                cells.append(f"**FAILED:** {md_cell(f)}" if f else md_cell(j.processed))
+            md.append(f"| {s + 1} | {cells[0]} | {cells[1]} |")
+        rag_hits = {tuple((h['id'], h['score']) for h in x.rendered.rag) for x in cjobs if x.rendered.rag}
+        for hits in sorted(rag_hits):
+            md.append(f"\nRAG retrieved: {', '.join(f'{i} ({sc})' for i, sc in hits)}")
+        md.append("")
+    return "\n".join(md)
+
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -212,107 +315,22 @@ def main(argv: list[str] | None = None) -> int:
             return 2
 
     # ---- run ----
-    def run(job: Job) -> Job:
-        if job.rendered.format_error:
-            job.skipped = "prompt rendered to [Format Error]"
-            return job
-        s = job.variant.settings
-        s_local = api.Settings(**{**s.__dict__, "system_prompt": job.rendered.system_prompt})
-        job.result = api.query(s_local, job.rendered.prompt)
-        if job.result.ok:
-            cfg = job.variant.cfg
-            job.processed, job.emote = postprocess.process_llm_response(
-                job.result.text, str(job.case["bot"]["name"]),
-                strip_markdown_on=cfg.boolean("StripMarkdown", True),
-                strip_decorative_on=cfg.boolean("StripDecorativeUnicode", True),
-                max_reply_length=cfg.integer("MaxReplyLength", 240))
-        return job
-
-    done = 0
-    with cf.ThreadPoolExecutor(max_workers=max(1, args.concurrency)) as pool:
-        futures = [pool.submit(run, j) for j in jobs]
-        for fut in cf.as_completed(futures):
-            fut.result()
-            done += 1
-            if done % 10 == 0 or done == len(futures):
-                print(f"  {done}/{len(futures)}", flush=True)
-
-    # ---- outputs ----
     run_dir.mkdir(parents=True, exist_ok=True)
-    with open(run_dir / "raw.jsonl", "w", encoding="utf-8") as fh:
-        for j in jobs:
-            r = j.result
-            fh.write(json.dumps({
-                "case": j.case["id"], "variant": j.variant.name, "sample": j.sample,
-                "prompt_hash": sha(j.rendered.prompt), "system_hash": sha(j.rendered.system_prompt),
-                "raw": r.text if r else None, "processed": j.processed or None, "emote": j.emote or None,
-                "input_tokens": r.input_tokens if r else None, "output_tokens": r.output_tokens if r else None,
-                "latency_ms": r.latency_ms if r else None, "status": r.status if r else None,
-                "error": (r.error if r and not r.ok else None) or j.skipped or None,
-                "rag": j.rendered.rag,
-            }, ensure_ascii=False) + "\n")
-
-    def failure_of(j: Job) -> str:
-        if j.skipped:
-            return j.skipped
-        if j.result is None:
-            return "no result"
-        if not j.result.ok:
-            return j.result.error or "request failed"
-        if not j.processed:
-            return "empty reply after clean-up"
-        return ""
-
-    stats = {}
-    for v in variants:
-        vj = [j for j in jobs if j.variant is v]
-        replies = [j.processed for j in vj if not failure_of(j)]
-        stats[v.name] = metrics.compute(replies, sum(1 for j in vj if failure_of(j)), openers, banned)
-
-    ok_results = [j.result for j in jobs if j.result and j.result.ok]
-    in_toks = [r.input_tokens for r in ok_results if r.input_tokens is not None]
-    out_toks = [r.output_tokens for r in ok_results if r.output_tokens is not None]
-
-    md: list[str] = []
-    md.append(f"# Prompt eval {stamp}\n")
-    md.append(f"* candidate: `{args.candidate}`  baseline: `{args.baseline or 'bare .dist'}`")
-    md.append(f"* cases: {len(cases)}, samples: {args.samples}, calls made: {sum(1 for j in jobs if j.result)}")
-    md.append("* models: " + ", ".join(f"{v.name}={v.settings.provider}/{v.settings.model}" for v in variants))
-    if in_toks and out_toks:
-        md.append(f"* mean tokens per call: {sum(in_toks) / len(in_toks):.0f} in / {sum(out_toks) / len(out_toks):.0f} out")
-    md.append("")
-    md.append("## Metrics\n")
-    md.append("| metric | baseline | candidate |")
-    md.append("|---|---|---|")
-    for m in ["replies", "slang_open_pct", "distinct_opener_ratio", "words_mean", "words_stdev",
-              "near_dup_pct", "banned_hits", "failures"]:
-        md.append(f"| {m} | {stats['baseline'][m]} | {stats['candidate'][m]} |")
-    for v in ("baseline", "candidate"):
-        top = ", ".join(f"{t} x{n}" for t, n in stats[v]["banned_top"]) or "none"
-        md.append(f"| banned top ({v}) | {top if v == 'baseline' else ''} | {top if v == 'candidate' else ''} |")
-    md.append("")
-    md.append("## Cases\n")
-    for case in cases:
-        cjobs = [j for j in jobs if j.case is case]
-        first = cjobs[0].rendered
-        md.append(f"### {case['id']}  ({case['path']})\n")
-        if case.get("notes"):
-            md.append(f"_Notes:_ {case['notes']}\n")
-        md.append(f"_Situation:_ {first.summary}\n")
-        md.append("| # | baseline | candidate |")
-        md.append("|---|---|---|")
-        for s in range(args.samples):
-            cells = []
-            for name in ("baseline", "candidate"):
-                j = next(x for x in cjobs if x.sample == s and x.variant.name == name)
-                f = failure_of(j)
-                cells.append(f"**FAILED:** {md_cell(f)}" if f else md_cell(j.processed))
-            md.append(f"| {s + 1} | {cells[0]} | {cells[1]} |")
-        rag_hits = {tuple((h['id'], h['score']) for h in x.rendered.rag) for x in cjobs if x.rendered.rag}
-        for hits in sorted(rag_hits):
-            md.append(f"\nRAG retrieved: {', '.join(f'{i} ({sc})' for i, sc in hits)}")
-        md.append("")
-    (run_dir / "report.md").write_text("\n".join(md), encoding="utf-8")
+    done = 0
+    try:
+        with open(run_dir / "raw.jsonl", "a", encoding="utf-8") as raw_fh, \
+                cf.ThreadPoolExecutor(max_workers=max(1, args.concurrency)) as pool:
+            futures = [pool.submit(execute, j) for j in jobs]
+            for fut in cf.as_completed(futures):
+                raw_fh.write(json.dumps(raw_record(fut.result()), ensure_ascii=False) + "\n")
+                raw_fh.flush()
+                done += 1
+                if done % 10 == 0 or done == len(futures):
+                    print(f"  {done}/{len(futures)}", flush=True)
+    finally:
+        # Always leave a report behind, even after Ctrl-C or an unexpected error.
+        (run_dir / "report.md").write_text(
+            build_report(jobs, cases, variants, args, openers, banned, stamp), encoding="utf-8")
 
     print(f"report: {run_dir / 'report.md'}")
     print(f"raw:    {run_dir / 'raw.jsonl'}")
