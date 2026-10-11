@@ -60,6 +60,20 @@ class Settings:
         return f"Settings(provider={self.provider!r}, model={self.model!r}, url={self.url!r}, api_key={masked})"
 
 
+_PROVIDER_ALIASES = {
+    "": "ollama", "ollama": "ollama",
+    "openai": "openai", "openrouter": "openai", "openai-compatible": "openai", "openai_compatible": "openai",
+    "anthropic": "anthropic", "claude": "anthropic",
+}
+
+
+def parse_provider(text: str) -> str:
+    """Mirror of OllamaProvider_Parse (config.cpp): ASCII case-fold, strip spaces, tabs and quotes
+    from both ends, accept the alias names, fall back to ollama for anything unknown."""
+    lowered = "".join(chr(ord(c) + 32) if "A" <= c <= "Z" else c for c in text)
+    return _PROVIDER_ALIASES.get(lowered.strip(" \t\"'"), "ollama")
+
+
 def settings_from_config(cfg: dict[str, str], api_key: str = "") -> Settings:
     def g(key: str, default: str) -> str:
         return cfg.get("OllamaChat." + key, default)
@@ -73,9 +87,7 @@ def settings_from_config(cfg: dict[str, str], api_key: str = "") -> Settings:
         except ValueError:
             return default
 
-    provider = g("Provider", "ollama").strip().lower()
-    if provider not in ("ollama", "openai", "anthropic"):
-        provider = "ollama"
+    provider = parse_provider(g("Provider", "ollama"))
     return Settings(
         provider=provider,
         url=g("Url", "http://localhost:11434/api/generate"),

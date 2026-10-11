@@ -22,6 +22,32 @@ import rag            # noqa: E402
 import render         # noqa: E402
 
 
+class ProviderAliasTests(unittest.TestCase):
+    """OllamaProvider_Parse: aliases, ASCII case-folding, quote and blank stripping."""
+
+    def test_each_alias(self):
+        for text, expected in [("", "ollama"), ("ollama", "ollama"), ("openai", "openai"),
+                               ("openrouter", "openai"), ("openai-compatible", "openai"),
+                               ("openai_compatible", "openai"), ("anthropic", "anthropic"),
+                               ("claude", "anthropic")]:
+            with self.subTest(text=text):
+                self.assertEqual(api.parse_provider(text), expected)
+                self.assertEqual(api.settings_from_config({"OllamaChat.Provider": text}).provider, expected)
+
+    def test_case_and_quotes(self):
+        self.assertEqual(api.parse_provider(' "OpenRouter" '), "openai")
+        self.assertEqual(api.parse_provider("'Claude'"), "anthropic")
+        self.assertEqual(api.parse_provider("\tANTHROPIC\t"), "anthropic")
+
+    def test_unknown_falls_back_to_ollama(self):
+        self.assertEqual(api.parse_provider("gemini"), "ollama")
+        self.assertEqual(api.parse_provider("   "), "ollama")
+
+    def test_alias_gets_the_right_request_shape(self):
+        s = api.settings_from_config({"OllamaChat.Provider": "openrouter", "OllamaChat.Url": "http://x/v1/chat"})
+        self.assertEqual(s.provider, "openai")
+
+
 class RagTests(unittest.TestCase):
     def test_preprocess_deletes_punctuation_and_lowercases(self):
         self.assertEqual(rag.preprocess_text("It's A Test, ok?"), "its a test ok")

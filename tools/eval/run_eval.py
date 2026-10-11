@@ -141,7 +141,7 @@ def main(argv: list[str] | None = None) -> int:
 
     def make_variant(name: str, overrides: dict, conf: dict) -> Variant:
         cfg = render.Config(conf)
-        provider = conf.get("OllamaChat.Provider", "ollama").strip().lower()
+        provider = api.parse_provider(conf.get("OllamaChat.Provider", "ollama"))
         key = key_cache.setdefault(provider, api.resolve_api_key(args.api_key_env, provider))
         return Variant(name, overrides, cfg, api.settings_from_config(conf, key))
 
