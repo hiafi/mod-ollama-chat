@@ -5,7 +5,7 @@ notes = "A player kills an enemy-faction player."
 name = "Tilda"
 level = 52
 class = "paladin"
-race = "dwarf"
+race = "Dwarf"
 gender = "Female"
 role = "retribution paladin"
 faction = "Alliance"
@@ -19,5 +19,5 @@ personality = "PVP_HARDCORE"
 
 [event]
 actor_name = "Ironbeard"
-event_type = "defeated player"
+kind = "defeated_player"
 event_detail = "Skullcrusha"

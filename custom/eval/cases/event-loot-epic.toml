@@ -1,11 +1,11 @@
 id = "event-loot-epic"
 path = "event"
-notes = "Someone picks up an epic at 60."
+notes = "Someone picks up an ordinary dungeon epic (Ironfoe, a Blackrock Depths drop) at 60."
 [bot]
 name = "Havric"
 level = 60
 class = "warrior"
-race = "human"
+race = "Human"
 gender = "Male"
 role = "protection warrior"
 faction = "Alliance"
@@ -13,11 +13,11 @@ guild = "No Guild"
 group_status = "In a group"
 gold = 2
 area = "Blackrock Depths"
-zone = "Blackrock Mountain"
-map = "Eastern Kingdoms"
+zone = "Blackrock Depths"
+map = "Blackrock Depths"
 personality = "RAIDER"
 
 [event]
 actor_name = "Ellara"
-event_type = "got item"
-event_detail = "Thunderfury, Blessed Blade of the Windseeker"
+kind = "got_item"
+event_detail = "Ironfoe"

@@ -5,7 +5,7 @@ notes = "A nearby player reaches level 10."
 name = "Maeve"
 level = 9
 class = "priest"
-race = "human"
+race = "Human"
 gender = "Female"
 role = "holy priest"
 faction = "Alliance"
@@ -19,5 +19,5 @@ personality = "MENTOR"
 
 [event]
 actor_name = "Tobias"
-event_type = "leveled up"
+kind = "leveled_up"
 event_detail = "10"

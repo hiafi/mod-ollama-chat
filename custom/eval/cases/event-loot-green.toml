@@ -5,7 +5,7 @@ notes = "Someone picks up a green item."
 name = "Sylwen"
 level = 22
 class = "hunter"
-race = "night elf"
+race = "Night Elf"
 gender = "Female"
 role = "marksmanship hunter"
 faction = "Alliance"
@@ -19,5 +19,5 @@ personality = "LONE_WOLF"
 
 [event]
 actor_name = "Pip"
-event_type = "got item"
+kind = "got_item"
 event_detail = "Gloves of the Moon"

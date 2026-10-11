@@ -1,28 +1,35 @@
-# Content that does not exist on this Classic realm (vanilla-era world; nothing from later expansions).
+# Content that does not exist on this realm: a vanilla-era world run by mod-progression (currently Phase 2: Dire Maul,
+# Azuregos, Kazzak, AV and WSG are open; BWL, AQ and Naxxramas are not yet), with Death Knights and the TBC races
+# (Blood Elf, Draenei) available, plus the dungeon finder and dual spec.
 # One term (word or phrase) per line, matched case-insensitively as whole words, so list plurals separately. '#' starts a comment.
 # Used by tools/eval/run_eval.py --banned-terms to count replies that talk about things players here cannot see.
+# Realm facts confirmed by the realm owner, 2026-10-11. Re-check this list whenever the progression phase changes.
 
 Northrend
 Lich King
 ICC
 Icecrown
 Ulduar
-# Naxxramas exists in vanilla (40-man); the 25-man version is the WotLK one. Phrase only.
+# Naxxramas exists in vanilla (40-man) but is not open in Phase 2, and the 25-man version is the WotLK one. Phrase only.
 Naxxramas 25
-dungeon finder
-LFD
 flying mount
 cold weather flying
-# Arena (the PvP mode) is TBC+. "arena" alone may be a place name in some zones, so this is a soft signal.
+# Flying is not available anywhere on this realm; the bare word is too common to ban ("flying machine", "flight path").
+# Arena (the PvP mode) does not exist here. "arena" alone may be a place name in some zones, so this is a soft signal.
 arena
 arenas
 Dalaran
 Outland
-Blood Elf
-Blood Elves
-Draenei
 achievement points
-dual spec
 # "heroic" as a dungeon difficulty is TBC+. The word also appears in ordinary speech ("heroic effort"),
 # so treat hits as prompts to read the reply, not as automatic failures.
 heroic
+# Ambiguous, not banned: these exist in the game but are closed until a later progression phase. A bot saying it
+# "cleared" them is wrong today, a bot talking about them as upcoming is fine, so read hits rather than count them.
+# Uncomment to count them while checking the Phase 2 content gate.
+# Blackwing Lair
+# BWL
+# Ahn'Qiraj
+# AQ40
+# AQ20
+# Naxxramas

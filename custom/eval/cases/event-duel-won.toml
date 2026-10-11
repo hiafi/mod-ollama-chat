@@ -5,7 +5,7 @@ notes = "A duel is won."
 name = "Grimtooth"
 level = 29
 class = "warlock"
-race = "undead"
+race = "Undead"
 gender = "Male"
 role = "destruction warlock"
 faction = "Horde"
@@ -19,5 +19,5 @@ personality = "WANNABE_VILLAIN"
 
 [event]
 actor_name = "Sable"
-event_type = "won duel against"
+kind = "won_duel"
 event_detail = "Mordo"

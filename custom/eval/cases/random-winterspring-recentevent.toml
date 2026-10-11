@@ -1,11 +1,11 @@
 id = "random-winterspring-recentevent"
 path = "random"
-notes = "Horde level 60, witnessed something happen."
+notes = "Horde level 60, witnessed a creature kill (witnessed-event text: '{actor} killed {creature}')."
 [bot]
 name = "Urza"
 level = 60
 class = "hunter"
-race = "troll"
+race = "Troll"
 gender = "Female"
 role = "survival hunter"
 faction = "Horde"
@@ -19,4 +19,4 @@ personality = "RAIDER"
 
 [random]
 env_template = "OllamaChat.EnvCommentRecentEvent"
-env_vars = { event_text = "Drogg cut down a frostsaber in a fight" }
+env_vars = { event_text = "Drogg killed Frostsaber Stalker" }

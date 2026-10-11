@@ -5,7 +5,7 @@ notes = "A nearby player turns in a quest."
 name = "Lorelai"
 level = 15
 class = "druid"
-race = "night elf"
+race = "Night Elf"
 gender = "Female"
 role = "restoration druid"
 faction = "Alliance"
@@ -19,5 +19,5 @@ personality = "CASUAL"
 
 [event]
 actor_name = "Brannoc"
-event_type = "completed quest"
+kind = "completed_quest"
 event_detail = "Murloc Poachers"

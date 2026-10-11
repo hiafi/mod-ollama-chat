@@ -1,20 +1,20 @@
 id = "trap-reply-where-kobolds"
 path = "reply"
-notes = "Where-do-I-find in a starting zone: the bot should not invent coordinates."
+notes = "Where-do-I-find in Goldshire (Kobold Candles quest): the bot should not invent coordinates."
 message = "where do I find the kobolds? i need 8 more candles"
 
 [bot]
 name = "Wynn"
 level = 5
 class = "mage"
-race = "gnome"
+race = "Gnome"
 gender = "Female"
 role = "arcane mage"
 faction = "Alliance"
 guild = "No Guild"
 group_status = "Solo"
 gold = 2
-area = "Northshire Valley"
+area = "Goldshire"
 zone = "Elwynn Forest"
 map = "Eastern Kingdoms"
 personality = "YOUNG_APPRENTICE"
@@ -23,7 +23,7 @@ personality = "YOUNG_APPRENTICE"
 name = "Tomas"
 level = 4
 class = "warrior"
-race = "human"
+race = "Human"
 gender = "Male"
 role = "arms warrior"
 faction = "Alliance"

@@ -5,7 +5,7 @@ notes = "Alliance level 60, inside a dungeon."
 name = "Thessaly"
 level = 60
 class = "mage"
-race = "human"
+race = "Human"
 gender = "Female"
 role = "frost mage"
 faction = "Alliance"
@@ -13,8 +13,8 @@ guild = "No Guild"
 group_status = "In a group"
 gold = 340
 area = "Blackrock Depths"
-zone = "Blackrock Mountain"
-map = "Eastern Kingdoms"
+zone = "Blackrock Depths"
+map = "Blackrock Depths"
 personality = "SCHOLAR"
 
 [random]

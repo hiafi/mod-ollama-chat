@@ -2,12 +2,12 @@ id = "event-death"
 path = "event"
 notes = "A nearby player dies."
 [bot]
-name = "Nazgrel"
+name = "Nazruk"
 level = 36
 class = "rogue"
-race = "orc"
+race = "Orc"
 gender = "Male"
-role = "assassination rogue"
+role = "assasination rogue"
 faction = "Horde"
 guild = "No Guild"
 group_status = "Solo"
@@ -19,5 +19,5 @@ personality = "PARANOID"
 
 [event]
 actor_name = "Wick"
-event_type = "died"
+kind = "died"
 event_detail = ""

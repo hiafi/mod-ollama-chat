@@ -2,10 +2,10 @@ id = "random-mulgore-questobjective"
 path = "random"
 notes = "Horde starting zone (tauren), level 1-10, quest in progress."
 [bot]
-name = "Baine Redhoof"
+name = "Tahsa"
 level = 5
 class = "hunter"
-race = "tauren"
+race = "Tauren"
 gender = "Male"
 role = "marksmanship hunter"
 faction = "Horde"
