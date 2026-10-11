@@ -506,9 +506,25 @@ uint32_t ExtractEmoteTag(std::string& response)
         }
     }
 
-    // ---- form 3: a bare /wave, anywhere in the line ----------------------
-    // scanFrom advances past non-emote slashes. Without it, a line containing
-    // "and/or" or a URL would rescan the same slash forever.
+    // ---- form 3: a bare /wave at the start or end of the line ------------
+    // A slash-word in the MIDDLE of a sentence is not a gesture: it is the
+    // bot telling the player what to type. /follow is a text emote, so
+    // "just type /follow and click on me" used to lose the command and come
+    // out as "just type and click on me". Only three placements count:
+    //   - the whole line            "/wave"
+    //   - the first token           "/wave hey there"
+    //   - the last token            "hey there /wave", unless the word before
+    //                               it is an instruction ("try /follow")
+    // Anything else stays in the text untouched.
+    //
+    // scanFrom advances past slashes we leave in place. Without it, a line
+    // containing "and/or" or a URL would rescan the same slash forever.
+    static const char* const instructionWords[] =
+        { "type", "try", "use", "say", "write", "enter", "do", "press", "hit", "just" };
+
+    auto isSpace = [](char c) { return std::isspace(static_cast<unsigned char>(c)) != 0; };
+    auto isAlpha = [](char c) { return std::isalpha(static_cast<unsigned char>(c)) != 0; };
+
     for (size_t scanFrom = 0; ; )
     {
         const size_t slash = response.find('/', scanFrom);
@@ -516,14 +532,59 @@ uint32_t ExtractEmoteTag(std::string& response)
             break;
 
         size_t end = slash + 1;
-        while (end < response.size() &&
-               std::isalpha(static_cast<unsigned char>(response[end])))
+        while (end < response.size() && isAlpha(response[end]))
             ++end;
 
         const std::string word = response.substr(slash + 1, end - slash - 1);
-        if (LookupTextEmoteId(word) == 0)
+        if (LookupTextEmoteId(word) == 0 || (slash > 0 && !isSpace(response[slash - 1])))
         {
-            // Not an emote -- leave it in the text and look past it.
+            // Not an emote (or glued to a word, like "and/or") -- leave it
+            // in the text and look past it.
+            scanFrom = slash + 1;
+            continue;
+        }
+
+        // Text before the slash, trailing whitespace ignored.
+        size_t beforeEnd = slash;
+        while (beforeEnd > 0 && isSpace(response[beforeEnd - 1]))
+            --beforeEnd;
+        const bool atStart = (beforeEnd == 0);
+
+        // Text after the word: only punctuation/whitespace means "last token".
+        bool atEnd = true;
+        for (size_t i = end; i < response.size(); ++i)
+        {
+            const unsigned char c = static_cast<unsigned char>(response[i]);
+            if (!std::isspace(c) && !std::ispunct(c))
+            {
+                atEnd = false;
+                break;
+            }
+        }
+
+        bool extract = atStart;
+        if (!extract && atEnd)
+        {
+            // The token before the slash-word, lowercased, letters only.
+            size_t tokStart = beforeEnd;
+            while (tokStart > 0 && !isSpace(response[tokStart - 1]))
+                --tokStart;
+            std::string prev;
+            for (size_t i = tokStart; i < beforeEnd; ++i)
+                if (isAlpha(response[i]))
+                    prev += static_cast<char>(std::tolower(static_cast<unsigned char>(response[i])));
+
+            extract = true;
+            for (const char* w : instructionWords)
+                if (prev == w)
+                {
+                    extract = false;
+                    break;
+                }
+        }
+
+        if (!extract)
+        {
             scanFrom = slash + 1;
             continue;
         }
