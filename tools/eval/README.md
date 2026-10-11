@@ -29,13 +29,13 @@ history = [ { player = "...", bot = "..." } ]                    # reply only, o
 
 [bot]      # name, level, class, race, gender, role, faction, guild, group_status, gold, area, zone, map, personality
 [player]   # reply only: name, level, class, race, gender, role, faction, guild, group_status, gold, distance
-[event]    # event only: actor_name, event_type, event_detail
+[event]    # event only: actor_name, kind, event_detail
 [random]   # random only: environment_info (text), or env_template + env_vars; optional variation
 ```
 
 * Every value a placeholder needs comes from the case; a missing one is an error naming the case and the
   placeholder. Only the fields the effective templates actually use are required.
-* `role` and `class`/`race` are the strings the module would print ("holy priest", "night elf").
+* `role` and `class`/`race` are the strings the module would print ("holy priest", "Night Elf" - race is Title Case, as the server sends it).
 * `personality` is a key in `--personalities` (default `personalities-stock.toml`, generated from the module's SQL with
   `sql_to_personalities.py`). When `EnableRPPersonalities = 0` the default personality prompt is used instead, as in
   the module.
@@ -43,6 +43,14 @@ history = [ { player = "...", bot = "..." } ]                    # reply only, o
   `env_template = "OllamaChat.EnvCommentZoneLandmark"`, `env_vars = { area_name = "...", zone_name = "..." }`.
   One `|`-separated variation of that key is picked. `variation` pins the statement/question line; otherwise one is
   picked with the module's statement/question split.
+* `[event] kind` names the kind of event; the text for `{event_type}` is read from the effective config
+  (`OllamaChat.EventType*`), as the module does, so a candidate that renames one shows up in the prompt.
+  Valid kinds: `defeated`, `defeated_player`, `pet_defeated`, `got_item`, `died`, `completed_quest`,
+  `learned_spell`, `requested_duel`, `started_dueling`, `won_duel`, `leveled_up`, `achievement`, `used_object`
+  (the `EventType*` keys) and the guild ones `guild_epic_gear`, `guild_rare_gear`, `guild_join`, `guild_login`,
+  `guild_leave`, `guild_promotion`, `guild_demotion`, `guild_achievement`, `guild_level_up`,
+  `guild_dungeon_complete` (the `GuildEventType*` keys). Aliases: `loot` = `got_item`, `level_up` =
+  `leveled_up`, `quest` = `completed_quest`, `pvp_kill` = `defeated_player`, `death` = `died`.
 * Optional per-case blocks, standing in for state the C++ reads from the game: `snapshot` (text, required when
   `EnableChatBotSnapshotTemplate = 1`), `memories = [{ text, importance }]`, `relationships = [{ name, description }]`,
   `sentiment` (float), `roleplay_voice` (text, required when `Roleplay.Enable = 1`).
@@ -79,7 +87,7 @@ processed reply, token usage, latency, status, error and - for the reply path - 
 * **Dice** (statement/question choice, variation and topic pick, gesture hint) use a seeded Python RNG, not `urand`.
   The distributions match; the individual picks cannot.
 * **Float printing** of `player_distance` and `sentiment_value` imitates `{fmt}` for a `float` (shortest float32
-  round trip, `4.0` prints as `4`). Exotic exponents are not handled.
+  round trip, `4.0` prints as `4`, fixed notation for decimal exponents -4 to 15 as {fmt} does).
 * **Roleplay mode** is not reimplemented: with `Roleplay.Enable = 1` the case must supply `roleplay_voice`, and the
   roleplay meta-term reply filter (`Roleplay_FilterMetaTerms`) is not applied.
 * **Guild chatter** templates (`GuildEnvComment*`, guild events) are not rendered.

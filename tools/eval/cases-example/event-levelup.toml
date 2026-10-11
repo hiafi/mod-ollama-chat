@@ -6,7 +6,7 @@ notes = "A nearby player levels up."
 name = "Zulnaka"
 level = 28
 class = "shaman"
-race = "troll"
+race = "Troll"
 gender = "Female"
 role = "enhancement shaman"
 faction = "Horde"
@@ -17,5 +17,5 @@ personality = "CASUAL"
 
 [event]
 actor_name = "Grogg"
-event_type = "leveled up"
+kind = "leveled_up"
 event_detail = "29"

@@ -486,6 +486,49 @@ def render_random(cfg: Config, view: CaseView, personalities: Mapping[str, str],
                     f"{_summary(view)}; topic: {args['environment_info']}", prompt.startswith(FORMAT_ERROR))
 
 
+# Event kind (what a case names) -> the config key whose value is the event type text, as
+# src/mod-ollama-chat_events.cpp passes g_EventType* / g_GuildEventType* to BuildPrompt.
+EVENT_KINDS: dict[str, str] = {
+    "defeated": "EventTypeDefeated",
+    "defeated_player": "EventTypeDefeatedPlayer",
+    "pet_defeated": "EventTypePetDefeated",
+    "got_item": "EventTypeGotItem",
+    "died": "EventTypeDied",
+    "completed_quest": "EventTypeCompletedQuest",
+    "learned_spell": "EventTypeLearnedSpell",
+    "requested_duel": "EventTypeRequestedDuel",
+    "started_dueling": "EventTypeStartedDueling",
+    "won_duel": "EventTypeWonDuel",
+    "leveled_up": "EventTypeLeveledUp",
+    "achievement": "EventTypeAchievement",
+    "used_object": "EventTypeUsedObject",
+    "guild_epic_gear": "GuildEventTypeEpicGear",
+    "guild_rare_gear": "GuildEventTypeRareGear",
+    "guild_join": "GuildEventTypeGuildJoin",
+    "guild_login": "GuildEventTypeGuildLogin",
+    "guild_leave": "GuildEventTypeGuildLeave",
+    "guild_promotion": "GuildEventTypeGuildPromotion",
+    "guild_demotion": "GuildEventTypeGuildDemotion",
+    "guild_achievement": "GuildEventTypeGuildAchievement",
+    "guild_level_up": "GuildEventTypeLevelUp",
+    "guild_dungeon_complete": "GuildEventTypeDungeonComplete",
+}
+EVENT_KIND_ALIASES = {"loot": "got_item", "level_up": "leveled_up", "quest": "completed_quest",
+                      "pvp_kill": "defeated_player", "death": "died"}
+
+
+def event_type_text(cfg: Config, ev: Mapping[str, Any], where: str) -> str:
+    """The event type text the way events.cpp gets it: from the effective config's EventType* key."""
+    kind = ev.get("kind")
+    if not isinstance(kind, str):
+        raise CaseError(f"{where}: [event] needs a 'kind' (one of {', '.join(EVENT_KINDS)})")
+    key = EVENT_KINDS.get(EVENT_KIND_ALIASES.get(kind, kind))
+    if key is None:
+        raise CaseError(f"{where}: unknown event kind {kind!r} (valid: {', '.join(EVENT_KINDS)}; "
+                        f"aliases: {', '.join(EVENT_KIND_ALIASES)})")
+    return cfg.text(key)
+
+
 def render_event(cfg: Config, view: CaseView, personalities: Mapping[str, str],
                  rag: RagSystem | None, sample: int) -> Rendered:
     where = f"case '{view.id}'"
@@ -495,7 +538,7 @@ def render_event(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     actor = ev.get("actor_name", MISSING)
     args = _bot_args(view, personality)
     args.update({
-        "event_type": ev.get("event_type", MISSING),
+        "event_type": event_type_text(cfg, ev, where),
         "event_detail": ev.get("event_detail", MISSING),
         "actor_name": actor,
         "sentiment_info": sentiment_info(cfg, view, actor if isinstance(actor, str) else None),
@@ -505,7 +548,7 @@ def render_event(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     prompt += build_roleplay_voice(cfg, view)
     prompt += build_gesture_prompt(cfg, rng_for(view.id, sample, "gesture"))
     return Rendered(prompt, cfg.text("SystemPrompt", ""), "event", [],
-                    f"{_summary(view)}; event: {ev.get('actor_name')} {ev.get('event_type')} {ev.get('event_detail')}",
+                    f"{_summary(view)}; event: {ev.get('actor_name')} {args['event_type']} {ev.get('event_detail')}",
                     prompt.startswith(FORMAT_ERROR))
 
 

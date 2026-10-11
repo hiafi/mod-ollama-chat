@@ -365,10 +365,34 @@ class RenderTests(unittest.TestCase):
 
     def test_event_path(self):
         cfg = render.Config({**self.conf, "OllamaChat.EventChatterPromptTemplate": "{actor_name} {event_type} {event_detail} {sentiment_info}",
-                             "OllamaChat.GestureChance": "0", "OllamaChat.EnableSentimentTracking": "0"})
+                             "OllamaChat.GestureChance": "0", "OllamaChat.EnableSentimentTracking": "0",
+                             "OllamaChat.EventTypeLeveledUp": "leveled up"})
         case = dict(id="e", path="event", bot=self.BOT,
-                    event=dict(actor_name="Grogg", event_type="leveled up", event_detail="29"))
+                    event=dict(actor_name="Grogg", kind="leveled_up", event_detail="29"))
         self.assertEqual(render.render_case(cfg, case, {}, None, 0).prompt, "Grogg leveled up 29 ")
+
+    def test_event_type_text_follows_the_effective_config(self):
+        base = {**self.conf, "OllamaChat.EventChatterPromptTemplate": "{event_type}",
+                "OllamaChat.GestureChance": "0", "OllamaChat.EnableSentimentTracking": "0",
+                "OllamaChat.EventTypeGotItem": "got item"}
+        case = dict(id="e", path="event", bot=self.BOT, event=dict(actor_name="G", kind="loot", event_detail="x"))
+        self.assertEqual(render.render_case(render.Config(base), case, {}, None, 0).prompt, "got item")
+        renamed = render.Config({**base, "OllamaChat.EventTypeGotItem": "picked up loot"})
+        self.assertEqual(render.render_case(renamed, case, {}, None, 0).prompt, "picked up loot")
+
+    def test_every_event_kind_maps_to_a_dist_key(self):
+        dist = (HERE.parents[1] / "conf" / "mod_ollama_chat.conf.dist").read_text(encoding="utf-8")
+        keys = build_conf.parse_conf_text(dist)
+        for kind, key in render.EVENT_KINDS.items():
+            self.assertIn("OllamaChat." + key, keys, kind)
+        for alias, kind in render.EVENT_KIND_ALIASES.items():
+            self.assertIn(kind, render.EVENT_KINDS, alias)
+
+    def test_unknown_or_missing_event_kind_is_a_case_error(self):
+        cfg = render.Config(self.conf)
+        for ev in (dict(actor_name="G", kind="exploded", event_detail="x"), dict(actor_name="G", event_detail="x")):
+            with self.assertRaises(render.CaseError):
+                render.render_case(cfg, dict(id="e", path="event", bot=self.BOT, event=ev), {}, None, 0)
 
     def test_rag_block_appended_with_newline(self):
         s = rag.RagSystem([rag.RagEntry("a", "Mage", "frost mages slow enemies")])
