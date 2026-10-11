@@ -398,7 +398,10 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
         if rag is None:
             raise CaseError("EnableRAG is 1 but no RAG data could be loaded (use --rag-dir or fix RAGDataPath)")
         results = rag.retrieve(message, cfg.integer("RAGMaxRetrievedItems", 3),
-                               cfg.number("RAGSimilarityThreshold", 0.3))
+                               cfg.number("RAGSimilarityThreshold", 0.3),
+                               [n for n in (bot.get("zone"), bot.get("area"))
+                                if isinstance(n, str) and n and n not in ("UnknownZone", "UnknownArea")],
+                               cfg.number("RAGLocationBoost", 0.0))
         rag_hits = [{"id": r.entry.id, "score": round(r.similarity, 4)} for r in results]
         content = rag.format_info(results)
         if content:
