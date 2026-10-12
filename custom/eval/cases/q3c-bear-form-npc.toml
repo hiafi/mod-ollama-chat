@@ -1,0 +1,33 @@
+id = "q3c-bear-form-npc"
+path = "reply"
+notes = "Q3-C case. Facts: server_shapeshift_appearances. A reply is right if it names Ursana Thornhide and/or the Park in Stormwind and invents no other place."
+message = "where can i change my bear form look"
+
+[bot]
+name = "Lyra"
+level = 20
+class = "druid"
+race = "Night Elf"
+gender = "Female"
+role = "restoration druid"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Shadowglen"
+zone = "Teldrassil"
+map = "Kalimdor"
+personality = "CASUAL"
+
+[player]
+name = "Tomas"
+level = 20
+class = "druid"
+race = "Night Elf"
+gender = "Male"
+role = "feral druid"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

@@ -1,0 +1,33 @@
+id = "q3c-rework-ret"
+path = "reply"
+notes = "Q3-C case. Facts: rework_paladin_ret (class_reworks.json). A reply is right if it names something the fact states about the reworked Retribution Paladin and invents no ability, number or talent."
+message = "what changed for ret paladins"
+
+[bot]
+name = "Mira"
+level = 30
+class = "paladin"
+race = "Human"
+gender = "Female"
+role = "retribution paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "CASUAL"
+
+[player]
+name = "Tomas"
+level = 30
+class = "paladin"
+race = "Human"
+gender = "Male"
+role = "retribution paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

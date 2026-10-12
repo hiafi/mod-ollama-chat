@@ -1,0 +1,33 @@
+id = "q3c-dummies"
+path = "reply"
+notes = "Q3-C case. Facts: server_training_dummies. A reply is right if it says Stormwind (Valley of Heroes, by the main gate) has training dummies and invents no other location."
+message = "is there a dummy to test my dps"
+
+[bot]
+name = "Orik"
+level = 30
+class = "warrior"
+race = "Dwarf"
+gender = "Female"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "GAMER"
+
+[player]
+name = "Tomas"
+level = 30
+class = "rogue"
+race = "Human"
+gender = "Male"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

@@ -1,0 +1,33 @@
+id = "q3c-rework-index"
+path = "reply"
+notes = "Q3-C case. Facts: rework_index. A reply is right if it lists classes or specs from the fact and invents none."
+message = "what classes got reworked"
+
+[bot]
+name = "Brann"
+level = 25
+class = "warrior"
+race = "Dwarf"
+gender = "Female"
+role = "protection warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Coldridge Valley"
+zone = "Dun Morogh"
+map = "Eastern Kingdoms"
+personality = "CASUAL"
+
+[player]
+name = "Tomas"
+level = 25
+class = "mage"
+race = "Gnome"
+gender = "Male"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

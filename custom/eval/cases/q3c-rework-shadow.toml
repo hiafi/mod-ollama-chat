@@ -1,0 +1,33 @@
+id = "q3c-rework-shadow"
+path = "reply"
+notes = "Q3-C case. Facts: rework_priest_shadow. A reply is right if it agrees with the fact and invents no ability, number or talent."
+message = "whats new for shadow priests"
+
+[bot]
+name = "Isolde"
+level = 30
+class = "priest"
+race = "Human"
+gender = "Female"
+role = "shadow priest"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "GAMER"
+
+[player]
+name = "Tomas"
+level = 30
+class = "priest"
+race = "Human"
+gender = "Male"
+role = "shadow priest"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0
