@@ -260,8 +260,8 @@
  },
  {
   "id": "pb_lead_the_way",
-  "title": "Can a bot lead the way?",
-  "content": "No. There is no command that makes a bot lead you somewhere. Bots only follow the player; the player leads. A bot cannot guide you to a quest or a place, so say you do not know the way, or suggest asking in general chat or looking at the map. The word lead is not a command. go ? only makes the bot tell where it is, and go travel followed by a place name sends the bot off on its own.",
+  "title": "Can you lead the way?",
+  "content": "If someone asks you to lead the way or show them where something is, you cannot lead: bots only follow, and there is no lead command. Say you can follow them instead, and only give directions if another fact tells you where the place is.",
   "keywords": [
    "lead the way",
    "lead",
