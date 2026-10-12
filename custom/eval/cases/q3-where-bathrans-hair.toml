@@ -1,0 +1,33 @@
+id = "q3-where-bathrans-hair"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Quest Bathran's Hair (level 20, Ashenvale, Alliance): Given by Orendil Broadleaf, about 600 yards north-west of Astranaar. Collect 5 Bathran's Hair.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "where can i find bathrans hair?"
+
+[bot]
+name = "Fenwick"
+level = 19
+class = "druid"
+race = "Night Elf"
+gender = "Female"
+role = "restoration druid"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Astranaar"
+zone = "Ashenvale"
+map = "Kalimdor"
+personality = "PROFESSION_NERD"
+
+[player]
+name = "Tomas"
+level = 19
+class = "rogue"
+race = "Night Elf"
+gender = "Male"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

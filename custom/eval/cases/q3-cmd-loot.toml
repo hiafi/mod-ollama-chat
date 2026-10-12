@@ -1,0 +1,33 @@
+id = "q3-cmd-loot"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: How to control what a bot loots: Say ll all, ll normal, ll gray or ll disenchant to set which items the bot picks up, and ll ? to ask what it is doing. Say loot all to make it loot everything nearby right now. Bots that joined you from the world cannot have loot changed through nc, only through ll.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "can you loot everything for me"
+
+[bot]
+name = "Dorrin"
+level = 14
+class = "hunter"
+race = "Dwarf"
+gender = "Male"
+role = "beast mastery hunter"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Thelsamar"
+zone = "Loch Modan"
+map = "Eastern Kingdoms"
+personality = "LOOTGOBLIN"
+
+[player]
+name = "Tomas"
+level = 13
+class = "priest"
+race = "Dwarf"
+gender = "Female"
+role = "holy priest"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

@@ -1,0 +1,33 @@
+id = "q3-chitchat-gg"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: none. A reply is right if it agrees with this and invents no direction, command or number beyond it. Chit-chat: nothing may be retrieved, the reply must stay a plain line (retrieval should be empty)."
+message = "gg that was close"
+
+[bot]
+name = "Aldric"
+level = 15
+class = "shaman"
+race = "Orc"
+gender = "Female"
+role = "enhancement shaman"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Razor Hill"
+zone = "Durotar"
+map = "Kalimdor"
+personality = "HYPE_MAN"
+
+[player]
+name = "Tomas"
+level = 15
+class = "warrior"
+race = "Orc"
+gender = "Male"
+role = "fury warrior"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

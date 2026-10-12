@@ -1,0 +1,339 @@
+# Retrieval probes for custom/rag (no API calls): python3 custom/eval/rag_probe.py
+#   group    where | command | chitchat | case (the reply cases in cases/)
+#   expect   ids that should land in the top 3; empty = nothing should be retrieved
+#   zone, area  the bot's zone and area when the question is asked, passed to the location boost (RAGLocationBoost).
+#            'case' probes take them from the case's [bot] table.
+# The where/how questions name a place or quest the way a player would, and pick the entry the generated data gives.
+
+# --- where / how: four starting zones, two level-20 zones --------------------------------------------------
+[[probe]]
+group = "where"
+message = "where is the warrior trainer in northshire?"
+expect = ["npc_911_0"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "where"
+message = "who gives the wolves across the border quest"
+expect = ["quest_33"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "where"
+message = "where can i find the innkeeper in goldshire"
+expect = ["npc_295_0"]
+note = "goldshire is not derived anywhere (no flight point, no sorted quests); the entry says Elwynn Forest"
+zone = "Elwynn Forest"
+area = "Goldshire"
+[[probe]]
+group = "where"
+message = "where do i learn mage spells in coldridge valley?"
+expect = ["npc_944_0"]
+zone = "Dun Morogh"
+area = "Coldridge Valley"
+[[probe]]
+group = "where"
+message = "where do i take the bitter rivals quest"
+expect = ["quest_310"]
+zone = "Dun Morogh"
+area = "Kharanos"
+[[probe]]
+group = "where"
+message = "how do i do vanquish the betrayers, where are the sailors"
+expect = ["quest_784"]
+zone = "Durotar"
+area = "Valley of Trials"
+[[probe]]
+group = "where"
+message = "where is the hunter trainer in durotar"
+expect = ["npc_3171_0"]
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "where"
+message = "where do i get plainstrider meat for the hunt begins"
+expect = ["quest_747"]
+zone = "Mulgore"
+area = "Red Cloud Mesa"
+[[probe]]
+group = "where"
+message = "where is the innkeeper in mulgore"
+expect = ["npc_6747_0"]
+zone = "Mulgore"
+area = "Bloodhoof Village"
+[[probe]]
+group = "where"
+message = "where do i find the prairie wolves for poison water?"
+expect = ["quest_748"]
+zone = "Mulgore"
+area = "Red Cloud Mesa"
+[[probe]]
+group = "where"
+message = "where is the priest trainer in deathknell"
+expect = ["npc_2123_0"]
+zone = "Tirisfal Glades"
+area = "Deathknell"
+[[probe]]
+group = "where"
+message = "where do i find a hunter trainer in shadowglen"
+expect = ["npc_3596_0"]
+zone = "Teldrassil"
+area = "Shadowglen"
+[[probe]]
+group = "where"
+message = "where is the innkeeper in darkshire"
+expect = ["npc_6790_0"]
+zone = "Duskwood"
+area = "Darkshire"
+[[probe]]
+group = "where"
+message = "who do i hand in raven hill to"
+expect = ["quest_163"]
+zone = "Duskwood"
+area = "Darkshire"
+[[probe]]
+group = "where"
+message = "where do i get gooey spider legs for dusky crab cakes"
+expect = ["quest_93"]
+zone = "Duskwood"
+area = "Darkshire"
+[[probe]]
+group = "where"
+message = "where is the flight master in astranaar"
+expect = ["npc_4267_0"]
+zone = "Ashenvale"
+area = "Astranaar"
+[[probe]]
+group = "where"
+message = "where can i find bathrans hair?"
+expect = ["quest_1010"]
+zone = "Ashenvale"
+area = "Astranaar"
+[[probe]]
+group = "where"
+message = "where are the wrathtail naga for the zoram strand quest"
+expect = ["quest_1008"]
+zone = "Ashenvale"
+area = "Astranaar"
+[[probe]]
+group = "where"
+message = "where do i find kobold miners for the candles quest"
+expect = ["quest_60"]
+zone = "Elwynn Forest"
+area = "Goldshire"
+[[probe]]
+group = "where"
+message = "who has the warrior trainer in dun morogh"
+expect = ["npc_912_0"]
+zone = "Dun Morogh"
+area = "Coldridge Valley"
+
+# --- wrong-zone failures of Q3-B: the message no longer names the zone, the bot's location decides ---------
+[[probe]]
+group = "where"
+message = "where do i find the kobolds? i need 8 more candles"
+expect = ["quest_60"]
+zone = "Elwynn Forest"
+area = "Goldshire"
+note = "Q3-B: ranked second behind Candles of Beckoning in Tirisfal Glades"
+[[probe]]
+group = "where"
+message = "where is the warrior trainer"
+expect = ["npc_911_0"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+note = "Q3-B: sibling trainers in other zones tie with Llane Beshere"
+
+# --- commands ----------------------------------------------------------------------------------------------
+[[probe]]
+group = "command"
+message = "how do i get you to follow me?"
+expect = ["pb_follow"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "how do i invite you to my group"
+expect = ["pb_invite"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "can you lead the way?"
+expect = ["pb_lead_the_way"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "how do i tell you to stay here"
+expect = ["pb_stay"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "what command makes you attack my target"
+expect = ["pb_attack"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "how do i make you stop fighting and run away"
+expect = ["pb_flee"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "can you loot everything for me"
+expect = ["pb_loot"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "how do i make you leave my party"
+expect = ["pb_leave"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "can you be the healer for this dungeon"
+expect = ["pb_roles"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+[[probe]]
+group = "command"
+message = "how do i get you to come to me, you are far away"
+expect = ["pb_summon", "pb_follow"]
+zone = "Elwynn Forest"
+area = "Northshire Valley"
+
+# --- reworked classes and server facts (class_reworks.json, server_facts.json) -----------------------------
+[[probe]]
+group = "rework"
+message = "what changed for ret paladins"
+expect = ["rework_paladin_ret"]
+zone = "Elwynn Forest"
+area = "Goldshire"
+[[probe]]
+group = "rework"
+message = "how does bestial fury work"
+expect = ["rework_druid_feral"]
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "rework"
+message = "whats new for shadow priests"
+expect = ["rework_priest_shadow"]
+zone = "Tirisfal Glades"
+area = "Deathknell"
+[[probe]]
+group = "rework"
+message = "do warlocks still need soul shards"
+expect = ["rework_warlock_aff", "rework_warlock_demo", "rework_warlock_destro"]
+zone = "Elwynn Forest"
+area = "Goldshire"
+[[probe]]
+group = "rework"
+message = "what classes got reworked"
+expect = ["rework_index"]
+zone = "Dun Morogh"
+area = "Coldridge Valley"
+[[probe]]
+group = "rework"
+message = "where can i change my bear form look"
+expect = ["server_shapeshift_appearances"]
+zone = "Teldrassil"
+area = "Shadowglen"
+[[probe]]
+group = "rework"
+message = "is there a dummy to test my dps"
+expect = ["server_training_dummies"]
+zone = "Elwynn Forest"
+area = "Goldshire"
+[[probe]]
+group = "rework"
+message = "is bwl out yet"
+expect = ["server_progression_next"]
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "rework"
+message = "whats the level cap"
+expect = ["server_progression_now"]
+zone = "Mulgore"
+area = "Bloodhoof Village"
+[[probe]]
+group = "rework"
+message = "is naxx the last raid"
+expect = ["server_progression_next"]
+zone = "Elwynn Forest"
+area = "Goldshire"
+
+# --- chit-chat: nothing should be retrieved --------------------------------------------------------------
+[[probe]]
+group = "chitchat"
+message = "lol"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "sup yall"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "nice"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "gg"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "brb"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "thanks man"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "haha true"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "ok cool"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "wb"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "chitchat"
+message = "what a night"
+zone = "Durotar"
+area = "Razor Hill"
+
+# --- reply cases (messages are read from cases/*.toml; only the ones with an expectation are listed) ----------
+[[probe]]
+group = "case"
+case = "real-05-lead-the-way-command"
+expect = ["pb_lead_the_way"]
+[[probe]]
+group = "case"
+case = "trap-reply-follow-command"
+expect = ["pb_follow"]
+[[probe]]
+group = "case"
+case = "trap-reply-where-kobolds"
+expect = ["quest_60"]
+[[probe]]
+group = "case"
+case = "trap-reply-can-you-heal"
+expect = ["pb_roles"]

@@ -1,0 +1,354 @@
+[
+ {
+  "id": "pb_talk_to_bots",
+  "title": "How to give a bot a command",
+  "content": "Bot commands are plain words sent to the bot by whisper or in party or raid chat, for example follow, stay, attack, summon, leave. The message has to start with the command word; a polite sentence such as can you follow me does nothing. The bot does not answer a command in words, it just does it and says a short line like Following or Staying. Only the player who invited the bot to the group can command it. These command words are on this module's blacklist, so a message that starts with one is never answered by the bot's chat AI: whispering just follow makes the bot follow.",
+  "keywords": [
+   "how do i command a bot",
+   "how to talk to bots",
+   "bot commands",
+   "whisper the bot",
+   "what can i tell the bots",
+   "give orders to a bot",
+   "how do i control you",
+   "commands list",
+   "help"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Script/Playerbots.cpp:275",
+   "src:Script/Playerbots.cpp:300",
+   "src:Bot/PlayerbotAI.cpp:791",
+   "src:Bot/Engine/ExternalEventHelper.cpp:12",
+   "src:Mgr/Security/PlayerbotSecurity.cpp:66",
+   "src:mod-ollama-chat:conf/mod_ollama_chat.conf.dist:338",
+   "src:mod-ollama-chat:src/mod-ollama-chat_handler.cpp:1118"
+  ]
+ },
+ {
+  "id": "pb_invite",
+  "title": "How to get a bot to join your group",
+  "content": "Whisper the bot the word invite and it sends you a group invitation; accept it and it becomes your party member and follows your orders. A bot refuses if it is more than 5 levels above you (unless you share a guild), or if it is in a battleground queue or its group is full; then it only chats. You can also invite a bot yourself with the normal group invite on its name.",
+  "keywords": [
+   "invite",
+   "invite me",
+   "how do i get you in my group",
+   "join my party",
+   "group up",
+   "party with me",
+   "can you join me",
+   "can i group with you",
+   "add to party"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:97",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:128",
+   "src:Ai/Base/Actions/InviteToGroupAction.h:32",
+   "src:Mgr/Security/PlayerbotSecurity.cpp:91",
+   "src:Bot/PlayerbotAI.cpp:953"
+  ]
+ },
+ {
+  "id": "pb_summon",
+  "title": "How to bring a bot to you",
+  "content": "Whisper or say summon in party chat and the bot is teleported next to you, from any distance, as long as it is in your group. If you would rather have it walk to you, say follow.",
+  "keywords": [
+   "summon",
+   "summon me",
+   "come here",
+   "come to me",
+   "teleport to me",
+   "get over here",
+   "bring the bot to me",
+   "bot is far away",
+   "where are you"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:105",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:133",
+   "src:Ai/Base/Actions/UseMeetingStoneAction.cpp:73"
+  ]
+ },
+ {
+  "id": "pb_follow",
+  "title": "How to make a bot follow you",
+  "content": "Say follow (whisper or party chat) and the bot follows you around and stops being passive; it answers Following. This is how to make a bot come with you while you quest. Say stay to stop it again.",
+  "keywords": [
+   "follow",
+   "follow me",
+   "come with me",
+   "make you follow",
+   "follow command",
+   "tag along",
+   "come along",
+   "stick with me",
+   "go with me"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:86",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:51",
+   "src:Ai/Base/Actions/ChatShortcutActions.cpp:46",
+   "src:Ai/Base/Actions/ChatShortcutActions.cpp:53"
+  ]
+ },
+ {
+  "id": "pb_stay",
+  "title": "How to make a bot stay or wait",
+  "content": "Say stay and the bot stops where it is and holds that spot; it answers Staying. Say follow when you want it to come along again. There is no timed wait command: stay holds the bot until you tell it otherwise.",
+  "keywords": [
+   "stay",
+   "wait here",
+   "wait for me",
+   "stay here",
+   "hold position",
+   "dont move",
+   "stay put",
+   "wait",
+   "stop following",
+   "stand still"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:88",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:52",
+   "src:Ai/Base/Actions/ChatShortcutActions.cpp:118",
+   "src:Ai/Base/Actions/ChatShortcutActions.cpp:125"
+  ]
+ },
+ {
+  "id": "pb_attack",
+  "title": "How to make a bot attack your target",
+  "content": "Select the enemy you want, then say attack. The bot attacks whatever you currently have targeted; with no target it says You have no target. The pull command works the same way for pulling a mob. Bots also fight on their own when something attacks you or them.",
+  "keywords": [
+   "attack",
+   "attack my target",
+   "kill that",
+   "attack this",
+   "help me kill",
+   "assist me",
+   "pull",
+   "get him",
+   "fight",
+   "engage"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:71",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:49",
+   "src:Ai/Base/Actions/AttackAction.cpp:31",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:71"
+  ]
+ },
+ {
+  "id": "pb_flee",
+  "title": "How to make a bot flee or run away",
+  "content": "Say flee to make the bot stop fighting, go passive and stay close to you; it answers Fleeing, or says it is too far away if it is. Say runaway (or warning) to have it run away from the fight instead. Say follow afterwards to bring it back to normal.",
+  "keywords": [
+   "flee",
+   "run away",
+   "retreat",
+   "run",
+   "escape",
+   "get out of here",
+   "stop fighting",
+   "back off",
+   "runaway",
+   "disengage"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:89",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:54",
+   "src:Ai/Base/Actions/ChatShortcutActions.cpp:152",
+   "src:Ai/Base/Actions/ChatShortcutActions.cpp:159",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:65"
+  ]
+ },
+ {
+  "id": "pb_passive",
+  "title": "How to make a bot passive or aggressive",
+  "content": "There is no standalone passive or aggressive command. To change how it fights, send co +passive (do not start fights) or co -passive, co +aggressive, and nc +passive for outside combat. The flee command also sets passive. A message that is only the word passive or aggressive does not change anything.",
+  "keywords": [
+   "passive",
+   "aggressive",
+   "set passive",
+   "stop attacking",
+   "do not attack",
+   "dont attack",
+   "defensive",
+   "attack on your own",
+   "co +passive",
+   "nc +passive",
+   "strategy",
+   "stance"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:62",
+   "src:Ai/Base/ChatTriggerContext.h:63",
+   "src:Ai/Base/Actions/ChangeStrategyAction.cpp:36",
+   "src:Ai/Base/StrategyContext.h:69",
+   "src:Ai/Base/StrategyContext.h:70",
+   "src:Ai/Base/Actions/ChatShortcutActions.cpp:159"
+  ]
+ },
+ {
+  "id": "pb_loot",
+  "title": "How to control what a bot loots",
+  "content": "Say ll all, ll normal, ll gray or ll disenchant to set which items the bot picks up, and ll ? to ask what it is doing. Say loot all to make it loot everything nearby right now. Bots that joined you from the world cannot have loot changed through nc, only through ll.",
+  "keywords": [
+   "loot",
+   "loot all",
+   "loot everything",
+   "can you loot",
+   "looting",
+   "ll all",
+   "ll normal",
+   "take the loot",
+   "pick up loot",
+   "loot rules",
+   "roll"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:37",
+   "src:Ai/Base/ChatTriggerContext.h:39",
+   "src:Ai/Base/Actions/LootStrategyAction.cpp:15",
+   "src:Ai/Base/Value/LootStrategyValue.cpp:33",
+   "src:Ai/Base/Value/LootStrategyValue.cpp:65",
+   "src:Ai/Base/Actions/ChangeStrategyAction.cpp:56",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:35"
+  ]
+ },
+ {
+  "id": "pb_leave",
+  "title": "How to make a bot leave your group",
+  "content": "Whisper or say leave and the bot leaves your group (only its master can do this). It also leaves by itself when you leave the party.",
+  "keywords": [
+   "leave",
+   "leave group",
+   "leave party",
+   "kick",
+   "disband",
+   "go away",
+   "you can go now",
+   "remove from party",
+   "leave the group",
+   "dismiss bot",
+   "bye"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:25",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:91",
+   "src:Ai/Base/Actions/LeaveGroupAction.cpp:13",
+   "src:Bot/PlayerbotAI.cpp:954"
+  ]
+ },
+ {
+  "id": "pb_lead_the_way",
+  "title": "Can you lead the way?",
+  "content": "If someone asks you to lead the way or show them where something is, you cannot lead: bots only follow, and there is no lead command. Say you can follow them instead, and only give directions if another fact tells you where the place is.",
+  "keywords": [
+   "lead the way",
+   "lead",
+   "show me the way",
+   "guide me",
+   "take me there",
+   "can you lead",
+   "walk ahead",
+   "go first",
+   "show me where",
+   "command to lead",
+   "you lead"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "absent-command",
+   "src:Ai/Base/ChatTriggerContext.h:124",
+   "src:Ai/Base/Actions/GoAction.cpp:26",
+   "src:Ai/Base/Actions/GoAction.cpp:38",
+   "src:Ai/Base/Actions/PassLeadershipToMasterAction.h:33"
+  ]
+ },
+ {
+  "id": "pb_roles",
+  "title": "Healer, tank and damage roles for bots",
+  "content": "There is no command to change a bot's role; its role comes from its class and talent spec. To address only some bots, start the message with @tank, @heal, @dps, @melee or @ranged, for example @heal follow, and only bots of that role react. Say tank attack to have a tank take your target, and focus heal to make healers concentrate on set targets.",
+  "keywords": [
+   "heal",
+   "healer",
+   "tank",
+   "can you heal",
+   "can you tank",
+   "be the healer",
+   "be the tank",
+   "dps",
+   "heal me",
+   "role",
+   "spec",
+   "who is the healer",
+   "taunt"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "absent-command",
+   "src:Bot/Cmd/ChatFilter.cpp:41",
+   "src:Bot/Cmd/ChatFilter.cpp:49",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:55",
+   "src:Ai/Base/Strategy/ChatCommandHandlerStrategy.cpp:81"
+  ]
+ },
+ {
+  "id": "pb_other",
+  "title": "Other useful bot commands",
+  "content": "Useful commands, each sent on its own: stats shows the bot's gold, bag space and repair cost; quests lists its quests; accept followed by a quest link makes it accept that quest from a nearby NPC; talk makes it talk to the nearest NPC; autogear equips the best gear it can; talents help lists what it can do about its talents; release and revive handle dying; help prints the command list; who tells its spec and where it is; reset botAI resets its behavior. Commands only work for the bot's master.",
+  "keywords": [
+   "stats",
+   "quests",
+   "accept quest",
+   "talk",
+   "autogear",
+   "talents",
+   "release",
+   "revive",
+   "help",
+   "who",
+   "reset",
+   "what else can i tell you",
+   "more commands",
+   "other commands",
+   "gear"
+  ],
+  "tags": [
+   "playerbots",
+   "command",
+   "src:Ai/Base/ChatTriggerContext.h:24",
+   "src:Ai/Base/ChatTriggerContext.h:23",
+   "src:Ai/Base/ChatTriggerContext.h:76",
+   "src:Ai/Base/ChatTriggerContext.h:92",
+   "src:Ai/Base/ChatTriggerContext.h:68",
+   "src:Ai/Base/ChatTriggerContext.h:60",
+   "src:Ai/Base/ChatTriggerContext.h:41",
+   "src:Ai/Base/ChatTriggerContext.h:101",
+   "src:Ai/Base/ChatTriggerContext.h:82",
+   "src:Ai/Base/ChatTriggerContext.h:106",
+   "src:Ai/Base/ChatTriggerContext.h:78"
+  ]
+ }
+]

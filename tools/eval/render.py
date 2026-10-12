@@ -398,7 +398,10 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
         if rag is None:
             raise CaseError("EnableRAG is 1 but no RAG data could be loaded (use --rag-dir or fix RAGDataPath)")
         results = rag.retrieve(message, cfg.integer("RAGMaxRetrievedItems", 3),
-                               cfg.number("RAGSimilarityThreshold", 0.3))
+                               cfg.number("RAGSimilarityThreshold", 0.3),
+                               [n for n in (bot.get("zone"), bot.get("area"))
+                                if isinstance(n, str) and n and n not in ("UnknownZone", "UnknownArea")],
+                               cfg.number("RAGLocationBoost", 0.0))
         rag_hits = [{"id": r.entry.id, "score": round(r.similarity, 4)} for r in results]
         content = rag.format_info(results)
         if content:
@@ -591,8 +594,9 @@ def render_case(cfg: Config, case: Mapping[str, Any], personalities: Mapping[str
 
 
 def load_rag(cfg: Config, rag_dir: Path | None, module_root: Path) -> RagSystem | None:
+    common = cfg.boolean("RAGIgnoreCommonWords", False)
     if rag_dir is not None:
-        return RagSystem.from_directory(rag_dir)
+        return RagSystem.from_directory(rag_dir, common)
     if not cfg.boolean("EnableRAG", False):
         return None
     path = Path(cfg.text("RAGDataPath", "rag/"))
@@ -603,4 +607,4 @@ def load_rag(cfg: Config, rag_dir: Path | None, module_root: Path) -> RagSystem 
         fallback = module_root / "data" / "rag"
         if fallback.is_dir():
             path = fallback
-    return RagSystem.from_directory(path)
+    return RagSystem.from_directory(path, common)

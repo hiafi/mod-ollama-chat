@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <nlohmann/json.hpp>
 
 struct RAGEntry {
@@ -12,6 +13,13 @@ struct RAGEntry {
     std::string content;
     std::vector<std::string> keywords;
     std::vector<std::string> tags;
+
+    // Lowercased, punctuation-free title + content + keywords, for the location substring test. Built once at load.
+    std::string searchText;
+
+    // Sparse term-frequency vector of title + content + keywords, and its length. Built once at load.
+    std::unordered_map<std::string, float> termFreq;
+    float norm = 0.0f;
 };
 
 struct RAGResult {
@@ -28,7 +36,11 @@ public:
     bool Initialize();
 
     // Retrieve relevant information based on a query
-    std::vector<RAGResult> RetrieveRelevantInfo(const std::string& query, uint32_t maxResults = 3, float similarityThreshold = 0.3f);
+    // Entries are dropped below similarityThreshold on the raw score. When locationBoost > 0, an entry that
+    // mentions any of locationNames (case-insensitive substring of title, keywords or content) is ranked
+    // as raw * (1 + locationBoost); the boost never lets a below-threshold entry in.
+    std::vector<RAGResult> RetrieveRelevantInfo(const std::string& query, uint32_t maxResults = 3, float similarityThreshold = 0.3f,
+                                                const std::vector<std::string>& locationNames = {}, float locationBoost = 0.0f);
 
     // Get formatted RAG information for prompt inclusion
     std::string GetFormattedRAGInfo(const std::vector<RAGResult>& results);
@@ -40,8 +52,13 @@ private:
     // Load a single JSON file
     bool LoadRAGDataFromFile(const std::string& filePath);
 
-    // Calculate similarity between query and entry
-    float CalculateSimilarity(const std::string& query, const RAGEntry& entry);
+    // Term-frequency map of a preprocessed text, and the vector length it implies
+    std::unordered_map<std::string, float> BuildTermFrequencies(const std::string& preprocessedText) const;
+    static float VectorNorm(const std::unordered_map<std::string, float>& termFreq);
+
+    // Cosine similarity between a query (already restricted to the vocabulary) and an entry
+    float CalculateSimilarity(const std::unordered_map<std::string, float>& queryTf, float queryNorm,
+                              const RAGEntry& entry) const;
 
     // Simple text preprocessing (lowercase, remove punctuation)
     std::string PreprocessText(const std::string& text) const;
@@ -49,15 +66,11 @@ private:
     // Split text into words
     std::vector<std::string> TokenizeText(const std::string& text) const;
 
-    // Calculate cosine similarity between two vectors
-    float CalculateCosineSimilarity(const std::vector<float>& vec1, const std::vector<float>& vec2) const;
-
-    // Convert text to simple TF vector (term frequency)
-    std::vector<float> TextToTFVector(const std::string& text, const std::vector<std::string>& vocabulary) const;
 
 private:
     std::vector<RAGEntry> m_ragEntries;
-    std::vector<std::string> m_vocabulary;
+    std::unordered_set<std::string> m_vocabulary;
+    bool m_ignoreCommonWords;
     bool m_initialized;
 };
 

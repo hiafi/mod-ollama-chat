@@ -1,0 +1,33 @@
+id = "q3-where-innkeeper-darkshire"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Innkeeper Trelayne: Innkeeper Trelayne is near Darkshire, Duskwood, Alliance.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "where is the innkeeper in darkshire"
+
+[bot]
+name = "Ismera"
+level = 21
+class = "rogue"
+race = "Human"
+gender = "Female"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Darkshire"
+zone = "Duskwood"
+map = "Eastern Kingdoms"
+personality = "GRUMPY_VETERAN"
+
+[player]
+name = "Tomas"
+level = 20
+class = "mage"
+race = "Gnome"
+gender = "Male"
+role = "fire mage"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

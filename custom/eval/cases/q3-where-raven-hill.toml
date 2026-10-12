@@ -1,0 +1,33 @@
+id = "q3-where-raven-hill"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Quest Raven Hill (level 20, Duskwood, Alliance): Given by Elaine Carevin, near Darkshire. Turn in to Jitters, in Westfall, about 700 yards east of Sentinel Hill.. A reply is right if it agrees with this and invents no direction, command or number beyond it. Turn-in NPC is Jitters; the entry places him in Westfall near Sentinel Hill, the zone box is approximate near the border."
+message = "who do i hand in raven hill to"
+
+[bot]
+name = "Nolan"
+level = 20
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "holy paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Darkshire"
+zone = "Duskwood"
+map = "Eastern Kingdoms"
+personality = "DUNGEON_REGULAR"
+
+[player]
+name = "Tomas"
+level = 20
+class = "hunter"
+race = "Human"
+gender = "Female"
+role = "marksmanship hunter"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

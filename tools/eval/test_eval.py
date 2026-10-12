@@ -83,6 +83,64 @@ class RagTests(unittest.TestCase):
         self.assertEqual(hits[0].entry.id, "b")
         self.assertEqual(s.retrieve("cat", 5, 0.99), [])
 
+    def test_location_boost_reorders_but_never_admits(self):
+        # "cat" vs "A cat" (same text apart from the zone word) -> equal raw scores
+        s = rag.RagSystem([rag.RagEntry("far", "Cat", "cat in Westfall"),
+                           rag.RagEntry("near", "Cat", "cat in Elwynn Forest"),
+                           rag.RagEntry("lowzone", "Dog", "dog dog dog dog cat Elwynn Forest")])
+        plain = s.retrieve("cat", 3, 0.3)
+        self.assertEqual([h.entry.id for h in plain], ["far", "near"])          # ties keep load order
+        self.assertEqual([h.entry.id for h in s.retrieve("cat", 3, 0.3, ["Elwynn Forest"], 0.0)],
+                         ["far", "near"])                                        # boost 0 == today
+        boosted = s.retrieve("cat", 3, 0.3, ["Elwynn Forest"], 0.5)
+        self.assertEqual([h.entry.id for h in boosted], ["near", "far"])
+        self.assertAlmostEqual(boosted[0].similarity, plain[1].similarity)      # similarity stays raw
+        # lowzone is same-zone but below the threshold on its raw score: still out
+        self.assertNotIn("lowzone", [h.entry.id for h in s.retrieve("cat", 3, 0.3, ["Elwynn Forest"], 5.0)])
+
+    def test_sparse_retrieve_matches_dense_similarity(self):
+        entries = [rag.RagEntry("a", "Kobold Candles", "Collect 8 Large Candle, dropped by Kobold Miner", ["goldshire"]),
+                   rag.RagEntry("b", "Trainer", "Warrior Trainer is in Northshire", []),
+                   rag.RagEntry("c", "Dup", "candle candle candle", ["x y"])]
+        s = rag.RagSystem(entries)
+        for q in ["where are the kobold candles?", "zzz unknown words", "warrior in northshire abbey", "candle", ""]:
+            expected = {e.id: s.similarity(q, e) for e in entries}
+            got = {r.entry.id: r.similarity for r in s.retrieve(q, 10, 0.0)} if q else {}
+            for eid, sim in got.items():
+                self.assertAlmostEqual(sim, expected[eid], places=9, msg=(q, eid))
+            self.assertEqual(sorted(got) if q else [], sorted(entries and [e.id for e in entries]) if q else [])
+
+    def test_ignore_common_words_filters_entries_and_query_and_sparse_matches_dense(self):
+        entries = [rag.RagEntry("a", "The Hunt", "where is the hunter trainer in durotar"),
+                   rag.RagEntry("b", "Other", "the is of in")]
+        plain, filt = rag.RagSystem(entries), rag.RagSystem(entries, ignore_common_words=True)
+        self.assertIn("the", plain.vocabulary)
+        self.assertNotIn("the", filt.vocabulary)
+        self.assertEqual(filt.retrieve("the is in of", 5, 0.0)[0].similarity if filt.retrieve("the is in of", 5, 0.0) else 0, 0)
+        self.assertGreater(plain.retrieve("the is in of", 5, 0.3)[0].similarity, 0.3)       # stop words alone matched
+        self.assertEqual(filt.retrieve("the is in of", 5, 0.01), [])
+        for q in ["where is the hunter trainer", "durotar hunt"]:
+            for e in entries:
+                got = {r.entry.id: r.similarity for r in filt.retrieve(q, 5, 0.0)}
+                self.assertAlmostEqual(got.get(e.id, 0.0), filt.similarity(q, e), places=9)
+
+    def test_sparse_filter_and_boost_compose(self):
+        entries = [rag.RagEntry("far", "Trainer", "the warrior trainer is in Westfall"),
+                   rag.RagEntry("near", "Trainer", "the warrior trainer is in Elwynn Forest"),
+                   rag.RagEntry("stop", "Other", "the is of in Elwynn Forest"),
+                   rag.RagEntry("low", "Wolf", "wolf wolf wolf wolf warrior Elwynn Forest")]
+        s = rag.RagSystem(entries, ignore_common_words=True)
+        q = "where is the warrior trainer"
+        plain = s.retrieve(q, 5, 0.3)
+        self.assertEqual([h.entry.id for h in plain], ["far", "near"])
+        boosted = s.retrieve(q, 5, 0.3, ["Elwynn Forest"], 0.5)
+        self.assertEqual([h.entry.id for h in boosted], ["near", "far"])
+        # similarity stays the raw sparse score, equal to the dense reference
+        self.assertAlmostEqual(boosted[0].similarity, s.similarity(q, entries[1]), places=9)
+        # filtered stop words never match, and a boost cannot admit a below-threshold same-zone entry
+        self.assertNotIn("stop", [h.entry.id for h in s.retrieve(q, 5, 0.01, ["Elwynn Forest"], 5.0)])
+        self.assertNotIn("low", [h.entry.id for h in s.retrieve(q, 5, 0.3, ["Elwynn Forest"], 5.0)])
+
     def test_format_info(self):
         s = rag.RagSystem([rag.RagEntry("a", "A", "one"), rag.RagEntry("b", "B", "two")])
         hits = [rag.RagResult(s.entries[0], 1.0), rag.RagResult(s.entries[1], 0.5)]
@@ -107,6 +165,21 @@ class ProcessResponseTests(unittest.TestCase):
     def test_inner_quote_blocks_unwrap(self):
         self.assertEqual(self.p('"Hi" he said "yo"'), '"Hi" he said "yo"')
 
+    def test_slash_emote_only_at_start_or_end(self):
+        pe = lambda raw: pp.extract_emote_tag(raw.encode())
+        for raw, text in [("/wave hey there", "hey there"), ("hey there /wave", "hey there"),
+                          ("hey there /wave!", "hey there !"), ("/wave", "")]:
+            with self.subTest(raw=raw):
+                t, found = pe(raw)
+                self.assertEqual((t.decode(), found), (text, "wave"))
+        for raw in ["follow me or just type /follow and click on me",
+                    "no clue, maybe try /follow? though honestly ...",
+                    "they dont want us to know ..., but /follow is how you do it",
+                    "just type /follow", "Use /Follow.", "and/or", "see http://x.com/wave now"]:
+            with self.subTest(raw=raw):
+                t, found = pe(raw)
+                self.assertEqual((t.decode(), found), (raw, ""))
+
     def test_think_tags_and_speaker_prefix(self):
         self.assertEqual(self.p("<think>hmm</think>Bob: yo what's up"), "yo what's up")
         self.assertEqual(self.p("<think>cut off mid thought"), "")
@@ -124,7 +197,8 @@ class ProcessResponseTests(unittest.TestCase):
 
     def test_bracket_and_slash_forms(self):
         self.assertEqual(self.p("hi there [emote:wave]"), "hi there")
-        self.assertEqual(self.p("hi /wave there"), "hi there")
+        self.assertEqual(self.p("/wave hi there"), "hi there")
+        self.assertEqual(self.p("hi /wave there"), "hi /wave there")    # mid-sentence: left alone
         self.assertEqual(self.p("and/or maybe"), "and/or maybe")         # not an emote: left alone
 
     def test_emphasis_keeps_the_word(self):
@@ -469,6 +543,19 @@ class RenderTests(unittest.TestCase):
         r = render.render_case(cfg, self.reply_case(message="tell me about mage"), {}, s, 0)
         self.assertEqual(r.prompt, "PINFO - Mage: frost mages slow enemies\n")
         self.assertEqual(r.rag[0]["id"], "a")
+
+    def test_rag_location_boost_uses_bot_zone_and_area(self):
+        s = rag.RagSystem([rag.RagEntry("a", "Kobolds", "kobolds near Westfall"),
+                           rag.RagEntry("b", "Kobolds", "kobolds near Elwynn Forest")])
+        base = {**self.conf, "OllamaChat.EnableRAG": "1", "OllamaChat.ChatPromptTemplate": "P",
+                "OllamaChat.RAGPromptTemplate": "{rag_info}", "OllamaChat.GestureChance": "0",
+                "OllamaChat.RAGMaxRetrievedItems": "1"}
+        case = self.reply_case(message="where are the kobolds")
+        case["bot"] = {**case["bot"], "zone": "Elwynn Forest", "area": "UnknownArea"}
+        off = render.render_case(render.Config(base), case, {}, s, 0)
+        on = render.render_case(render.Config({**base, "OllamaChat.RAGLocationBoost": "0.5"}), case, {}, s, 0)
+        self.assertEqual(off.rag[0]["id"], "a")
+        self.assertEqual(on.rag[0]["id"], "b")
 
     def test_float_formatting_matches_fmt(self):
         self.assertEqual(render.f32_repr(8.5), "8.5")

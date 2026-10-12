@@ -1,0 +1,33 @@
+id = "q3-where-bitter-rivals"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Quest Bitter Rivals (level 6, Dun Morogh, Alliance): Given by Marleth Barleybrew. Collect 1 Barrel of Barleybrew Scalder.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "where do i take the bitter rivals quest"
+
+[bot]
+name = "Gilda"
+level = 6
+class = "hunter"
+race = "Dwarf"
+gender = "Female"
+role = "marksmanship hunter"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Coldridge Valley"
+zone = "Dun Morogh"
+map = "Eastern Kingdoms"
+personality = "CASUAL"
+
+[player]
+name = "Tomas"
+level = 5
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "holy paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

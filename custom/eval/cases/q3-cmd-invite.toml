@@ -1,0 +1,33 @@
+id = "q3-cmd-invite"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: How to get a bot to join your group: Whisper the bot the word invite and it sends you a group invitation; accept it and it becomes your party member and follows your orders. A bot refuses if it is more than 5 levels above you (unless you share a guild), or if it is in a battleground queue or its group is full; then it only chats. You can also invite a bot yourself with the normal group invite on its name.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "how do i invite you to my group"
+
+[bot]
+name = "Brenna"
+level = 10
+class = "mage"
+race = "Human"
+gender = "Female"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "CASUAL"
+
+[player]
+name = "Tomas"
+level = 9
+class = "warrior"
+race = "Human"
+gender = "Male"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

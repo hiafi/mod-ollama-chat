@@ -1,0 +1,33 @@
+id = "q3c-lead-the-way"
+path = "reply"
+notes = "Q3-C case. Facts: pb_lead_the_way (rewritten from the persona side). A reply is right if the bot says it cannot lead, offers to follow, and gives no directions."
+message = "hey can you lead me to the mine entrance?"
+
+[bot]
+name = "Caelum"
+level = 7
+class = "warlock"
+race = "Human"
+gender = "Female"
+role = "affliction warlock"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "GAMER"
+
+[player]
+name = "Tomas"
+level = 7
+class = "paladin"
+race = "Human"
+gender = "Male"
+role = "holy paladin"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0
