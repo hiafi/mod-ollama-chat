@@ -128,10 +128,14 @@ whether anyone wants to group up for it.|Ask what others think of it.|Ask a quic
 # One fact: the second and third hits are usually sibling entries (other trainers, other zones) that read as answers.
 # On the probes, top-1 finds 27 of 34 answerable questions and top-3 only 28, with 0.09 against 0.74 unrelated entries.
 "OllamaChat.RAGMaxRetrievedItems" = 1
-# Chosen on custom/eval/rag-probes.toml with the filter on and one fact: 9 of 10 chit-chat messages retrieve nothing and
-# 27 of 34 answerable questions get the right fact. Below 0.30 chit-chat starts matching entries; above 0.40 the right
-# fact is lost. Single-word messages that are also quest names (mana) still match.
-"OllamaChat.RAGSimilarityThreshold" = 0.35
+# Chosen with python3 custom/eval/rag_probe.py --sweep (filter on, one fact, bot zone and area set per probe): 9 of 10
+# chit-chat messages retrieve nothing, 9 of 10 command and 17 of 22 where questions get the right fact first, and
+# 5 of 10 rework or server questions. Rework facts are long, so they score 0.23 to 0.39: lowering the threshold to 0.22
+# finds 9 to 10 of them but lets 2 of 10 chit-chat messages ("thanks man", "what a night") pull in a quest.
+"OllamaChat.RAGSimilarityThreshold" = 0.31
+# Entries naming the bot's zone or area rank 1.5x higher (the threshold is tested on the raw score first, so this only
+# reorders). It picks the local trainer or innkeeper among siblings. 0.25 changes nothing on the probes; 1.0 equals 0.5.
+"OllamaChat.RAGLocationBoost" = 0.5
 # The stock template asks for detailed answers, against the system prompt's short lines; this one also stops the extras
 # the model added in the first live eval (a cave east of here, by the barracks) when the fact only names a valley.
 "OllamaChat.RAGPromptTemplate" = """
