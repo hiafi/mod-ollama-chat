@@ -1,0 +1,33 @@
+id = "q3-where-innkeeper-mulgore"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Innkeeper Kauth: Innkeeper Kauth is in Mulgore, Horde.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "where is the innkeeper in mulgore"
+
+[bot]
+name = "Jorund"
+level = 8
+class = "hunter"
+race = "Tauren"
+gender = "Female"
+role = "beast mastery hunter"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Bloodhoof Village"
+zone = "Mulgore"
+map = "Kalimdor"
+personality = "FAMILY_GAMER"
+
+[player]
+name = "Tomas"
+level = 7
+class = "shaman"
+race = "Tauren"
+gender = "Male"
+role = "restoration shaman"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

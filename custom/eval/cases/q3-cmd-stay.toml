@@ -1,0 +1,33 @@
+id = "q3-cmd-stay"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: How to make a bot stay or wait: Say stay and the bot stops where it is and holds that spot; it answers Staying. Say follow when you want it to come along again. There is no timed wait command: stay holds the bot until you tell it otherwise.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "how do i tell you to stay here"
+
+[bot]
+name = "Elyse"
+level = 12
+class = "priest"
+race = "Human"
+gender = "Male"
+role = "holy priest"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Goldshire"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "MENTOR"
+
+[player]
+name = "Tomas"
+level = 11
+class = "rogue"
+race = "Human"
+gender = "Female"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

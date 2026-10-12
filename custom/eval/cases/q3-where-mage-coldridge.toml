@@ -1,0 +1,33 @@
+id = "q3-where-mage-coldridge"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Mage Trainer Marryk Nurribit: Mage Trainer Marryk Nurribit is in Coldridge Valley, Dun Morogh, Alliance.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "where do i learn mage spells in coldridge valley?"
+
+[bot]
+name = "Kessa"
+level = 3
+class = "warrior"
+race = "Dwarf"
+gender = "Male"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Coldridge Valley"
+zone = "Dun Morogh"
+map = "Eastern Kingdoms"
+personality = "GAMER"
+
+[player]
+name = "Tomas"
+level = 2
+class = "mage"
+race = "Gnome"
+gender = "Female"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

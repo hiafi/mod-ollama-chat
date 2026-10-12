@@ -1,0 +1,33 @@
+id = "q3-where-hunter-durotar"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Hunter Trainer Thotar: Hunter Trainer Thotar is in Durotar, Horde.. A reply is right if it agrees with this and invents no direction, command or number beyond it. Another hunter trainer may be retrieved first; the stock data has several Horde hunter trainers."
+message = "where is the hunter trainer in durotar"
+
+[bot]
+name = "Haskel"
+level = 5
+class = "shaman"
+race = "Orc"
+gender = "Male"
+role = "elemental shaman"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Valley of Trials"
+zone = "Durotar"
+map = "Kalimdor"
+personality = "LONE_WOLF"
+
+[player]
+name = "Tomas"
+level = 4
+class = "hunter"
+race = "Troll"
+gender = "Female"
+role = "beast mastery hunter"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

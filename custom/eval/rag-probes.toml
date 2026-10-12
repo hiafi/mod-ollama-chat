@@ -1,0 +1,180 @@
+# Retrieval probes for custom/rag (no API calls): python3 custom/eval/rag_probe.py
+#   group    where | command | chitchat | case (the reply cases in cases/)
+#   expect   ids that should land in the top 3; empty = nothing should be retrieved
+#   zone     'wrong-zone' marks a question that only fails because the bot's zone is not used for ranking yet (Q3-A)
+# The where/how questions name a place or quest the way a player would, and pick the entry the generated data gives.
+
+# --- where / how: four starting zones, two level-20 zones --------------------------------------------------
+[[probe]]
+group = "where"
+message = "where is the warrior trainer in northshire?"
+expect = ["npc_911_0"]
+[[probe]]
+group = "where"
+message = "who gives the wolves across the border quest"
+expect = ["quest_33"]
+[[probe]]
+group = "where"
+message = "where can i find the innkeeper in goldshire"
+expect = ["npc_295_0"]
+note = "goldshire is not derived anywhere (no flight point, no sorted quests); the entry says Elwynn Forest"
+[[probe]]
+group = "where"
+message = "where do i learn mage spells in coldridge valley?"
+expect = ["npc_944_0"]
+[[probe]]
+group = "where"
+message = "where do i take the bitter rivals quest"
+expect = ["quest_310"]
+[[probe]]
+group = "where"
+message = "how do i do vanquish the betrayers, where are the sailors"
+expect = ["quest_784"]
+[[probe]]
+group = "where"
+message = "where is the hunter trainer in durotar"
+expect = ["npc_3171_0"]
+[[probe]]
+group = "where"
+message = "where do i get plainstrider meat for the hunt begins"
+expect = ["quest_747"]
+[[probe]]
+group = "where"
+message = "where is the innkeeper in mulgore"
+expect = ["npc_6747_0"]
+[[probe]]
+group = "where"
+message = "where do i find the prairie wolves for poison water?"
+expect = ["quest_748"]
+[[probe]]
+group = "where"
+message = "where is the priest trainer in deathknell"
+expect = ["npc_2123_0"]
+[[probe]]
+group = "where"
+message = "where do i find a hunter trainer in shadowglen"
+expect = ["npc_3596_0"]
+[[probe]]
+group = "where"
+message = "where is the innkeeper in darkshire"
+expect = ["npc_6790_0"]
+[[probe]]
+group = "where"
+message = "who do i hand in raven hill to"
+expect = ["quest_163"]
+[[probe]]
+group = "where"
+message = "where do i get gooey spider legs for dusky crab cakes"
+expect = ["quest_93"]
+[[probe]]
+group = "where"
+message = "where is the flight master in astranaar"
+expect = ["npc_4267_0"]
+[[probe]]
+group = "where"
+message = "where can i find bathrans hair?"
+expect = ["quest_1010"]
+[[probe]]
+group = "where"
+message = "where are the wrathtail naga for the zoram strand quest"
+expect = ["quest_1008"]
+[[probe]]
+group = "where"
+message = "where do i find kobold miners for the candles quest"
+expect = ["quest_60"]
+[[probe]]
+group = "where"
+message = "who has the warrior trainer in dun morogh"
+expect = ["npc_912_0"]
+
+# --- commands ----------------------------------------------------------------------------------------------
+[[probe]]
+group = "command"
+message = "how do i get you to follow me?"
+expect = ["pb_follow"]
+[[probe]]
+group = "command"
+message = "how do i invite you to my group"
+expect = ["pb_invite"]
+[[probe]]
+group = "command"
+message = "can you lead the way?"
+expect = ["pb_lead_the_way"]
+[[probe]]
+group = "command"
+message = "how do i tell you to stay here"
+expect = ["pb_stay"]
+[[probe]]
+group = "command"
+message = "what command makes you attack my target"
+expect = ["pb_attack"]
+[[probe]]
+group = "command"
+message = "how do i make you stop fighting and run away"
+expect = ["pb_flee"]
+[[probe]]
+group = "command"
+message = "can you loot everything for me"
+expect = ["pb_loot"]
+[[probe]]
+group = "command"
+message = "how do i make you leave my party"
+expect = ["pb_leave"]
+[[probe]]
+group = "command"
+message = "can you be the healer for this dungeon"
+expect = ["pb_roles"]
+[[probe]]
+group = "command"
+message = "how do i get you to come to me, you are far away"
+expect = ["pb_summon", "pb_follow"]
+
+# --- chit-chat: nothing should be retrieved --------------------------------------------------------------
+[[probe]]
+group = "chitchat"
+message = "lol"
+[[probe]]
+group = "chitchat"
+message = "sup yall"
+[[probe]]
+group = "chitchat"
+message = "nice"
+[[probe]]
+group = "chitchat"
+message = "gg"
+[[probe]]
+group = "chitchat"
+message = "brb"
+[[probe]]
+group = "chitchat"
+message = "thanks man"
+[[probe]]
+group = "chitchat"
+message = "haha true"
+[[probe]]
+group = "chitchat"
+message = "ok cool"
+[[probe]]
+group = "chitchat"
+message = "wb"
+[[probe]]
+group = "chitchat"
+message = "what a night"
+
+# --- reply cases (messages are read from cases/*.toml; only the ones with an expectation are listed) ----------
+[[probe]]
+group = "case"
+case = "real-05-lead-the-way-command"
+expect = ["pb_lead_the_way"]
+[[probe]]
+group = "case"
+case = "trap-reply-follow-command"
+expect = ["pb_follow"]
+[[probe]]
+group = "case"
+case = "trap-reply-where-kobolds"
+expect = ["quest_60"]
+[[probe]]
+group = "case"
+case = "trap-reply-can-you-heal"
+expect = ["pb_roles"]

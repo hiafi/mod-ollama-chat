@@ -1,0 +1,33 @@
+id = "q3-where-wolves-quest"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Quest Wolves Across the Border (level 2, Northshire Valley, Elwynn Forest, Alliance): Given by Eagan Peltskinner. Collect 8 Tough Wolf Meat, dropped by Young Wolf and Timber Wolf, found right next to the quest giver. Requires finishing Eagan Peltskinner first.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "who gives the wolves across the border quest"
+
+[bot]
+name = "Perrin"
+level = 3
+class = "mage"
+race = "Human"
+gender = "Male"
+role = "arcane mage"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Northshire Valley"
+zone = "Elwynn Forest"
+map = "Eastern Kingdoms"
+personality = "MENTOR"
+
+[player]
+name = "Tomas"
+level = 2
+class = "rogue"
+race = "Human"
+gender = "Female"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

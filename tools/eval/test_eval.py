@@ -98,6 +98,49 @@ class RagTests(unittest.TestCase):
         # lowzone is same-zone but below the threshold on its raw score: still out
         self.assertNotIn("lowzone", [h.entry.id for h in s.retrieve("cat", 3, 0.3, ["Elwynn Forest"], 5.0)])
 
+    def test_sparse_retrieve_matches_dense_similarity(self):
+        entries = [rag.RagEntry("a", "Kobold Candles", "Collect 8 Large Candle, dropped by Kobold Miner", ["goldshire"]),
+                   rag.RagEntry("b", "Trainer", "Warrior Trainer is in Northshire", []),
+                   rag.RagEntry("c", "Dup", "candle candle candle", ["x y"])]
+        s = rag.RagSystem(entries)
+        for q in ["where are the kobold candles?", "zzz unknown words", "warrior in northshire abbey", "candle", ""]:
+            expected = {e.id: s.similarity(q, e) for e in entries}
+            got = {r.entry.id: r.similarity for r in s.retrieve(q, 10, 0.0)} if q else {}
+            for eid, sim in got.items():
+                self.assertAlmostEqual(sim, expected[eid], places=9, msg=(q, eid))
+            self.assertEqual(sorted(got) if q else [], sorted(entries and [e.id for e in entries]) if q else [])
+
+    def test_ignore_common_words_filters_entries_and_query_and_sparse_matches_dense(self):
+        entries = [rag.RagEntry("a", "The Hunt", "where is the hunter trainer in durotar"),
+                   rag.RagEntry("b", "Other", "the is of in")]
+        plain, filt = rag.RagSystem(entries), rag.RagSystem(entries, ignore_common_words=True)
+        self.assertIn("the", plain.vocabulary)
+        self.assertNotIn("the", filt.vocabulary)
+        self.assertEqual(filt.retrieve("the is in of", 5, 0.0)[0].similarity if filt.retrieve("the is in of", 5, 0.0) else 0, 0)
+        self.assertGreater(plain.retrieve("the is in of", 5, 0.3)[0].similarity, 0.3)       # stop words alone matched
+        self.assertEqual(filt.retrieve("the is in of", 5, 0.01), [])
+        for q in ["where is the hunter trainer", "durotar hunt"]:
+            for e in entries:
+                got = {r.entry.id: r.similarity for r in filt.retrieve(q, 5, 0.0)}
+                self.assertAlmostEqual(got.get(e.id, 0.0), filt.similarity(q, e), places=9)
+
+    def test_sparse_filter_and_boost_compose(self):
+        entries = [rag.RagEntry("far", "Trainer", "the warrior trainer is in Westfall"),
+                   rag.RagEntry("near", "Trainer", "the warrior trainer is in Elwynn Forest"),
+                   rag.RagEntry("stop", "Other", "the is of in Elwynn Forest"),
+                   rag.RagEntry("low", "Wolf", "wolf wolf wolf wolf warrior Elwynn Forest")]
+        s = rag.RagSystem(entries, ignore_common_words=True)
+        q = "where is the warrior trainer"
+        plain = s.retrieve(q, 5, 0.3)
+        self.assertEqual([h.entry.id for h in plain], ["far", "near"])
+        boosted = s.retrieve(q, 5, 0.3, ["Elwynn Forest"], 0.5)
+        self.assertEqual([h.entry.id for h in boosted], ["near", "far"])
+        # similarity stays the raw sparse score, equal to the dense reference
+        self.assertAlmostEqual(boosted[0].similarity, s.similarity(q, entries[1]), places=9)
+        # filtered stop words never match, and a boost cannot admit a below-threshold same-zone entry
+        self.assertNotIn("stop", [h.entry.id for h in s.retrieve(q, 5, 0.01, ["Elwynn Forest"], 5.0)])
+        self.assertNotIn("low", [h.entry.id for h in s.retrieve(q, 5, 0.3, ["Elwynn Forest"], 5.0)])
+
     def test_format_info(self):
         s = rag.RagSystem([rag.RagEntry("a", "A", "one"), rag.RagEntry("b", "B", "two")])
         hits = [rag.RagResult(s.entries[0], 1.0), rag.RagResult(s.entries[1], 0.5)]

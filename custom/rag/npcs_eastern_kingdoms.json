@@ -1,0 +1,4428 @@
+[
+ {
+  "id": "npc_198_0",
+  "title": "Mage Trainer Khelden Bremen",
+  "content": "Mage Trainer Khelden Bremen is in Northshire Valley, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Elwynn Forest",
+   "Northshire Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_295_0",
+  "title": "Innkeeper Farley",
+  "content": "Innkeeper Farley is about 800 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_328_0",
+  "title": "Mage Trainer Zaldimar Wefhellt",
+  "content": "Mage Trainer Zaldimar Wefhellt is about 800 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_352_0",
+  "title": "Flight Master Dungar Longdrink",
+  "content": "Flight Master Dungar Longdrink is in Stormwind City, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_375_0",
+  "title": "Priest Trainer Priestess Anetta",
+  "content": "Priest Trainer Priestess Anetta is in Northshire Valley, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Elwynn Forest",
+   "Northshire Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_376_0",
+  "title": "Priest Trainer High Priestess Laurena",
+  "content": "Priest Trainer High Priestess Laurena is in Stormwind City, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_377_0",
+  "title": "Priest Trainer Priestess Josetta",
+  "content": "Priest Trainer Priestess Josetta is about 750 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_459_0",
+  "title": "Warlock Trainer Drusilla La Salle",
+  "content": "Warlock Trainer Drusilla La Salle is in Northshire Valley, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Elwynn Forest",
+   "Northshire Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_460_0",
+  "title": "Warlock Trainer Alamar Grimm",
+  "content": "Warlock Trainer Alamar Grimm is in Coldridge Valley, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Dun Morogh",
+   "Coldridge Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_461_0",
+  "title": "Warlock Trainer Demisette Cloyce",
+  "content": "Warlock Trainer Demisette Cloyce is in Stormwind City, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_514_0",
+  "title": "Blacksmithing Trainer Smith Argus",
+  "content": "Blacksmithing Trainer Smith Argus is about 750 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_523_0",
+  "title": "Flight Master Thor",
+  "content": "Flight Master Thor is near Sentinel Hill, Westfall, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Westfall",
+   "Sentinel Hill"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "westfall",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_812_0",
+  "title": "Herbalism Trainer Alma Jainrose",
+  "content": "Herbalism Trainer Alma Jainrose is near Lakeshire, Redridge Mountains, Alliance.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Redridge Mountains",
+   "Lakeshire"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "redridge-mountains",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_837_0",
+  "title": "Priest Trainer Branstock Khalder",
+  "content": "Priest Trainer Branstock Khalder is in Coldridge Valley, Dun Morogh, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Dun Morogh",
+   "Coldridge Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_895_0",
+  "title": "Hunter Trainer Thorgas Grimson",
+  "content": "Hunter Trainer Thorgas Grimson is in Coldridge Valley, Dun Morogh, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Dun Morogh",
+   "Coldridge Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_906_0",
+  "title": "Warlock Trainer Maximillian Crowe",
+  "content": "Warlock Trainer Maximillian Crowe is in Elwynn Forest, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Elwynn Forest"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_908_0",
+  "title": "Herbalism Trainer Flora Silverwind",
+  "content": "Herbalism Trainer Flora Silverwind is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_911_0",
+  "title": "Warrior Trainer Llane Beshere",
+  "content": "Warrior Trainer Llane Beshere is in Northshire Valley, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Elwynn Forest",
+   "Northshire Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_912_0",
+  "title": "Warrior Trainer Thran Khorman",
+  "content": "Warrior Trainer Thran Khorman is in Coldridge Valley, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Dun Morogh",
+   "Coldridge Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_913_0",
+  "title": "Warrior Trainer Lyria Du Lac",
+  "content": "Warrior Trainer Lyria Du Lac is about 750 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_914_0",
+  "title": "Warrior Trainer Ander Germaine",
+  "content": "Warrior Trainer Ander Germaine is near Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_915_0",
+  "title": "Rogue Trainer Jorik Kerridan",
+  "content": "Rogue Trainer Jorik Kerridan is in Northshire Valley, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Elwynn Forest",
+   "Northshire Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_916_0",
+  "title": "Rogue Trainer Solm Hargrin",
+  "content": "Rogue Trainer Solm Hargrin is in Coldridge Valley, Dun Morogh, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Dun Morogh",
+   "Coldridge Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_917_0",
+  "title": "Rogue Trainer Keryn Sylvius",
+  "content": "Rogue Trainer Keryn Sylvius is about 800 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_918_0",
+  "title": "Rogue Trainer Osborne the Night Man",
+  "content": "Rogue Trainer Osborne the Night Man is near Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_925_0",
+  "title": "Paladin Trainer Brother Sammuel",
+  "content": "Paladin Trainer Brother Sammuel is in Northshire Valley, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Elwynn Forest",
+   "Northshire Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_926_0",
+  "title": "Paladin Trainer Bromos Grummner",
+  "content": "Paladin Trainer Bromos Grummner is in Coldridge Valley, Dun Morogh, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Dun Morogh",
+   "Coldridge Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_927_0",
+  "title": "Paladin Trainer Brother Wilhelm",
+  "content": "Paladin Trainer Brother Wilhelm is about 750 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_928_0",
+  "title": "Paladin Trainer Lord Grayson Shadowbreaker",
+  "content": "Paladin Trainer Lord Grayson Shadowbreaker is in Stormwind City, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_931_0",
+  "title": "Flight Master Ariena Stormfeather",
+  "content": "Flight Master Ariena Stormfeather is near Lakeshire, Redridge Mountains, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Redridge Mountains",
+   "Lakeshire"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "redridge-mountains",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_944_0",
+  "title": "Mage Trainer Marryk Nurribit",
+  "content": "Mage Trainer Marryk Nurribit is in Coldridge Valley, Dun Morogh, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Dun Morogh",
+   "Coldridge Valley"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_985_0",
+  "title": "Warrior Trainer Malosh",
+  "content": "Warrior Trainer Malosh is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Warrior Trainer",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_986_0",
+  "title": "Shaman Trainer Haromm",
+  "content": "Shaman Trainer Haromm is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Shaman Trainer",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_987_0",
+  "title": "Hunter Trainer Ogromm",
+  "content": "Hunter Trainer Ogromm is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Hunter Trainer",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_988_0",
+  "title": "Warlock Trainer Kartosh",
+  "content": "Warlock Trainer Kartosh is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Warlock Trainer",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_1103_0",
+  "title": "Tailoring Trainer Eldrin",
+  "content": "Tailoring Trainer Eldrin is in Elwynn Forest, Alliance.",
+  "keywords": [
+   "Tailoring Trainer",
+   "Elwynn Forest"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1215_0",
+  "title": "Alchemy Trainer Alchemist Mallory",
+  "content": "Alchemy Trainer Alchemist Mallory is about 400 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1218_0",
+  "title": "Herbalism Trainer Herbalist Pomeroy",
+  "content": "Herbalism Trainer Herbalist Pomeroy is about 400 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1226_0",
+  "title": "Priest Trainer Maxan Anvol",
+  "content": "Priest Trainer Maxan Anvol is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1228_0",
+  "title": "Mage Trainer Magis Sparkmantle",
+  "content": "Mage Trainer Magis Sparkmantle is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1229_0",
+  "title": "Warrior Trainer Granis Swiftaxe",
+  "content": "Warrior Trainer Granis Swiftaxe is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1231_0",
+  "title": "Hunter Trainer Grif Wildheart",
+  "content": "Hunter Trainer Grif Wildheart is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1232_0",
+  "title": "Paladin Trainer Azar Stronghammer",
+  "content": "Paladin Trainer Azar Stronghammer is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1234_0",
+  "title": "Rogue Trainer Hogral Bakkan",
+  "content": "Rogue Trainer Hogral Bakkan is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1241_0",
+  "title": "Blacksmithing Trainer Tognus Flintfire",
+  "content": "Blacksmithing Trainer Tognus Flintfire is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1247_0",
+  "title": "Innkeeper Belm",
+  "content": "Innkeeper Belm is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1292_0",
+  "title": "Skinning Trainer Maris Granger",
+  "content": "Skinning Trainer Maris Granger is in Stormwind City, Alliance.",
+  "keywords": [
+   "Skinning Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1317_0",
+  "title": "Enchanting Trainer Lucan Cordell",
+  "content": "Enchanting Trainer Lucan Cordell is in Stormwind City, Alliance.",
+  "keywords": [
+   "Enchanting Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1346_0",
+  "title": "Tailoring Trainer Georgio Bolero",
+  "content": "Tailoring Trainer Georgio Bolero is in Stormwind City, Alliance.",
+  "keywords": [
+   "Tailoring Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1355_0",
+  "title": "Cooking Trainer Cook Ghilm",
+  "content": "Cooking Trainer Cook Ghilm is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Cooking Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1385_0",
+  "title": "Leatherworking Trainer Brawn",
+  "content": "Leatherworking Trainer Brawn is near Grom'gol, Stranglethorn Vale, Horde.",
+  "keywords": [
+   "Leatherworking Trainer",
+   "Stranglethorn Vale",
+   "Grom'gol"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_1386_0",
+  "title": "Alchemy Trainer Rogvar",
+  "content": "Alchemy Trainer Rogvar is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_1387_0",
+  "title": "Flight Master Thysta",
+  "content": "Flight Master Thysta is near Grom'gol, Stranglethorn Vale, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Stranglethorn Vale",
+   "Grom'gol"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "stranglethorn-vale",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_1404_0",
+  "title": "Hunter Trainer Kragg",
+  "content": "Hunter Trainer Kragg is near Grom'gol, Stranglethorn Vale, Horde.",
+  "keywords": [
+   "Hunter Trainer",
+   "Stranglethorn Vale",
+   "Grom'gol"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stranglethorn-vale",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_1411_0",
+  "title": "Rogue Trainer Ian Strom",
+  "content": "Rogue Trainer Ian Strom is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Rogue Trainer",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_1458_0",
+  "title": "Herbalism Trainer Telurinon Moonshadow",
+  "content": "Herbalism Trainer Telurinon Moonshadow is near Menethil Harbor, Wetlands, Alliance.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Wetlands",
+   "Menethil Harbor"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "wetlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1464_0",
+  "title": "Innkeeper Helbrek",
+  "content": "Innkeeper Helbrek is near Menethil Harbor, Wetlands, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Wetlands",
+   "Menethil Harbor"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "wetlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1470_0",
+  "title": "Alchemy Trainer Ghak Healtouch",
+  "content": "Alchemy Trainer Ghak Healtouch is near Thelsamar, Loch Modan, Alliance.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Loch Modan",
+   "Thelsamar"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1473_0",
+  "title": "Herbalism Trainer Kali Healtouch",
+  "content": "Herbalism Trainer Kali Healtouch is near Thelsamar, Loch Modan, Alliance.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Loch Modan",
+   "Thelsamar"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1571_0",
+  "title": "Flight Master Shellei Brondir",
+  "content": "Flight Master Shellei Brondir is near Menethil Harbor, Wetlands, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Wetlands",
+   "Menethil Harbor"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "wetlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1572_0",
+  "title": "Flight Master Thorgrum Borrelson",
+  "content": "Flight Master Thorgrum Borrelson is near Thelsamar, Loch Modan, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Loch Modan",
+   "Thelsamar"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1573_0",
+  "title": "Flight Master Gryth Thurden",
+  "content": "Flight Master Gryth Thurden is in Ironforge, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1632_0",
+  "title": "Leatherworking Trainer Adele Fielder",
+  "content": "Leatherworking Trainer Adele Fielder is about 800 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Leatherworking Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1651_0",
+  "title": "Fishing Trainer Lee Brown",
+  "content": "Fishing Trainer Lee Brown is in Elwynn Forest, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Elwynn Forest"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1676_0",
+  "title": "Engineering Trainer Finbus Geargrind",
+  "content": "Engineering Trainer Finbus Geargrind is near Darkshire, Duskwood, Alliance.",
+  "keywords": [
+   "Engineering Trainer",
+   "Duskwood",
+   "Darkshire"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "duskwood",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1680_0",
+  "title": "Fishing Trainer Matthew Hooper",
+  "content": "Fishing Trainer Matthew Hooper is near Lakeshire, Redridge Mountains, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Redridge Mountains",
+   "Lakeshire"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "redridge-mountains",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1681_0",
+  "title": "Mining Trainer Brock Stoneseeker",
+  "content": "Mining Trainer Brock Stoneseeker is near Thelsamar, Loch Modan, Alliance.",
+  "keywords": [
+   "Mining Trainer",
+   "Loch Modan",
+   "Thelsamar"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1683_0",
+  "title": "Fishing Trainer Warg Deepwater",
+  "content": "Fishing Trainer Warg Deepwater is near Thelsamar, Loch Modan, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Loch Modan",
+   "Thelsamar"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1699_0",
+  "title": "Cooking Trainer Gremlock Pilsnor",
+  "content": "Cooking Trainer Gremlock Pilsnor is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Cooking Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1700_0",
+  "title": "Fishing Trainer Paxton Ganter",
+  "content": "Fishing Trainer Paxton Ganter is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1701_0",
+  "title": "Mining Trainer Dank Drizzlecut",
+  "content": "Mining Trainer Dank Drizzlecut is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Mining Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1702_0",
+  "title": "Engineering Trainer Bronk Guzzlegear",
+  "content": "Engineering Trainer Bronk Guzzlegear is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Engineering Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_1901_0",
+  "title": "Warrior Trainer Kelstrum Stonebreaker",
+  "content": "Warrior Trainer Kelstrum Stonebreaker is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2114_0",
+  "title": "Herbalism Trainer Faruza",
+  "content": "Herbalism Trainer Faruza is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2119_0",
+  "title": "Warrior Trainer Dannal Stern",
+  "content": "Warrior Trainer Dannal Stern is in Deathknell, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warrior Trainer",
+   "Tirisfal Glades",
+   "Deathknell"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2122_0",
+  "title": "Rogue Trainer David Trias",
+  "content": "Rogue Trainer David Trias is in Deathknell, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Rogue Trainer",
+   "Tirisfal Glades",
+   "Deathknell"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2123_0",
+  "title": "Priest Trainer Dark Cleric Duesten",
+  "content": "Priest Trainer Dark Cleric Duesten is in Deathknell, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Priest Trainer",
+   "Tirisfal Glades",
+   "Deathknell"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2124_0",
+  "title": "Mage Trainer Isabella",
+  "content": "Mage Trainer Isabella is in Deathknell, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Mage Trainer",
+   "Tirisfal Glades",
+   "Deathknell"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2126_0",
+  "title": "Warlock Trainer Maximillion",
+  "content": "Warlock Trainer Maximillion is in Deathknell, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warlock Trainer",
+   "Tirisfal Glades",
+   "Deathknell"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2127_0",
+  "title": "Warlock Trainer Rupert Boch",
+  "content": "Warlock Trainer Rupert Boch is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warlock Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2128_0",
+  "title": "Mage Trainer Cain Firesong",
+  "content": "Mage Trainer Cain Firesong is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Mage Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2129_0",
+  "title": "Priest Trainer Dark Cleric Beryl",
+  "content": "Priest Trainer Dark Cleric Beryl is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Priest Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2130_0",
+  "title": "Rogue Trainer Marion Call",
+  "content": "Rogue Trainer Marion Call is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Rogue Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2131_0",
+  "title": "Warrior Trainer Austil de Mon",
+  "content": "Warrior Trainer Austil de Mon is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warrior Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2132_0",
+  "title": "Alchemy Trainer Carolai Anise",
+  "content": "Alchemy Trainer Carolai Anise is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2226_0",
+  "title": "Flight Master Karos Razok",
+  "content": "Flight Master Karos Razok is near The Sepulcher, Silverpine Forest, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Silverpine Forest",
+   "The Sepulcher"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "silverpine-forest",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2299_0",
+  "title": "Flight Master Borgus Stoutarm",
+  "content": "Flight Master Borgus Stoutarm is near Morgan's Vigil, Burning Steppes, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Burning Steppes",
+   "Morgan's Vigil"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "burning-steppes",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2327_0",
+  "title": "First Aid Trainer Shaina Fuller",
+  "content": "First Aid Trainer Shaina Fuller is in Stormwind City, Alliance.",
+  "keywords": [
+   "First Aid Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2352_0",
+  "title": "Innkeeper Anderson",
+  "content": "Innkeeper Anderson is near Southshore, Hillsbrad Foothills, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Hillsbrad Foothills",
+   "Southshore"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "hillsbrad-foothills",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2367_0",
+  "title": "Fishing Trainer Donald Rabonne",
+  "content": "Fishing Trainer Donald Rabonne is near Southshore, Hillsbrad Foothills, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Hillsbrad Foothills",
+   "Southshore"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "hillsbrad-foothills",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2388_0",
+  "title": "Innkeeper Shay",
+  "content": "Innkeeper Shay is near Tarren Mill, Hillsbrad Foothills, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Hillsbrad Foothills",
+   "Tarren Mill"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "hillsbrad-foothills",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2389_0",
+  "title": "Flight Master Zarise",
+  "content": "Flight Master Zarise is near Tarren Mill, Hillsbrad Foothills, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Hillsbrad Foothills",
+   "Tarren Mill"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "hillsbrad-foothills",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2390_0",
+  "title": "Herbalism Trainer Aranae Venomblood",
+  "content": "Herbalism Trainer Aranae Venomblood is near Tarren Mill, Hillsbrad Foothills, Horde.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Hillsbrad Foothills",
+   "Tarren Mill"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "hillsbrad-foothills",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2391_0",
+  "title": "Alchemy Trainer Serge Hinott",
+  "content": "Alchemy Trainer Serge Hinott is near Tarren Mill, Hillsbrad Foothills, Horde.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Hillsbrad Foothills",
+   "Tarren Mill"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "hillsbrad-foothills",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2399_0",
+  "title": "Tailoring Trainer Daryl Stack",
+  "content": "Tailoring Trainer Daryl Stack is near Tarren Mill, Hillsbrad Foothills, Horde.",
+  "keywords": [
+   "Tailoring Trainer",
+   "Hillsbrad Foothills",
+   "Tarren Mill"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "hillsbrad-foothills",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2409_0",
+  "title": "Flight Master Felicia Maline",
+  "content": "Flight Master Felicia Maline is near Darkshire, Duskwood, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Duskwood",
+   "Darkshire"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "duskwood",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2432_0",
+  "title": "Flight Master Darla Harris",
+  "content": "Flight Master Darla Harris is near Southshore, Hillsbrad Foothills, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Hillsbrad Foothills",
+   "Southshore"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "hillsbrad-foothills",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2485_0",
+  "title": "Portal Trainer Larimaine Purdue",
+  "content": "Portal Trainer Larimaine Purdue is in Stormwind City, Alliance.",
+  "keywords": [
+   "Portal Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2489_0",
+  "title": "Portal Trainer Milstaff Stormeye",
+  "content": "Portal Trainer Milstaff Stormeye is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Portal Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2492_0",
+  "title": "Portal Trainer Lexington Mortaim",
+  "content": "Portal Trainer Lexington Mortaim is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Portal Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2627_0",
+  "title": "Tailoring Trainer Grarnik Goodstitch",
+  "content": "Tailoring Trainer Grarnik Goodstitch is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Tailoring Trainer",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_2834_0",
+  "title": "Fishing Trainer Myizz Luckycatch",
+  "content": "Fishing Trainer Myizz Luckycatch is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Fishing Trainer",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_2835_0",
+  "title": "Flight Master Cedrik Prose",
+  "content": "Flight Master Cedrik Prose is near Refuge Pointe, Arathi Highlands, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Arathi Highlands",
+   "Refuge Pointe"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "arathi-highlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2836_0",
+  "title": "Blacksmithing Trainer Brikk Keencraft",
+  "content": "Blacksmithing Trainer Brikk Keencraft is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_2837_0",
+  "title": "Alchemy Trainer Jaxin Chong",
+  "content": "Alchemy Trainer Jaxin Chong is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_2851_0",
+  "title": "Flight Master Urda",
+  "content": "Flight Master Urda is near Hammerfall, Arathi Highlands, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Arathi Highlands",
+   "Hammerfall"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "arathi-highlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2856_0",
+  "title": "Herbalism Trainer Angrun",
+  "content": "Herbalism Trainer Angrun is near Grom'gol, Stranglethorn Vale, Horde.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Stranglethorn Vale",
+   "Grom'gol"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2858_0",
+  "title": "Flight Master Gringer",
+  "content": "Flight Master Gringer is near Booty Bay, Stranglethorn Vale, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "stranglethorn-vale",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2859_0",
+  "title": "Flight Master Gyll",
+  "content": "Flight Master Gyll is near Booty Bay, Stranglethorn Vale, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "stranglethorn-vale",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2861_0",
+  "title": "Flight Master Gorrik",
+  "content": "Flight Master Gorrik is near Kargath, Badlands, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Badlands",
+   "Kargath"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "badlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_2878_0",
+  "title": "Pet Trainer Peria Lamenur",
+  "content": "Pet Trainer Peria Lamenur is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Pet Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2878_1",
+  "title": "Pet Trainer Peria Lamenur",
+  "content": "Pet Trainer Peria Lamenur is about 600 yards south-east of Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Pet Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2879_0",
+  "title": "Pet Trainer Karrina Mekenda",
+  "content": "Pet Trainer Karrina Mekenda is in Stormwind City, Alliance.",
+  "keywords": [
+   "Pet Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_2941_0",
+  "title": "Flight Master Lanie Reed",
+  "content": "Flight Master Lanie Reed is near Thorium Point, Searing Gorge, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Searing Gorge",
+   "Thorium Point"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "searing-gorge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_3087_0",
+  "title": "Cooking Trainer Crystal Boughman",
+  "content": "Cooking Trainer Crystal Boughman is near Lakeshire, Redridge Mountains, Alliance.",
+  "keywords": [
+   "Cooking Trainer",
+   "Redridge Mountains",
+   "Lakeshire"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "redridge-mountains",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_3136_0",
+  "title": "Blacksmithing Trainer Clarise Gnarltree",
+  "content": "Blacksmithing Trainer Clarise Gnarltree is near Darkshire, Duskwood, Alliance.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Duskwood",
+   "Darkshire"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "duskwood",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_3137_0",
+  "title": "Mining Trainer Matt Johnson",
+  "content": "Mining Trainer Matt Johnson is near Darkshire, Duskwood, Alliance.",
+  "keywords": [
+   "Mining Trainer",
+   "Duskwood",
+   "Darkshire"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "duskwood",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_3179_0",
+  "title": "Fishing Trainer Harold Riggs",
+  "content": "Fishing Trainer Harold Riggs is near Menethil Harbor, Wetlands, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Wetlands",
+   "Menethil Harbor"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "wetlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_3181_0",
+  "title": "First Aid Trainer Fremal Doohickey",
+  "content": "First Aid Trainer Fremal Doohickey is near Menethil Harbor, Wetlands, Alliance.",
+  "keywords": [
+   "First Aid Trainer",
+   "Wetlands",
+   "Menethil Harbor"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "wetlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_3290_0",
+  "title": "Engineering Trainer Deek Fizzlebizz",
+  "content": "Engineering Trainer Deek Fizzlebizz is about 750 yards north-east of Thelsamar, Loch Modan, Alliance.",
+  "keywords": [
+   "Engineering Trainer",
+   "Loch Modan",
+   "Thelsamar"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_3305_0",
+  "title": "Flight Master Grisha",
+  "content": "Flight Master Grisha is near Thorium Point, Searing Gorge, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Searing Gorge",
+   "Thorium Point"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "searing-gorge",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_3523_0",
+  "title": "Tailoring Trainer Bowen Brisboise",
+  "content": "Tailoring Trainer Bowen Brisboise is about 700 yards north-west of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Tailoring Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_3549_0",
+  "title": "Leatherworking Trainer Shelene Rhobart",
+  "content": "Leatherworking Trainer Shelene Rhobart is about 500 yards north-east of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Leatherworking Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_3555_0",
+  "title": "Mining Trainer Johan Focht",
+  "content": "Mining Trainer Johan Focht is near The Sepulcher, Silverpine Forest, Horde.",
+  "keywords": [
+   "Mining Trainer",
+   "Silverpine Forest",
+   "The Sepulcher"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "silverpine-forest",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_3557_0",
+  "title": "Blacksmithing Trainer Guillaume Sorouy",
+  "content": "Blacksmithing Trainer Guillaume Sorouy is near The Sepulcher, Silverpine Forest, Horde.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Silverpine Forest",
+   "The Sepulcher"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "silverpine-forest",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4254_0",
+  "title": "Mining Trainer Geofram Bouldertoe",
+  "content": "Mining Trainer Geofram Bouldertoe is in Ironforge, Alliance.",
+  "keywords": [
+   "Mining Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_4258_0",
+  "title": "Blacksmithing Trainer Bengus Deepforge",
+  "content": "Blacksmithing Trainer Bengus Deepforge is in Ironforge, Alliance.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_4314_0",
+  "title": "Flight Master Gorkas",
+  "content": "Flight Master Gorkas is near Revantusk Village, The Hinterlands, Horde.",
+  "keywords": [
+   "Flight Master",
+   "The Hinterlands",
+   "Revantusk Village"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "the-hinterlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4551_0",
+  "title": "Flight Master Michael Garrett",
+  "content": "Flight Master Michael Garrett is in Undercity, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4552_0",
+  "title": "Cooking Trainer Eunice Burch",
+  "content": "Cooking Trainer Eunice Burch is in Undercity, Horde.",
+  "keywords": [
+   "Cooking Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4563_0",
+  "title": "Warlock Trainer Kaal Soulreaper",
+  "content": "Warlock Trainer Kaal Soulreaper is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warlock Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4564_0",
+  "title": "Warlock Trainer Luther Pickman",
+  "content": "Warlock Trainer Luther Pickman is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warlock Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4565_0",
+  "title": "Warlock Trainer Richard Kerwin",
+  "content": "Warlock Trainer Richard Kerwin is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warlock Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4566_0",
+  "title": "Mage Trainer Kaelystia Hatebringer",
+  "content": "Mage Trainer Kaelystia Hatebringer is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Mage Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4567_0",
+  "title": "Mage Trainer Pierce Shackleton",
+  "content": "Mage Trainer Pierce Shackleton is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Mage Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4568_0",
+  "title": "Mage Trainer Anastasia Hartwell",
+  "content": "Mage Trainer Anastasia Hartwell is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Mage Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4573_0",
+  "title": "Fishing Trainer Armand Cromwell",
+  "content": "Fishing Trainer Armand Cromwell is in Undercity, Horde.",
+  "keywords": [
+   "Fishing Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4576_0",
+  "title": "Tailoring Trainer Josef Gregorian",
+  "content": "Tailoring Trainer Josef Gregorian is in Undercity, Horde.",
+  "keywords": [
+   "Tailoring Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4582_0",
+  "title": "Rogue Trainer Carolyn Ward",
+  "content": "Rogue Trainer Carolyn Ward is in Undercity, Horde.",
+  "keywords": [
+   "Rogue Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4583_0",
+  "title": "Rogue Trainer Miles Dexter",
+  "content": "Rogue Trainer Miles Dexter is in Undercity, Horde.",
+  "keywords": [
+   "Rogue Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4584_0",
+  "title": "Rogue Trainer Gregory Charles",
+  "content": "Rogue Trainer Gregory Charles is in Undercity, Horde.",
+  "keywords": [
+   "Rogue Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4588_0",
+  "title": "Leatherworking Trainer Arthur Moore",
+  "content": "Leatherworking Trainer Arthur Moore is in Undercity, Horde.",
+  "keywords": [
+   "Leatherworking Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4591_0",
+  "title": "First Aid Trainer Mary Edras",
+  "content": "First Aid Trainer Mary Edras is in Undercity, Horde.",
+  "keywords": [
+   "First Aid Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4593_0",
+  "title": "Warrior Trainer Christoph Walker",
+  "content": "Warrior Trainer Christoph Walker is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warrior Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4594_0",
+  "title": "Warrior Trainer Angela Curthas",
+  "content": "Warrior Trainer Angela Curthas is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warrior Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4595_0",
+  "title": "Warrior Trainer Baltus Fowler",
+  "content": "Warrior Trainer Baltus Fowler is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Warrior Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4596_0",
+  "title": "Blacksmithing Trainer James Van Brunt",
+  "content": "Blacksmithing Trainer James Van Brunt is in Undercity, Horde.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4598_0",
+  "title": "Mining Trainer Brom Killian",
+  "content": "Mining Trainer Brom Killian is in Undercity, Horde.",
+  "keywords": [
+   "Mining Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4606_0",
+  "title": "Priest Trainer Aelthalyste",
+  "content": "Priest Trainer Aelthalyste is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Priest Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4607_0",
+  "title": "Priest Trainer Father Lankester",
+  "content": "Priest Trainer Father Lankester is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Priest Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4608_0",
+  "title": "Priest Trainer Father Lazarus",
+  "content": "Priest Trainer Father Lazarus is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Priest Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4611_0",
+  "title": "Alchemy Trainer Doctor Herbert Halsey",
+  "content": "Alchemy Trainer Doctor Herbert Halsey is in Undercity, Horde.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4614_0",
+  "title": "Herbalism Trainer Martha Alliestar",
+  "content": "Herbalism Trainer Martha Alliestar is in Undercity, Horde.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4616_0",
+  "title": "Enchanting Trainer Lavinia Crowe",
+  "content": "Enchanting Trainer Lavinia Crowe is in Undercity, Horde.",
+  "keywords": [
+   "Enchanting Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_4732_0",
+  "title": "Riding Trainer Randal Hunter",
+  "content": "Riding Trainer Randal Hunter is in Elwynn Forest, Alliance.",
+  "keywords": [
+   "Riding Trainer",
+   "Elwynn Forest"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_4772_0",
+  "title": "Riding Trainer Ultham Ironhorn",
+  "content": "Riding Trainer Ultham Ironhorn is about 700 yards south of Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Riding Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_4773_0",
+  "title": "Riding Trainer Velma Warnam",
+  "content": "Riding Trainer Velma Warnam is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Riding Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_5111_0",
+  "title": "Innkeeper Firebrew",
+  "content": "Innkeeper Firebrew is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5113_0",
+  "title": "Warrior Trainer Kelv Sternhammer",
+  "content": "Warrior Trainer Kelv Sternhammer is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5114_0",
+  "title": "Warrior Trainer Bilban Tosslespanner",
+  "content": "Warrior Trainer Bilban Tosslespanner is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5115_0",
+  "title": "Hunter Trainer Daera Brightspear",
+  "content": "Hunter Trainer Daera Brightspear is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5116_0",
+  "title": "Hunter Trainer Olmin Burningbeard",
+  "content": "Hunter Trainer Olmin Burningbeard is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5117_0",
+  "title": "Hunter Trainer Regnus Thundergranite",
+  "content": "Hunter Trainer Regnus Thundergranite is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5127_0",
+  "title": "Leatherworking Trainer Fimble Finespindle",
+  "content": "Leatherworking Trainer Fimble Finespindle is in Ironforge, Alliance.",
+  "keywords": [
+   "Leatherworking Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5137_0",
+  "title": "Herbalism Trainer Reyna Stonebranch",
+  "content": "Herbalism Trainer Reyna Stonebranch is in Ironforge, Alliance.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5141_0",
+  "title": "Priest Trainer Theodrus Frostbeard",
+  "content": "Priest Trainer Theodrus Frostbeard is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5142_0",
+  "title": "Priest Trainer Braenna Flintcrag",
+  "content": "Priest Trainer Braenna Flintcrag is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5143_0",
+  "title": "Priest Trainer Toldren Deepiron",
+  "content": "Priest Trainer Toldren Deepiron is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5144_0",
+  "title": "Mage Trainer Bink",
+  "content": "Mage Trainer Bink is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5145_0",
+  "title": "Mage Trainer Juli Stormkettle",
+  "content": "Mage Trainer Juli Stormkettle is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5146_0",
+  "title": "Mage Trainer Nittlebur Sparkfizzle",
+  "content": "Mage Trainer Nittlebur Sparkfizzle is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5147_0",
+  "title": "Paladin Trainer Valgar Highforge",
+  "content": "Paladin Trainer Valgar Highforge is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5148_0",
+  "title": "Paladin Trainer Beldruk Doombrow",
+  "content": "Paladin Trainer Beldruk Doombrow is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5149_0",
+  "title": "Paladin Trainer Brandur Ironhammer",
+  "content": "Paladin Trainer Brandur Ironhammer is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5150_0",
+  "title": "First Aid Trainer Nissa Firestone",
+  "content": "First Aid Trainer Nissa Firestone is in Ironforge, Alliance.",
+  "keywords": [
+   "First Aid Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5153_0",
+  "title": "Tailoring Trainer Jormund Stonebrow",
+  "content": "Tailoring Trainer Jormund Stonebrow is in Ironforge, Alliance.",
+  "keywords": [
+   "Tailoring Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5157_0",
+  "title": "Enchanting Trainer Gimble Thistlefuzz",
+  "content": "Enchanting Trainer Gimble Thistlefuzz is in Ironforge, Alliance.",
+  "keywords": [
+   "Enchanting Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5159_0",
+  "title": "Cooking Trainer Daryl Riknussun",
+  "content": "Cooking Trainer Daryl Riknussun is in Ironforge, Alliance.",
+  "keywords": [
+   "Cooking Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5161_0",
+  "title": "Fishing Trainer Grimnur Stonebrand",
+  "content": "Fishing Trainer Grimnur Stonebrand is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5164_0",
+  "title": "Armorsmith Trainer Grumnus Steelshaper",
+  "content": "Armorsmith Trainer Grumnus Steelshaper is in Ironforge, Alliance.",
+  "keywords": [
+   "Armorsmith Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5165_0",
+  "title": "Rogue Trainer Hulfdan Blackbeard",
+  "content": "Rogue Trainer Hulfdan Blackbeard is in Ironforge, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5166_0",
+  "title": "Rogue Trainer Ormyr Flinteye",
+  "content": "Rogue Trainer Ormyr Flinteye is in Ironforge, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5167_0",
+  "title": "Rogue Trainer Fenthwick",
+  "content": "Rogue Trainer Fenthwick is in Ironforge, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5171_0",
+  "title": "Warlock Trainer Thistleheart",
+  "content": "Warlock Trainer Thistleheart is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5172_0",
+  "title": "Warlock Trainer Briarthorn",
+  "content": "Warlock Trainer Briarthorn is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5173_0",
+  "title": "Warlock Trainer Alexander Calder",
+  "content": "Warlock Trainer Alexander Calder is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5174_0",
+  "title": "Engineering Trainer Springspindle Fizzlegear",
+  "content": "Engineering Trainer Springspindle Fizzlegear is in Ironforge, Alliance.",
+  "keywords": [
+   "Engineering Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5177_0",
+  "title": "Alchemy Trainer Tally Berryfizz",
+  "content": "Alchemy Trainer Tally Berryfizz is in Ironforge, Alliance.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5392_0",
+  "title": "Mining Trainer Yarr Hammerstone",
+  "content": "Mining Trainer Yarr Hammerstone is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Mining Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5479_0",
+  "title": "Warrior Trainer Wu Shen",
+  "content": "Warrior Trainer Wu Shen is near Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5480_0",
+  "title": "Warrior Trainer Ilsa Corbin",
+  "content": "Warrior Trainer Ilsa Corbin is near Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Warrior Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5482_0",
+  "title": "Cooking Trainer Stephen Ryback",
+  "content": "Cooking Trainer Stephen Ryback is in Stormwind City, Alliance.",
+  "keywords": [
+   "Cooking Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5484_0",
+  "title": "Priest Trainer Brother Benjamin",
+  "content": "Priest Trainer Brother Benjamin is in Stormwind City, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5489_0",
+  "title": "Priest Trainer Brother Joshua",
+  "content": "Priest Trainer Brother Joshua is in Stormwind City, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5491_0",
+  "title": "Paladin Trainer Arthur the Faithful",
+  "content": "Paladin Trainer Arthur the Faithful is in Stormwind City, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5492_0",
+  "title": "Paladin Trainer Katherine the Pure",
+  "content": "Paladin Trainer Katherine the Pure is in Stormwind City, Alliance.",
+  "keywords": [
+   "Paladin Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5493_0",
+  "title": "Fishing Trainer Arnold Leland",
+  "content": "Fishing Trainer Arnold Leland is in Stormwind City, Alliance.",
+  "keywords": [
+   "Fishing Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5495_0",
+  "title": "Warlock Trainer Ursula Deline",
+  "content": "Warlock Trainer Ursula Deline is in Stormwind City, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5496_0",
+  "title": "Warlock Trainer Sandahl",
+  "content": "Warlock Trainer Sandahl is in Stormwind City, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5497_0",
+  "title": "Mage Trainer Jennea Cannon",
+  "content": "Mage Trainer Jennea Cannon is in Stormwind City, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5498_0",
+  "title": "Mage Trainer Elsharin",
+  "content": "Mage Trainer Elsharin is in Stormwind City, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5499_0",
+  "title": "Alchemy Trainer Lilyssia Nightbreeze",
+  "content": "Alchemy Trainer Lilyssia Nightbreeze is in Stormwind City, Alliance.",
+  "keywords": [
+   "Alchemy Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5502_0",
+  "title": "Herbalism Trainer Shylamiir",
+  "content": "Herbalism Trainer Shylamiir is in Stormwind City, Alliance.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5504_0",
+  "title": "Druid Trainer Sheldras Moontree",
+  "content": "Druid Trainer Sheldras Moontree is in Stormwind City, Alliance.",
+  "keywords": [
+   "Druid Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5505_0",
+  "title": "Druid Trainer Theridran",
+  "content": "Druid Trainer Theridran is in Stormwind City, Alliance.",
+  "keywords": [
+   "Druid Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5506_0",
+  "title": "Druid Trainer Maldryn",
+  "content": "Druid Trainer Maldryn is in Stormwind City, Alliance.",
+  "keywords": [
+   "Druid Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5511_0",
+  "title": "Blacksmithing Trainer Therum Deepforge",
+  "content": "Blacksmithing Trainer Therum Deepforge is in Stormwind City, Alliance.",
+  "keywords": [
+   "Blacksmithing Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5513_0",
+  "title": "Mining Trainer Gelman Stonehand",
+  "content": "Mining Trainer Gelman Stonehand is in Stormwind City, Alliance.",
+  "keywords": [
+   "Mining Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5515_0",
+  "title": "Hunter Trainer Einris Brightspear",
+  "content": "Hunter Trainer Einris Brightspear is in Stormwind City, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5516_0",
+  "title": "Hunter Trainer Ulfir Ironbeard",
+  "content": "Hunter Trainer Ulfir Ironbeard is in Stormwind City, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5517_0",
+  "title": "Hunter Trainer Thorfin Stoneshield",
+  "content": "Hunter Trainer Thorfin Stoneshield is in Stormwind City, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5518_0",
+  "title": "Engineering Trainer Lilliam Sparkspindle",
+  "content": "Engineering Trainer Lilliam Sparkspindle is in Stormwind City, Alliance.",
+  "keywords": [
+   "Engineering Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5564_0",
+  "title": "Leatherworking Trainer Simon Tanner",
+  "content": "Leatherworking Trainer Simon Tanner is in Stormwind City, Alliance.",
+  "keywords": [
+   "Leatherworking Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5566_0",
+  "title": "Herbalism Trainer Tannysa",
+  "content": "Herbalism Trainer Tannysa is in Stormwind City, Alliance.",
+  "keywords": [
+   "Herbalism Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5612_0",
+  "title": "Warlock Trainer Gimrizz Shadowcog",
+  "content": "Warlock Trainer Gimrizz Shadowcog is in Dun Morogh, Alliance.",
+  "keywords": [
+   "Warlock Trainer",
+   "Dun Morogh"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_5688_0",
+  "title": "Innkeeper Renee",
+  "content": "Innkeeper Renee is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_5690_0",
+  "title": "Fishing Trainer Clyde Kellen",
+  "content": "Fishing Trainer Clyde Kellen is about 800 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Fishing Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_5695_0",
+  "title": "Enchanting Trainer Vance Undergloom",
+  "content": "Enchanting Trainer Vance Undergloom is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Enchanting Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_5759_0",
+  "title": "First Aid Trainer Nurse Neela",
+  "content": "First Aid Trainer Nurse Neela is about 700 yards north of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "First Aid Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_5814_0",
+  "title": "Innkeeper Thulbek",
+  "content": "Innkeeper Thulbek is near Grom'gol, Stranglethorn Vale, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Stranglethorn Vale",
+   "Grom'gol"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "stranglethorn-vale",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_6026_0",
+  "title": "Flight Master Breyk",
+  "content": "Flight Master Breyk is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_6289_0",
+  "title": "Skinning Trainer Rand Rhobart",
+  "content": "Skinning Trainer Rand Rhobart is about 500 yards north-east of Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Skinning Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_6291_0",
+  "title": "Skinning Trainer Balthus Stoneflayer",
+  "content": "Skinning Trainer Balthus Stoneflayer is in Ironforge, Alliance.",
+  "keywords": [
+   "Skinning Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_6295_0",
+  "title": "Skinning Trainer Wilma Ranthal",
+  "content": "Skinning Trainer Wilma Ranthal is in Redridge Mountains, Alliance.",
+  "keywords": [
+   "Skinning Trainer",
+   "Redridge Mountains"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "redridge-mountains",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_6306_0",
+  "title": "Skinning Trainer Helene Peltskinner",
+  "content": "Skinning Trainer Helene Peltskinner is about 800 yards south-east of Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Skinning Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_6727_0",
+  "title": "Innkeeper Brianna",
+  "content": "Innkeeper Brianna is near Lakeshire, Redridge Mountains, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Redridge Mountains",
+   "Lakeshire"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "redridge-mountains",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_6734_0",
+  "title": "Innkeeper Hearthstove",
+  "content": "Innkeeper Hearthstove is near Thelsamar, Loch Modan, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Loch Modan",
+   "Thelsamar"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_6739_0",
+  "title": "Innkeeper Bates",
+  "content": "Innkeeper Bates is near The Sepulcher, Silverpine Forest, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Silverpine Forest",
+   "The Sepulcher"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "silverpine-forest",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_6740_0",
+  "title": "Innkeeper Allison",
+  "content": "Innkeeper Allison is in Stormwind City, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_6741_0",
+  "title": "Innkeeper Norman",
+  "content": "Innkeeper Norman is in Undercity, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_6790_0",
+  "title": "Innkeeper Trelayne",
+  "content": "Innkeeper Trelayne is near Darkshire, Duskwood, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Duskwood",
+   "Darkshire"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "duskwood",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_6807_0",
+  "title": "Innkeeper Skindle",
+  "content": "Innkeeper Skindle is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Innkeeper",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_6930_0",
+  "title": "Innkeeper Karakul",
+  "content": "Innkeeper Karakul is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_7087_0",
+  "title": "Skinning Trainer Killian Hagey",
+  "content": "Skinning Trainer Killian Hagey is in Undercity, Horde.",
+  "keywords": [
+   "Skinning Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_7232_0",
+  "title": "Weaponsmith Trainer Borgus Steelhand",
+  "content": "Weaponsmith Trainer Borgus Steelhand is in Stormwind City, Alliance.",
+  "keywords": [
+   "Weaponsmith Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_7312_0",
+  "title": "Mage Trainer Dink",
+  "content": "Mage Trainer Dink is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Mage Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_7406_0",
+  "title": "Gnomish Engineering Trainer Oglethorpe Obnoticus",
+  "content": "Gnomish Engineering Trainer Oglethorpe Obnoticus is near Booty Bay, Stranglethorn Vale.",
+  "keywords": [
+   "Gnomish Engineering Trainer",
+   "Stranglethorn Vale",
+   "Booty Bay"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_7744_0",
+  "title": "Innkeeper Thulfram",
+  "content": "Innkeeper Thulfram is near Aerie Peak, The Hinterlands, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "The Hinterlands",
+   "Aerie Peak"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "the-hinterlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_7867_0",
+  "title": "Dragonscale Leatherworking Trainer Thorkaf Dragoneye",
+  "content": "Dragonscale Leatherworking Trainer Thorkaf Dragoneye is in Badlands, Horde.",
+  "keywords": [
+   "Dragonscale Leatherworking Trainer",
+   "Badlands"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "badlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_7868_0",
+  "title": "Elemental Leatherworking Trainer Sarah Tanner",
+  "content": "Elemental Leatherworking Trainer Sarah Tanner is about 500 yards north-west of Flame Crest, Searing Gorge, Alliance.",
+  "keywords": [
+   "Elemental Leatherworking Trainer",
+   "Searing Gorge",
+   "Flame Crest"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "searing-gorge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_7869_0",
+  "title": "Elemental Leatherworking Trainer Brumn Winterhoof",
+  "content": "Elemental Leatherworking Trainer Brumn Winterhoof is about 650 yards west of Refuge Pointe, Arathi Highlands, Horde.",
+  "keywords": [
+   "Elemental Leatherworking Trainer",
+   "Arathi Highlands",
+   "Refuge Pointe"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "arathi-highlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_7871_0",
+  "title": "Tribal Leatherworking Trainer Se'Jib",
+  "content": "Tribal Leatherworking Trainer Se'Jib is near Grom'gol, Stranglethorn Vale, Horde.",
+  "keywords": [
+   "Tribal Leatherworking Trainer",
+   "Stranglethorn Vale",
+   "Grom'gol"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stranglethorn-vale",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_7944_0",
+  "title": "Gnomish Engineering Trainer Tinkmaster Overspark",
+  "content": "Gnomish Engineering Trainer Tinkmaster Overspark is in Ironforge, Alliance.",
+  "keywords": [
+   "Gnomish Engineering Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_8018_0",
+  "title": "Flight Master Guthrum Thunderfist",
+  "content": "Flight Master Guthrum Thunderfist is near Aerie Peak, The Hinterlands, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "The Hinterlands",
+   "Aerie Peak"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "the-hinterlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_8609_0",
+  "title": "Flight Master Alexandra Constantine",
+  "content": "Flight Master Alexandra Constantine is near Nethergarde Keep, Blasted Lands, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Blasted Lands",
+   "Nethergarde Keep"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "blasted-lands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_8931_0",
+  "title": "Innkeeper Heather",
+  "content": "Innkeeper Heather is near Sentinel Hill, Westfall, Alliance.",
+  "keywords": [
+   "Innkeeper",
+   "Westfall",
+   "Sentinel Hill"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "westfall",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_9356_0",
+  "title": "Innkeeper Shul'kar",
+  "content": "Innkeeper Shul'kar is near Kargath, Searing Gorge, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Searing Gorge",
+   "Kargath"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "searing-gorge",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_9501_0",
+  "title": "Innkeeper Adegwa",
+  "content": "Innkeeper Adegwa is near Hammerfall, Arathi Highlands, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "Arathi Highlands",
+   "Hammerfall"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "arathi-highlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_10090_0",
+  "title": "Pet Trainer Belia Thundergranite",
+  "content": "Pet Trainer Belia Thundergranite is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Pet Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_10930_0",
+  "title": "Hunter Trainer Dargh Trueaim",
+  "content": "Hunter Trainer Dargh Trueaim is in Loch Modan, Alliance.",
+  "keywords": [
+   "Hunter Trainer",
+   "Loch Modan"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "loch-modan",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11031_0",
+  "title": "Engineering Trainer Franklin Lloyd",
+  "content": "Engineering Trainer Franklin Lloyd is in Undercity, Horde.",
+  "keywords": [
+   "Engineering Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_11072_0",
+  "title": "Enchanting Trainer Kitta Firewind",
+  "content": "Enchanting Trainer Kitta Firewind is in Elwynn Forest, Alliance.",
+  "keywords": [
+   "Enchanting Trainer",
+   "Elwynn Forest"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11097_0",
+  "title": "Leatherworking Trainer Drakk Stonehand",
+  "content": "Leatherworking Trainer Drakk Stonehand is near Aerie Peak, The Hinterlands, Alliance.",
+  "keywords": [
+   "Leatherworking Trainer",
+   "The Hinterlands",
+   "Aerie Peak"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "the-hinterlands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11146_0",
+  "title": "Weaponsmith Trainer Ironus Coldsteel",
+  "content": "Weaponsmith Trainer Ironus Coldsteel is in Ironforge, Alliance.",
+  "keywords": [
+   "Weaponsmith Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11397_0",
+  "title": "Priest Trainer Nara Meideros",
+  "content": "Priest Trainer Nara Meideros is in Stormwind City, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11406_0",
+  "title": "Priest Trainer High Priest Rohan",
+  "content": "Priest Trainer High Priest Rohan is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Priest Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11865_0",
+  "title": "Weapon Master Buliwyf Stonehand",
+  "content": "Weapon Master Buliwyf Stonehand is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Weapon Master",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11867_0",
+  "title": "Weapon Master Woo Ping",
+  "content": "Weapon Master Woo Ping is in Stormwind City, Alliance.",
+  "keywords": [
+   "Weapon Master",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_11870_0",
+  "title": "Weapon Master Archibald",
+  "content": "Weapon Master Archibald is in Undercity, Horde.",
+  "keywords": [
+   "Weapon Master",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_12596_0",
+  "title": "Flight Master Bibilfaz Featherwhistle",
+  "content": "Flight Master Bibilfaz Featherwhistle is near Chillwind Camp, Western Plaguelands, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Western Plaguelands",
+   "Chillwind Camp"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "western-plaguelands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_12617_0",
+  "title": "Flight Master Khaelyn Steelwing",
+  "content": "Flight Master Khaelyn Steelwing is near Light's Hope Chapel, Eastern Plaguelands, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Eastern Plaguelands",
+   "Light's Hope Chapel"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "eastern-plaguelands",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_12636_0",
+  "title": "Flight Master Georgia",
+  "content": "Flight Master Georgia is near Light's Hope Chapel, Eastern Plaguelands, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Eastern Plaguelands",
+   "Light's Hope Chapel"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "eastern-plaguelands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_13084_0",
+  "title": "Weapon Master Bixi Wobblebonk",
+  "content": "Weapon Master Bixi Wobblebonk is near Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Weapon Master",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_13177_0",
+  "title": "Flight Master Vahgruk",
+  "content": "Flight Master Vahgruk is near Flame Crest, Burning Steppes, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Burning Steppes",
+   "Flame Crest"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "burning-steppes",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_13283_0",
+  "title": "Rogue Trainer Lord Tony Romano",
+  "content": "Rogue Trainer Lord Tony Romano is near Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Rogue Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_14731_0",
+  "title": "Innkeeper Lard",
+  "content": "Innkeeper Lard is near Revantusk Village, The Hinterlands, Horde.",
+  "keywords": [
+   "Innkeeper",
+   "The Hinterlands",
+   "Revantusk Village"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "the-hinterlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_14740_0",
+  "title": "Fishing Trainer & Supplies Katoom the Angler",
+  "content": "Fishing Trainer & Supplies Katoom the Angler is near Revantusk Village, The Hinterlands, Horde.",
+  "keywords": [
+   "Fishing Trainer & Supplies",
+   "The Hinterlands",
+   "Revantusk Village"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "the-hinterlands",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_16256_0",
+  "title": "Innkeeper Jessica Chambers",
+  "content": "Innkeeper Jessica Chambers is near Light's Hope Chapel, Eastern Plaguelands.",
+  "keywords": [
+   "Innkeeper",
+   "Eastern Plaguelands",
+   "Light's Hope Chapel"
+  ],
+  "tags": [
+   "npc",
+   "innkeeper",
+   "eastern-plaguelands",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_20406_0",
+  "title": "Paladin Trainer Champion Cyssa Dawnrose",
+  "content": "Paladin Trainer Champion Cyssa Dawnrose is in Undercity, Horde.",
+  "keywords": [
+   "Paladin Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_20407_0",
+  "title": "Shaman Trainer Farseer Umbrua",
+  "content": "Shaman Trainer Farseer Umbrua is near Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Shaman Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_23103_0",
+  "title": "Mage Trainer Derek the Undying",
+  "content": "Mage Trainer Derek the Undying is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Mage Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_23127_0",
+  "title": "Shaman Trainer Farseer Javad",
+  "content": "Shaman Trainer Farseer Javad is in Ironforge, Alliance.",
+  "keywords": [
+   "Shaman Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_24366_0",
+  "title": "Flight Master Nizzle",
+  "content": "Flight Master Nizzle is near Rebel Camp, Stranglethorn Vale, Alliance.",
+  "keywords": [
+   "Flight Master",
+   "Stranglethorn Vale",
+   "Rebel Camp"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "stranglethorn-vale",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_27705_0",
+  "title": "Portal Trainer Lorrin Foxfire",
+  "content": "Portal Trainer Lorrin Foxfire is near Stonard, Swamp of Sorrows, Horde.",
+  "keywords": [
+   "Portal Trainer",
+   "Swamp of Sorrows",
+   "Stonard"
+  ],
+  "tags": [
+   "npc",
+   "class-trainer",
+   "swamp-of-sorrows",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_29480_0",
+  "title": "Flight Master Grimwing",
+  "content": "Flight Master Grimwing is near Acherus: The Ebon Hold, Eastern Plaguelands.",
+  "keywords": [
+   "Flight Master",
+   "Eastern Plaguelands",
+   "Acherus: The Ebon Hold"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "eastern-plaguelands",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_30711_0",
+  "title": "Inscription Trainer Margaux Parchley",
+  "content": "Inscription Trainer Margaux Parchley is in Undercity, Horde.",
+  "keywords": [
+   "Inscription Trainer",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "undercity",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_30713_0",
+  "title": "Inscription Trainer Catarina Stanford",
+  "content": "Inscription Trainer Catarina Stanford is in Stormwind City, Alliance.",
+  "keywords": [
+   "Inscription Trainer",
+   "Stormwind City"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "stormwind-city",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_30717_0",
+  "title": "Inscription Trainer Elise Brightletter",
+  "content": "Inscription Trainer Elise Brightletter is in Ironforge, Alliance.",
+  "keywords": [
+   "Inscription Trainer",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "ironforge",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_34708_0",
+  "title": "Cooking Trainer Caitrin Ironkettle",
+  "content": "Cooking Trainer Caitrin Ironkettle is about 450 yards south-west of Ironforge, Dun Morogh, Alliance.",
+  "keywords": [
+   "Cooking Trainer",
+   "Dun Morogh",
+   "Ironforge"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "dun-morogh",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_34710_0",
+  "title": "Cooking Trainer Ellen Moore",
+  "content": "Cooking Trainer Ellen Moore is near Stormwind, Elwynn Forest, Alliance.",
+  "keywords": [
+   "Cooking Trainer",
+   "Elwynn Forest",
+   "Stormwind"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "elwynn-forest",
+   "alliance"
+  ]
+ },
+ {
+  "id": "npc_34712_0",
+  "title": "Cooking Trainer Roberta Carter",
+  "content": "Cooking Trainer Roberta Carter is near Undercity, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Cooking Trainer",
+   "Tirisfal Glades",
+   "Undercity"
+  ],
+  "tags": [
+   "npc",
+   "profession-trainer",
+   "tirisfal-glades",
+   "horde"
+  ]
+ },
+ {
+  "id": "npc_37888_0",
+  "title": "Flight Master Frax Bucketdrop",
+  "content": "Flight Master Frax Bucketdrop is near Thondoril River, Western Plaguelands.",
+  "keywords": [
+   "Flight Master",
+   "Western Plaguelands",
+   "Thondoril River"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "western-plaguelands",
+   "both"
+  ]
+ },
+ {
+  "id": "npc_37915_0",
+  "title": "Flight Master Timothy Cunningham",
+  "content": "Flight Master Timothy Cunningham is near The Bulwark, Tirisfal Glades, Horde.",
+  "keywords": [
+   "Flight Master",
+   "Tirisfal Glades",
+   "The Bulwark"
+  ],
+  "tags": [
+   "npc",
+   "flightmaster",
+   "tirisfal-glades",
+   "horde"
+  ]
+ }
+]

@@ -1,0 +1,33 @@
+id = "q3-where-plainstrider-meat"
+path = "reply"
+notes = "Q3-B grounding case. Correct answer from the generated data: Quest The Hunt Begins (level 2, Red Cloud Mesa, Mulgore, Horde): Given by Grull Hawkwind. Collect 7 Plainstrider Meat, dropped by Plainstrider, found about 300 yards south-east of the quest giver. Collect 7 Plainstrider Feather, dropped by Plainstrider, found about 300 yards south-east of the quest giver.. A reply is right if it agrees with this and invents no direction, command or number beyond it."
+message = "where do i get plainstrider meat for the hunt begins"
+
+[bot]
+name = "Loric"
+level = 2
+class = "druid"
+race = "Tauren"
+gender = "Male"
+role = "balance druid"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+area = "Red Cloud Mesa"
+zone = "Mulgore"
+map = "Kalimdor"
+personality = "MENTOR"
+
+[player]
+name = "Tomas"
+level = 2
+class = "warrior"
+race = "Tauren"
+gender = "Female"
+role = "arms warrior"
+faction = "Horde"
+guild = "No Guild"
+group_status = "Solo"
+gold = 2
+distance = 6.0

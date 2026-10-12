@@ -1,0 +1,33 @@
+[
+ {
+  "id": "server_realm_facts",
+  "title": "What this server has",
+  "content": "This server runs classic-era content with a level cap of 60. Open now: every old-world zone and dungeon, including Maraudon and Dire Maul; the raids Molten Core, Onyxia's Lair and Zul'Gurub; the world bosses Azuregos and Lord Kazzak; and the battlegrounds Warsong Gulch and Alterac Valley. Blackwing Lair, Ahn'Qiraj and Naxxramas are not out yet. Every race and class can be played, including Blood Elves, Draenei and Death Knights, and the dungeon finder and dual spec are available. There is no Outland, no Northrend, no flying mount and no arena. Classes have been reworked on this server, so exact ability names, numbers and talent details differ from the original game.",
+  "keywords": [
+   "server",
+   "level cap",
+   "max level",
+   "raids",
+   "dungeons",
+   "battlegrounds",
+   "outland",
+   "northrend",
+   "flying mount",
+   "arena",
+   "blackwing lair",
+   "naxxramas",
+   "ahnqiraj",
+   "molten core",
+   "dual spec",
+   "dungeon finder",
+   "what is open",
+   "phase",
+   "patch"
+  ],
+  "tags": [
+   "server",
+   "realm-facts",
+   "scaffold"
+  ]
+ }
+]
