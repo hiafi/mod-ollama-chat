@@ -1011,6 +1011,9 @@ OllamaChat.GuildEventTypeDungeonComplete_Chance = 85
 #     Description: Enable or disable the RAG (Retrieval-Augmented Generation) feature.
 #                  When enabled, the bot will analyze player messages and retrieve relevant information
 #                  from JSON knowledge base files to provide more accurate and detailed responses.
+#                  The knowledge base is loaded once at worldserver startup: turning this on, changing
+#                  OllamaChat.RAGDataPath or OllamaChat.RAGIgnoreCommonWords, or editing the JSON files needs a
+#                  restart. .ollama reload does not rebuild it (threshold, item count and boost do apply on reload).
 #     Default:     0 (false)
 OllamaChat.EnableRAG = 0
 
@@ -1059,6 +1062,7 @@ OllamaChat.RAGLocationBoost = 0.0
 #                  entries and for the player's message. Without it a short chat message matches long entries
 #                  mostly on those words, which makes the score a poor guide to relevance and forces a high
 #                  OllamaChat.RAGSimilarityThreshold. Scores change when this is switched, so retune the threshold.
+#                  Applied when the knowledge base is built at startup, so a change needs a worldserver restart.
 #     Default:     0 (false)
 OllamaChat.RAGIgnoreCommonWords = 0
 
