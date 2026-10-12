@@ -146,7 +146,8 @@ bool OllamaRAGSystem::LoadRAGDataFromFile(const std::string& filePath)
     }
 }
 
-std::vector<RAGResult> OllamaRAGSystem::RetrieveRelevantInfo(const std::string& query, uint32_t maxResults, float similarityThreshold)
+std::vector<RAGResult> OllamaRAGSystem::RetrieveRelevantInfo(const std::string& query, uint32_t maxResults, float similarityThreshold,
+                                                             const std::vector<std::string>& locationNames, float locationBoost)
 {
     std::vector<RAGResult> results;
 
@@ -154,25 +155,67 @@ std::vector<RAGResult> OllamaRAGSystem::RetrieveRelevantInfo(const std::string& 
         return results;
     }
 
-    for (const auto& entry : m_ragEntries) {
-        float similarity = CalculateSimilarity(query, entry);
-        if (similarity >= similarityThreshold) {
-            results.push_back({&entry, similarity});
+    // Preprocess location names once, the same way entry text is preprocessed.
+    std::vector<std::string> locations;
+    if (locationBoost > 0.0f) {
+        for (const auto& name : locationNames) {
+            std::string processed = PreprocessText(name);
+            if (!processed.empty()) {
+                locations.push_back(std::move(processed));
+            }
         }
     }
 
-    // Sort by similarity (highest first)
-    std::sort(results.begin(), results.end(),
-              [](const RAGResult& a, const RAGResult& b) {
-                  return a.similarity > b.similarity;
-              });
+    // Parallel to results: the score used for ordering.
+    std::vector<float> ranking;
 
-    // Limit results
-    if (results.size() > maxResults) {
-        results.resize(maxResults);
+    for (const auto& entry : m_ragEntries) {
+        // Threshold on the raw score only, so a boost cannot admit an unrelated entry.
+        float similarity = CalculateSimilarity(query, entry);
+        if (similarity < similarityThreshold) {
+            continue;
+        }
+
+        float rank = similarity;
+        if (!locations.empty()) {
+            std::string entryText = entry.title + " " + entry.content;
+            for (const auto& keyword : entry.keywords) {
+                entryText += " " + keyword;
+            }
+            entryText = PreprocessText(entryText);
+
+            for (const auto& location : locations) {
+                if (entryText.find(location) != std::string::npos) {
+                    rank = similarity * (1.0f + locationBoost);
+                    break;
+                }
+            }
+        }
+
+        results.push_back({&entry, similarity});
+        ranking.push_back(rank);
     }
 
-    return results;
+    // Sort by ranking score (highest first); stable, ties keep raw-score order then load order.
+    std::vector<size_t> order(results.size());
+    for (size_t i = 0; i < order.size(); ++i) {
+        order[i] = i;
+    }
+    std::stable_sort(order.begin(), order.end(),
+                     [&](size_t a, size_t b) {
+                         if (ranking[a] != ranking[b]) {
+                             return ranking[a] > ranking[b];
+                         }
+                         return results[a].similarity > results[b].similarity;
+                     });
+
+    std::vector<RAGResult> sorted;
+    sorted.reserve(std::min<size_t>(order.size(), maxResults));
+    for (size_t i = 0; i < order.size() && sorted.size() < maxResults; ++i) {
+        sorted.push_back(results[order[i]]);
+    }
+
+    return sorted;
 }
 
 std::string OllamaRAGSystem::GetFormattedRAGInfo(const std::vector<RAGResult>& results)

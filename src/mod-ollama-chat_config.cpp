@@ -339,6 +339,7 @@ bool        g_EnableRAG = false;
 std::string g_RAGDataPath = "rag/";
 uint32_t    g_RAGMaxRetrievedItems = 3;
 float       g_RAGSimilarityThreshold = 0.3f;
+float       g_RAGLocationBoost = 0.0f;
 std::string g_RAGPromptTemplate;
 
 class OllamaRAGSystem;
@@ -714,6 +715,7 @@ void LoadOllamaChatConfig()
     g_RAGDataPath                     = sConfigMgr->GetOption<std::string>("OllamaChat.RAGDataPath", "rag/");
     g_RAGMaxRetrievedItems            = sConfigMgr->GetOption<uint32_t>("OllamaChat.RAGMaxRetrievedItems", 3);
     g_RAGSimilarityThreshold          = sConfigMgr->GetOption<float>("OllamaChat.RAGSimilarityThreshold", 0.3f);
+    g_RAGLocationBoost                = sConfigMgr->GetOption<float>("OllamaChat.RAGLocationBoost", 0.0f);
     g_RAGPromptTemplate               = sConfigMgr->GetOption<std::string>("OllamaChat.RAGPromptTemplate", "RELEVANT INFORMATION:\n{rag_info}\nUse this information to provide accurate and detailed responses when applicable.");
 
     g_ChatterUseGeneralChannel          = sConfigMgr->GetOption<bool>("OllamaChat.Chatter.UseGeneralChannel", true);

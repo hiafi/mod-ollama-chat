@@ -83,6 +83,21 @@ class RagTests(unittest.TestCase):
         self.assertEqual(hits[0].entry.id, "b")
         self.assertEqual(s.retrieve("cat", 5, 0.99), [])
 
+    def test_location_boost_reorders_but_never_admits(self):
+        # "cat" vs "A cat" (same text apart from the zone word) -> equal raw scores
+        s = rag.RagSystem([rag.RagEntry("far", "Cat", "cat in Westfall"),
+                           rag.RagEntry("near", "Cat", "cat in Elwynn Forest"),
+                           rag.RagEntry("lowzone", "Dog", "dog dog dog dog cat Elwynn Forest")])
+        plain = s.retrieve("cat", 3, 0.3)
+        self.assertEqual([h.entry.id for h in plain], ["far", "near"])          # ties keep load order
+        self.assertEqual([h.entry.id for h in s.retrieve("cat", 3, 0.3, ["Elwynn Forest"], 0.0)],
+                         ["far", "near"])                                        # boost 0 == today
+        boosted = s.retrieve("cat", 3, 0.3, ["Elwynn Forest"], 0.5)
+        self.assertEqual([h.entry.id for h in boosted], ["near", "far"])
+        self.assertAlmostEqual(boosted[0].similarity, plain[1].similarity)      # similarity stays raw
+        # lowzone is same-zone but below the threshold on its raw score: still out
+        self.assertNotIn("lowzone", [h.entry.id for h in s.retrieve("cat", 3, 0.3, ["Elwynn Forest"], 5.0)])
+
     def test_format_info(self):
         s = rag.RagSystem([rag.RagEntry("a", "A", "one"), rag.RagEntry("b", "B", "two")])
         hits = [rag.RagResult(s.entries[0], 1.0), rag.RagResult(s.entries[1], 0.5)]
@@ -107,6 +122,21 @@ class ProcessResponseTests(unittest.TestCase):
     def test_inner_quote_blocks_unwrap(self):
         self.assertEqual(self.p('"Hi" he said "yo"'), '"Hi" he said "yo"')
 
+    def test_slash_emote_only_at_start_or_end(self):
+        pe = lambda raw: pp.extract_emote_tag(raw.encode())
+        for raw, text in [("/wave hey there", "hey there"), ("hey there /wave", "hey there"),
+                          ("hey there /wave!", "hey there !"), ("/wave", "")]:
+            with self.subTest(raw=raw):
+                t, found = pe(raw)
+                self.assertEqual((t.decode(), found), (text, "wave"))
+        for raw in ["follow me or just type /follow and click on me",
+                    "no clue, maybe try /follow? though honestly ...",
+                    "they dont want us to know ..., but /follow is how you do it",
+                    "just type /follow", "Use /Follow.", "and/or", "see http://x.com/wave now"]:
+            with self.subTest(raw=raw):
+                t, found = pe(raw)
+                self.assertEqual((t.decode(), found), (raw, ""))
+
     def test_think_tags_and_speaker_prefix(self):
         self.assertEqual(self.p("<think>hmm</think>Bob: yo what's up"), "yo what's up")
         self.assertEqual(self.p("<think>cut off mid thought"), "")
@@ -124,7 +154,8 @@ class ProcessResponseTests(unittest.TestCase):
 
     def test_bracket_and_slash_forms(self):
         self.assertEqual(self.p("hi there [emote:wave]"), "hi there")
-        self.assertEqual(self.p("hi /wave there"), "hi there")
+        self.assertEqual(self.p("/wave hi there"), "hi there")
+        self.assertEqual(self.p("hi /wave there"), "hi /wave there")    # mid-sentence: left alone
         self.assertEqual(self.p("and/or maybe"), "and/or maybe")         # not an emote: left alone
 
     def test_emphasis_keeps_the_word(self):
@@ -469,6 +500,19 @@ class RenderTests(unittest.TestCase):
         r = render.render_case(cfg, self.reply_case(message="tell me about mage"), {}, s, 0)
         self.assertEqual(r.prompt, "PINFO - Mage: frost mages slow enemies\n")
         self.assertEqual(r.rag[0]["id"], "a")
+
+    def test_rag_location_boost_uses_bot_zone_and_area(self):
+        s = rag.RagSystem([rag.RagEntry("a", "Kobolds", "kobolds near Westfall"),
+                           rag.RagEntry("b", "Kobolds", "kobolds near Elwynn Forest")])
+        base = {**self.conf, "OllamaChat.EnableRAG": "1", "OllamaChat.ChatPromptTemplate": "P",
+                "OllamaChat.RAGPromptTemplate": "{rag_info}", "OllamaChat.GestureChance": "0",
+                "OllamaChat.RAGMaxRetrievedItems": "1"}
+        case = self.reply_case(message="where are the kobolds")
+        case["bot"] = {**case["bot"], "zone": "Elwynn Forest", "area": "UnknownArea"}
+        off = render.render_case(render.Config(base), case, {}, s, 0)
+        on = render.render_case(render.Config({**base, "OllamaChat.RAGLocationBoost": "0.5"}), case, {}, s, 0)
+        self.assertEqual(off.rag[0]["id"], "a")
+        self.assertEqual(on.rag[0]["id"], "b")
 
     def test_float_formatting_matches_fmt(self):
         self.assertEqual(render.f32_repr(8.5), "8.5")

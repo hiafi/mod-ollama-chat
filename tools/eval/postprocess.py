@@ -51,6 +51,11 @@ def lookup_text_emote(name: bytes) -> bool:
     return letters.decode("ascii") in EMOTE_NAMES
 
 
+_PUNCT_BYTES = frozenset(b"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")   # std::ispunct, C locale
+_INSTRUCTION_WORDS = frozenset(
+    w.encode() for w in ("type", "try", "use", "say", "write", "enter", "do", "press", "hit", "just"))
+
+
 def extract_emote_tag(response: bytes) -> tuple[bytes, str]:
     """Returns (text with gesture tags removed, first resolved emote word or '')."""
     found = ""
@@ -109,7 +114,8 @@ def extract_emote_tag(response: bytes) -> tuple[bytes, str]:
             r = r[:close] + r[close + 1:]
             r = r[:start] + r[start + 1:]
 
-    # form 3: a bare /wave
+    # form 3: a bare /wave at the start or end of the line. Mid-sentence slash-words are advice
+    # ("just type /follow"), not gestures, and stay in the text.
     scan_from = 0
     while True:
         slash = r.find(b"/", scan_from)
@@ -119,9 +125,27 @@ def extract_emote_tag(response: bytes) -> tuple[bytes, str]:
         while end < len(r) and _is_alpha(r[end]):
             end += 1
         word = r[slash + 1:end]
-        if not lookup_text_emote(word):
+        if not lookup_text_emote(word) or (slash > 0 and not _is_space(r[slash - 1])):
             scan_from = slash + 1
             continue
+
+        before_end = slash
+        while before_end > 0 and _is_space(r[before_end - 1]):
+            before_end -= 1
+        at_start = before_end == 0
+        at_end = all(_is_space(c) or c in _PUNCT_BYTES for c in r[end:])
+
+        extract = at_start
+        if not extract and at_end:
+            tok_start = before_end
+            while tok_start > 0 and not _is_space(r[tok_start - 1]):
+                tok_start -= 1
+            prev = bytes(c for c in _lower(r[tok_start:before_end]) if _is_alpha(c))
+            extract = prev not in _INSTRUCTION_WORDS
+        if not extract:
+            scan_from = slash + 1
+            continue
+
         consider(word)
         r = r[:slash] + r[end:]
         scan_from = slash

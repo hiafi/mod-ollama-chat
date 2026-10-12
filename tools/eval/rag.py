@@ -118,16 +118,28 @@ class RagSystem:
         ev = text_to_tf_vector(preprocess_text(entry_text), self.vocabulary)
         return cosine_similarity(qv, ev)
 
-    def retrieve(self, query: str, max_results: int, threshold: float) -> list[RagResult]:
+    def retrieve(self, query: str, max_results: int, threshold: float,
+                 location_names: list[str] | None = None, location_boost: float = 0.0) -> list[RagResult]:
+        """Threshold on the raw score; rank by raw * (1 + boost) for entries mentioning a location."""
         if not query:
             return []
-        results = []
+        locations = []
+        if location_boost > 0.0:
+            locations = [p for p in (preprocess_text(n) for n in location_names or []) if p]
+        scored: list[tuple[float, RagResult]] = []
         for e in self.entries:
             sim = self.similarity(query, e)
-            if sim >= threshold:
-                results.append(RagResult(e, sim))
-        results.sort(key=lambda r: -r.similarity)      # stable; std::sort is not, ties are arbitrary there
-        return results[:max_results]
+            if sim < threshold:
+                continue
+            rank = sim
+            if locations:
+                text = preprocess_text(" ".join([e.title, e.content, *e.keywords]))
+                if any(loc in text for loc in locations):
+                    rank = sim * (1.0 + location_boost)
+            scored.append((rank, RagResult(e, sim)))
+        # stable; ties on rank fall back to raw score, then load order
+        scored.sort(key=lambda t: (-t[0], -t[1].similarity))
+        return [r for _, r in scored[:max_results]]
 
     @staticmethod
     def format_info(results: list[RagResult]) -> str:
