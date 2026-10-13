@@ -30,7 +30,9 @@ namespace
     //    `max_completion_tokens` instead; older and third-party servers only
     //    know `max_tokens`
     //  - OpenAI reasoning models reject explicit temperature / top_p /
-    //    penalty values and only accept their defaults
+    //    penalty values and only accept their defaults; newer Claude models
+    //    (Haiku 5.5, Sonnet 5.5, Opus 5.5) reject temperature / top_k the
+    //    same way
     std::atomic<bool> g_useMaxCompletionTokens{ false };
     std::atomic<bool> g_samplingRejected{ false };
     std::atomic<bool> g_maxCompletionLogged{ false };
@@ -268,7 +270,7 @@ namespace
         {
             request["thinking"] = { { "type", "enabled" }, { "budget_tokens", budget } };
         }
-        else
+        else if (!g_samplingRejected.load())
         {
             request["temperature"] = cfg.temperature;
             if (cfg.topK >= 0)
@@ -718,6 +720,28 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
                              "[Ollama Chat] Model '{}' rejects explicit sampling parameters "
                              "(temperature/top_p/penalties); sending its defaults for the rest "
                              "of this session.", cfg.model);
+                r = PerformOnce(cfg, prompt, req, budget);
+            }
+        }
+
+        // Anthropic sampling rejection ("`temperature` is deprecated for this
+        // model."), learned once per session and retried the same way.
+        if (!r.ok && cfg.provider == OllamaProvider::Anthropic && r.status == 400 &&
+            !g_samplingRejected.load())
+        {
+            const std::string lower = ToLower(r.error);
+
+            if ((lower.find("deprecated") != std::string::npos ||
+                 lower.find("not supported") != std::string::npos) &&
+                (lower.find("temperature") != std::string::npos ||
+                 lower.find("top_k") != std::string::npos))
+            {
+                g_samplingRejected.store(true);
+                if (!g_samplingLogged.exchange(true))
+                    LOG_INFO("module.ollamachat",
+                             "[Ollama Chat] Model '{}' rejects explicit sampling parameters "
+                             "(temperature/top_k); sending its defaults for the rest of this "
+                             "session.", cfg.model);
                 r = PerformOnce(cfg, prompt, req, budget);
             }
         }
