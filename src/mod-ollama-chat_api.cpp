@@ -692,6 +692,8 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
 
         // OpenAI-format parameter rejections. Each is learned once per
         // session and the request is retried immediately so no reply is lost.
+        // The sampling retry is not gated on the flag: with several workers, a
+        // request built before another worker set it still needs its retry.
         if (!r.ok && cfg.provider == OllamaProvider::OpenAI && r.status == 400)
         {
             const std::string lower = ToLower(r.error);
@@ -706,8 +708,7 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
                              "max_tokens; switching for the rest of this session.", cfg.model);
                 r = PerformOnce(cfg, prompt, req, budget);
             }
-            else if (!g_samplingRejected.load() &&
-                     (lower.find("unsupported") != std::string::npos ||
+            else if ((lower.find("unsupported") != std::string::npos ||
                       lower.find("not supported") != std::string::npos) &&
                      (lower.find("temperature") != std::string::npos ||
                       lower.find("top_p") != std::string::npos ||
@@ -726,8 +727,7 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
 
         // Anthropic sampling rejection ("`temperature` is deprecated for this
         // model."), learned once per session and retried the same way.
-        if (!r.ok && cfg.provider == OllamaProvider::Anthropic && r.status == 400 &&
-            !g_samplingRejected.load())
+        if (!r.ok && cfg.provider == OllamaProvider::Anthropic && r.status == 400)
         {
             const std::string lower = ToLower(r.error);
 
