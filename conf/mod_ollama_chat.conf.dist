@@ -1101,11 +1101,19 @@ OllamaChat.RAGPromptTemplate = "RELEVANT INFORMATION:\n{rag_info}\nUse this info
 #        no capability endpoint to ask and a live probe would be a billed
 #        request, so nothing is probed. Under auto, reasoning is not requested
 #        at all. Under on, it is requested on every call -- as
-#        "reasoning_effort" for openai, as an extended-thinking budget of
-#        max(1024, ReasoningTokenReserve) tokens for anthropic -- and switched
-#        off for the session if the provider rejects it. Reasoning models on
-#        those services reason whether asked or not; the setting only tunes
-#        them.
+#        "reasoning_effort" = ThinkEffort for openai, and for anthropic as
+#        adaptive thinking at ThinkEffort (older Claude models such as Haiku 4.5
+#        get a thinking budget of max(1024, ReasoningTokenReserve) tokens
+#        instead) -- and switched off for the session if the provider rejects
+#        it. Reasoning models on those services reason whether asked or not;
+#        the setting only tunes them.
+#
+#        Anthropic with think off (auto, for chat): newer Claude models (Haiku
+#        5.5 and later) decide for themselves when to think, and that thinking
+#        is billed against NumPredict -- a question could spend the whole cap
+#        thinking and come back as an empty reply. So the module turns thinking
+#        off explicitly: thinking {type: disabled}, or effort low on models
+#        that reject that (Sonnet 5.5, Opus 5.5), learned once per session.
 #        Default: auto
 OllamaChat.ThinkMode = "auto"
 
@@ -1115,6 +1123,17 @@ OllamaChat.ThinkMode = "auto"
 #        Prefer OllamaChat.ThinkMode.
 #        Default: 0
 OllamaChat.ThinkModeEnableForModule = 0
+
+#    OllamaChat.ThinkEffort
+#        How hard the model reasons when think mode asks it to:
+#        low / medium / high / xhigh / max. Sent as "reasoning_effort" (openai)
+#        or "output_config.effort" (anthropic); ignored by Ollama, and by older
+#        Claude models that take a thinking budget instead. Higher levels give
+#        better answers but cost more tokens and time; keep NumPredict +
+#        ReasoningTokenReserve large enough to cover the thinking, or the reply
+#        can come back empty. Not every provider accepts xhigh / max.
+#        Default: medium
+OllamaChat.ThinkEffort = "medium"
 
 #    OllamaChat.ThinkMaxLatencyMs
 #        Latency guard for auto mode. If think-enabled requests average slower

@@ -49,6 +49,11 @@ namespace
     //  2 - neither                      (the model rejected both)
     std::atomic<int> g_anthropicThinkOff{ 0 };
 
+    // When thinking IS wanted: newer Claude models take adaptive thinking at an
+    // effort level (ThinkEffort) and reject a token budget; older ones (Haiku
+    // 4.5) reject adaptive and take the budget. Adaptive is tried first.
+    std::atomic<bool> g_anthropicAdaptiveRejected{ false };
+
     // 429 is the universal "slow down"; 503 is a busy upstream; 529 is
     // Anthropic's "overloaded". All are worth one short wait and a retry.
     bool IsRateLimited(int status)
@@ -226,7 +231,7 @@ namespace
         if (!think.level.empty())
             request["reasoning_effort"] = think.level;
         else if (think.wanted)
-            request["reasoning_effort"] = "medium";
+            request["reasoning_effort"] = g_ThinkEffort;
 
         return request;
     }
@@ -234,9 +239,12 @@ namespace
     // ----------------------------------------------------------------------
     // Anthropic Messages API: POST https://api.anthropic.com/v1/messages
     //
-    // max_tokens is mandatory here. Extended thinking takes a token budget
-    // rather than a flag, must be at least 1024, and is incompatible with
-    // temperature / top_k, so those are left out when thinking is on.
+    // max_tokens is mandatory here. With think mode on, newer models take
+    // adaptive thinking at ThinkEffort; older ones take a token budget of at
+    // least 1024 instead. Either way max_tokens gets that budget as headroom,
+    // and temperature / top_k are left out, since thinking rejects them.
+    // With think mode off, thinking is turned off explicitly (see
+    // g_anthropicThinkOff), because newer models otherwise think on their own.
     // Current Claude models also reject temperature and top_p together, so
     // only temperature is sent.
     // ----------------------------------------------------------------------
@@ -275,7 +283,12 @@ namespace
                 request["stop_sequences"] = stopSeqs;
         }
 
-        if (think.wanted)
+        if (think.wanted && !g_anthropicAdaptiveRejected.load())
+        {
+            request["thinking"]      = { { "type", "adaptive" } };
+            request["output_config"] = { { "effort", g_ThinkEffort } };
+        }
+        else if (think.wanted)
         {
             request["thinking"] = { { "type", "enabled" }, { "budget_tokens", budget } };
         }
@@ -595,6 +608,7 @@ void OllamaConfig_Publish()
     g_authFailureLogged.store(false);
     g_rateLimitLogged.store(false);
     g_anthropicThinkOff.store(0);
+    g_anthropicAdaptiveRejected.store(false);
 
     std::lock_guard<std::mutex> lock(g_settingsMutex);
     g_settings = std::move(next);
@@ -751,6 +765,7 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
         //    top_k
         //  - a rejected thinking {type: disabled} steps to effort low, and a
         //    rejected effort to neither (see g_anthropicThinkOff)
+        //  - rejected adaptive thinking (think mode on) falls back to a budget
         for (int attempt = 0; attempt < 3 && !r.ok && cfg.provider == OllamaProvider::Anthropic &&
                               r.status == 400; ++attempt)
         {
@@ -768,6 +783,14 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
                              "[Ollama Chat] Model '{}' rejects explicit sampling parameters "
                              "(temperature/top_k); sending its defaults for the rest of this "
                              "session.", cfg.model);
+            }
+            else if (req.wanted && lower.find("adaptive") != std::string::npos)
+            {
+                if (!g_anthropicAdaptiveRejected.exchange(true))
+                    LOG_INFO("module.ollamachat",
+                             "[Ollama Chat] Model '{}' rejects adaptive thinking; sending a "
+                             "thinking budget (ReasoningTokenReserve) instead for the rest of "
+                             "this session.", cfg.model);
             }
             else if (!req.wanted && lower.find("thinking") != std::string::npos &&
                      lower.find("disabled") != std::string::npos)

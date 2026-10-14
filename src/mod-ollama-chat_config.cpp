@@ -89,6 +89,25 @@ OllamaProvider OllamaProvider_Parse(const std::string& text)
     return OllamaProvider::Ollama;
 }
 
+std::string OllamaThinkEffort_Parse(const std::string& text)
+{
+    std::string lower = text;
+    for (char& c : lower)
+        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+
+    const size_t start = lower.find_first_not_of(" \t\"'");
+    const size_t end   = lower.find_last_not_of(" \t\"'");
+    lower = (start == std::string::npos) ? std::string() : lower.substr(start, end - start + 1);
+
+    if (lower == "low" || lower == "medium" || lower == "high" || lower == "xhigh" || lower == "max")
+        return lower;
+
+    LOG_WARN("module.ollamachat",
+             "[Ollama Chat] Unknown OllamaChat.ThinkEffort '{}'; expected low, medium, high, xhigh or max. "
+             "Falling back to medium.", text);
+    return "medium";
+}
+
 const char* OllamaProvider_Name(OllamaProvider provider)
 {
     switch (provider)
@@ -136,6 +155,7 @@ bool     g_ThinkModeEnableForModule      = false;
 uint8_t  g_ThinkModePolicy               = 0;      // OllamaThinkPolicy::Auto
 uint32_t g_ThinkMaxLatencyMs             = 12000;
 uint32_t g_ReasoningTokenReserve         = 512;
+std::string g_ThinkEffort                = "medium";
 uint32_t g_CapabilityProbeTimeoutSeconds = 10;
 
 // --------------------------------------------
@@ -781,6 +801,8 @@ void LoadOllamaChatConfig()
                                             g_ThinkModeEnableForModule));
     g_ThinkMaxLatencyMs               = sConfigMgr->GetOption<uint32_t>("OllamaChat.ThinkMaxLatencyMs", 12000);
     g_ReasoningTokenReserve           = sConfigMgr->GetOption<uint32_t>("OllamaChat.ReasoningTokenReserve", 512);
+    g_ThinkEffort                     = OllamaThinkEffort_Parse(
+                                            sConfigMgr->GetOption<std::string>("OllamaChat.ThinkEffort", "medium"));
     g_CapabilityProbeTimeoutSeconds   = sConfigMgr->GetOption<uint32_t>("OllamaChat.CapabilityProbeTimeoutSeconds", 10);
 
     // --- HTTP / dispatcher ----------------------------------------------

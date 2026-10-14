@@ -58,6 +58,7 @@ enum class OllamaProvider : uint8_t
 
 OllamaProvider OllamaProvider_Parse(const std::string& text);
 const char*    OllamaProvider_Name(OllamaProvider provider);
+std::string    OllamaThinkEffort_Parse(const std::string& text);   // low..max, else medium
 
 extern std::string g_OllamaUrl;
 extern std::string g_OllamaModel;
@@ -179,6 +180,9 @@ extern uint32_t g_ThinkMaxLatencyMs;
 // it is asked to. Without it a small NumPredict is spent on reasoning and the
 // reply comes back empty. 0 disables the headroom entirely.
 extern uint32_t g_ReasoningTokenReserve;
+// How hard the model reasons when think mode asks it to: low/medium/high/xhigh/
+// max. Sent as reasoning_effort (openai) or output_config.effort (anthropic).
+extern std::string g_ThinkEffort;
 extern uint32_t g_CapabilityProbeTimeoutSeconds;
 
 // --------------------------------------------
