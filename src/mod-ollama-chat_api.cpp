@@ -40,6 +40,15 @@ namespace
     std::atomic<bool> g_authFailureLogged{ false };
     std::atomic<bool> g_rateLimitLogged{ false };
 
+    // How the Anthropic request keeps the model from thinking when nobody
+    // asked it to. Newer Claude models think on their own, and a short
+    // NumPredict budget can go entirely to thinking, leaving an empty reply.
+    // Each step is tried until the model accepts one:
+    //  0 - thinking {type: disabled}    (Haiku 4.5, Haiku 5.5)
+    //  1 - output_config {effort: low}  (Sonnet 5.5, Opus 5.5 reject disabled)
+    //  2 - neither                      (the model rejected both)
+    std::atomic<int> g_anthropicThinkOff{ 0 };
+
     // 429 is the universal "slow down"; 503 is a busy upstream; 529 is
     // Anthropic's "overloaded". All are worth one short wait and a retry.
     bool IsRateLimited(int status)
@@ -270,11 +279,20 @@ namespace
         {
             request["thinking"] = { { "type", "enabled" }, { "budget_tokens", budget } };
         }
-        else if (!g_samplingRejected.load())
+        else
         {
-            request["temperature"] = cfg.temperature;
-            if (cfg.topK >= 0)
-                request["top_k"] = cfg.topK;
+            const int thinkOff = g_anthropicThinkOff.load();
+            if (thinkOff == 0)
+                request["thinking"] = { { "type", "disabled" } };
+            else if (thinkOff == 1)
+                request["output_config"] = { { "effort", "low" } };
+
+            if (!g_samplingRejected.load())
+            {
+                request["temperature"] = cfg.temperature;
+                if (cfg.topK >= 0)
+                    request["top_k"] = cfg.topK;
+            }
         }
 
         return request;
@@ -576,6 +594,7 @@ void OllamaConfig_Publish()
     g_samplingLogged.store(false);
     g_authFailureLogged.store(false);
     g_rateLimitLogged.store(false);
+    g_anthropicThinkOff.store(0);
 
     std::lock_guard<std::mutex> lock(g_settingsMutex);
     g_settings = std::move(next);
@@ -725,11 +744,18 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
             }
         }
 
-        // Anthropic sampling rejection ("`temperature` is deprecated for this
-        // model."), learned once per session and retried the same way.
-        if (!r.ok && cfg.provider == OllamaProvider::Anthropic && r.status == 400)
+        // Anthropic parameter rejections, learned once per session and retried
+        // the same way. One request can trip more than one (a model may reject
+        // both temperature and the way thinking is turned off), so this loops:
+        //  - "`temperature` is deprecated for this model." drops temperature /
+        //    top_k
+        //  - a rejected thinking {type: disabled} steps to effort low, and a
+        //    rejected effort to neither (see g_anthropicThinkOff)
+        for (int attempt = 0; attempt < 3 && !r.ok && cfg.provider == OllamaProvider::Anthropic &&
+                              r.status == 400; ++attempt)
         {
             const std::string lower = ToLower(r.error);
+            int thinkOffStep = 0;
 
             if ((lower.find("deprecated") != std::string::npos ||
                  lower.find("not supported") != std::string::npos) &&
@@ -742,8 +768,31 @@ OllamaApiResult QueryOllama(const std::string& prompt, OllamaRequestKind kind)
                              "[Ollama Chat] Model '{}' rejects explicit sampling parameters "
                              "(temperature/top_k); sending its defaults for the rest of this "
                              "session.", cfg.model);
-                r = PerformOnce(cfg, prompt, req, budget);
             }
+            else if (!req.wanted && lower.find("thinking") != std::string::npos &&
+                     lower.find("disabled") != std::string::npos)
+                thinkOffStep = 1;
+            else if (!req.wanted && lower.find("effort") != std::string::npos)
+                thinkOffStep = 2;
+            else
+                break;
+
+            int current = g_anthropicThinkOff.load();
+            while (current < thinkOffStep)
+            {
+                if (g_anthropicThinkOff.compare_exchange_weak(current, thinkOffStep))
+                {
+                    LOG_INFO("module.ollamachat",
+                             "[Ollama Chat] Model '{}' rejects {}; {} for the rest of this session.",
+                             cfg.model,
+                             thinkOffStep == 1 ? "thinking {type: disabled}" : "the effort parameter",
+                             thinkOffStep == 1 ? "sending effort low instead"
+                                               : "leaving thinking at the model's default");
+                    break;
+                }
+            }
+
+            r = PerformOnce(cfg, prompt, req, budget);
         }
 
         // Ollama would not take a string reasoning level. Drop to the boolean
