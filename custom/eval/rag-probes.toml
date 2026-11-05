@@ -268,6 +268,33 @@ expect = ["server_progression_next"]
 zone = "Elwynn Forest"
 area = "Goldshire"
 
+[[probe]]
+group = "rework"
+message = "is molten core open yet"
+expect = ["server_progression_now"]
+note = "quest 6822 (The Molten Core) outscores the fact on the raid name; the prompt carries the answer too"
+zone = "Burning Steppes"
+area = "Morgan's Vigil"
+[[probe]]
+group = "rework"
+message = "can we raid zul'gurub yet"
+expect = ["server_progression_next"]
+zone = "Stranglethorn Vale"
+area = "Booty Bay"
+[[probe]]
+group = "rework"
+message = "is arathi basin open"
+expect = ["server_progression_now"]
+note = "BG quests name Arathi Basin and outscore the fact; the prompt carries the answer too"
+zone = "Durotar"
+area = "Razor Hill"
+[[probe]]
+group = "rework"
+message = "which raids are open"
+expect = ["server_progression_now"]
+zone = "Elwynn Forest"
+area = "Goldshire"
+
 # --- chit-chat: nothing should be retrieved --------------------------------------------------------------
 [[probe]]
 group = "chitchat"
