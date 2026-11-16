@@ -303,7 +303,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(r["messages"], [{"role": "user", "content": "hello"}])
         self.assertEqual(r["stop_sequences"], ["a", "b"])
         self.assertEqual(r["temperature"], 0.8)
-        self.assertNotIn("thinking", r)
+        self.assertEqual(r["thinking"], {"type": "disabled"})     # think mode is off, said explicitly
         self.assertNotIn("top_k", r)
         self.assertNotIn("top_p", r)
 
@@ -386,6 +386,57 @@ class ApiTests(unittest.TestCase):
                         sleep=sleeps.append)
         self.assertFalse(res.ok)
         self.assertEqual((len(calls), sleeps), (3, [2, 4]))
+
+    def run_with_rejections(self, rejections):
+        """api.query against a server that rejects the first requests with these 400 messages. Returns the
+        request bodies it was sent and the result."""
+        import io
+        import json
+        api._LEARNED.clear()
+        self.addCleanup(api._LEARNED.clear)
+        bodies, queue = [], list(rejections)
+
+        class Resp:
+            status = 200
+
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self): return b'{"content":[{"type":"text","text":"ok"}]}'
+
+        def opener(req, timeout):
+            bodies.append(json.loads(req.data))
+            if queue:
+                msg = queue.pop(0)
+                raise urllib.error.HTTPError(req.full_url, 400, "bad", {},
+                                             io.BytesIO(json.dumps({"error": {"message": msg}}).encode()))
+            return Resp()
+
+        res = api.query(self.cfg(model="haiku-test"), "x", opener=opener, sleep=lambda s: None)
+        return bodies, res
+
+    def test_a_model_that_rejects_temperature_gets_it_dropped_and_is_remembered(self):
+        bodies, res = self.run_with_rejections(["`temperature` is deprecated for this model."])
+        self.assertTrue(res.ok)
+        self.assertIn("temperature", bodies[0])
+        self.assertNotIn("temperature", bodies[1])
+        self.assertEqual(bodies[1]["thinking"], {"type": "disabled"})
+        # remembered: the next request does not carry it
+        self.assertNotIn("temperature", api.build_request(self.cfg(model="haiku-test"), "y"))
+
+    def test_a_model_that_rejects_thinking_disabled_steps_to_effort_low_then_to_neither(self):
+        bodies, res = self.run_with_rejections(["thinking: disabled is not supported for this model",
+                                                "output_config.effort is not supported"])
+        self.assertTrue(res.ok)
+        self.assertEqual(bodies[0]["thinking"], {"type": "disabled"})
+        self.assertEqual(bodies[1]["output_config"], {"effort": "low"})
+        self.assertNotIn("thinking", bodies[1])
+        self.assertNotIn("output_config", bodies[2])
+        self.assertNotIn("thinking", bodies[2])
+
+    def test_an_unrelated_400_is_not_retried(self):
+        bodies, res = self.run_with_rejections(["prompt is too long"])
+        self.assertFalse(res.ok)
+        self.assertEqual(len(bodies), 1)
 
     def test_non_retryable_status(self):
         calls = []
