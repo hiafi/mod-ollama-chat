@@ -303,6 +303,18 @@ std::string g_EventChatterPromptTemplate;
 std::string g_ChatPromptTemplate;
 std::string g_ChatExtraInfoTemplate;
 
+std::string g_ChannelPhraseParty    = "in party chat";
+std::string g_ChannelPhraseRaid     = "in raid chat";
+std::string g_ChannelPhraseGuild    = "in guild chat";
+std::string g_ChannelPhraseOfficer  = "in officer chat";
+std::string g_ChannelPhraseWhisper  = "in a whisper to you";
+std::string g_ChannelPhraseSay      = "out loud nearby";
+std::string g_ChannelPhraseYell     = "in a yell";
+std::string g_ChannelPhraseCustom   = "in the {channel_name} channel";
+std::string g_AddressedNamed        = "They named you.";
+std::string g_AddressedWhisper;
+std::string g_AddressedNotAimed     = "It was not aimed at anyone in particular.";
+
 // --------------------------------------------
 // Personality and Prompt Data
 // --------------------------------------------
@@ -708,6 +720,18 @@ void LoadOllamaChatConfig()
     g_ChatPromptTemplate              = sConfigMgr->GetOption<std::string>("OllamaChat.ChatPromptTemplate", "");
     
     g_ChatExtraInfoTemplate           = sConfigMgr->GetOption<std::string>("OllamaChat.ChatExtraInfoTemplate", "");
+
+    g_ChannelPhraseParty              = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Party", "in party chat");
+    g_ChannelPhraseRaid               = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Raid", "in raid chat");
+    g_ChannelPhraseGuild              = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Guild", "in guild chat");
+    g_ChannelPhraseOfficer            = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Officer", "in officer chat");
+    g_ChannelPhraseWhisper            = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Whisper", "in a whisper to you");
+    g_ChannelPhraseSay                = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Say", "out loud nearby");
+    g_ChannelPhraseYell               = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Yell", "in a yell");
+    g_ChannelPhraseCustom             = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Custom", "in the {channel_name} channel");
+    g_AddressedNamed                  = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Named", "They named you.");
+    g_AddressedWhisper                = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Whisper", "");
+    g_AddressedNotAimed               = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.NotAimed", "It was not aimed at anyone in particular.");
 
     g_DefaultPersonalityPrompt        = sConfigMgr->GetOption<std::string>("OllamaChat.DefaultPersonalityPrompt", "");
 

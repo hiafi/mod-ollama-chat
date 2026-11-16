@@ -122,6 +122,19 @@ extern std::string g_EventChatterPromptTemplate;
 extern std::string g_ChatPromptTemplate;
 extern std::string g_ChatExtraInfoTemplate;
 
+// {chat_channel} and {addressed} for ChatPromptTemplate: where a line was said and whether it was aimed at this bot.
+extern std::string g_ChannelPhraseParty;
+extern std::string g_ChannelPhraseRaid;
+extern std::string g_ChannelPhraseGuild;
+extern std::string g_ChannelPhraseOfficer;
+extern std::string g_ChannelPhraseWhisper;
+extern std::string g_ChannelPhraseSay;
+extern std::string g_ChannelPhraseYell;
+extern std::string g_ChannelPhraseCustom;     // {channel_name}
+extern std::string g_AddressedNamed;
+extern std::string g_AddressedWhisper;
+extern std::string g_AddressedNotAimed;
+
 // --------------------------------------------
 // Personality and Prompt Data
 // --------------------------------------------

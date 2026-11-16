@@ -616,7 +616,7 @@ OllamaChat.SentimentPromptTemplate = "Your relationship sentiment with {player_n
 
 # OllamaChat.ChatPromptTemplate
 #   Description: The main template for bot chat prompts sent to the LLM.
-#   Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_personality} {bot_personality_name} {player_level} {player_class} {player_name} {player_message} {extra_info} {sentiment_info}
+#   Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_personality} {bot_personality_name} {player_level} {player_class} {player_name} {player_message} {extra_info} {sentiment_info} {chat_history} {chat_channel} {addressed}
 #   Note: {bot_personality_name} contains the name/key of the personality (e.g., "grumpy", "helpful"), while {bot_personality} contains the full personality description text.
 OllamaChat.ChatPromptTemplate = "You're a WoW player familiar with 3.3.5 version of the game and before. Name: {bot_name}, Level: {bot_level} {bot_class}, MAKE SURE YOU RESPOND USING YOUR PERSONALITY, WHICH IS: {bot_personality_name}: {bot_personality}. {sentiment_info} {chat_history} A level {player_level} {player_class} named {player_name} said: '{player_message}'. {extra_info} Reply naturally in under 15 words. Use authentic WoW tone. Be blunt if provoked. Be precise if giving directions. Never contradict your class, race, or location. Never act like a narrator—just respond like a player."
 
@@ -624,6 +624,30 @@ OllamaChat.ChatPromptTemplate = "You're a WoW player familiar with 3.3.5 version
 #   Description: The context/details string about the bot and player, injected into the chat prompt as the last parameter.
 #   Placeholders (named): {bot_race} {bot_gender} {bot_role} {bot_faction} {bot_guild} {bot_group_status} {bot_gold} {player_race} {player_gender} {player_role} {player_faction} {player_guild} {player_group_status} {player_gold} {player_distance} {bot_area} {bot_zone} {bot_map}
 OllamaChat.ChatExtraInfoTemplate = "Your Info: {bot_race} {bot_gender}, Spec: {bot_role}, Faction: {bot_faction}, Guild: {bot_guild}, Group: {bot_group_status}, Gold: {bot_gold}. Player Info: {player_race} {player_gender}, Spec: {player_role}, Faction: {player_faction}, Guild: {player_guild}, Group: {player_group_status}, Gold: {player_gold}, Distance: {player_distance} yards. Location: {bot_area}, Zone: {bot_zone}, Map: {bot_map}. Only respond to the new message. No commentary, no meta-talk, no prefix—just the reply."
+
+# OllamaChat.ChannelPhrase.*
+#   Description: What {chat_channel} says in ChatPromptTemplate: a short phrase for where the line was said, so a bot
+#                can tell a callout in party chat from a question asked to its face. One key per channel kind; reword
+#                them freely. {chat_channel} is only used if the template contains it.
+#   Placeholders (named, Custom only): {channel_name}, the real name of the channel (e.g. "General - Elwynn Forest").
+#   Custom covers General, Trade and any other numbered or custom channel.
+OllamaChat.ChannelPhrase.Party = "in party chat"
+OllamaChat.ChannelPhrase.Raid = "in raid chat"
+OllamaChat.ChannelPhrase.Guild = "in guild chat"
+OllamaChat.ChannelPhrase.Officer = "in officer chat"
+OllamaChat.ChannelPhrase.Whisper = "in a whisper to you"
+OllamaChat.ChannelPhrase.Say = "out loud nearby"
+OllamaChat.ChannelPhrase.Yell = "in a yell"
+OllamaChat.ChannelPhrase.Custom = "in the {channel_name} channel"
+
+# OllamaChat.Addressed.*
+#   Description: What {addressed} says in ChatPromptTemplate: whether the line was aimed at this bot. Named is used when
+#                the bot's name appears in the message, NotAimed when it does not. A whisper is always for the bot and
+#                {chat_channel} already says so, so Whisper is empty by default. {addressed} is only used if the
+#                template contains it.
+OllamaChat.Addressed.Named = "They named you."
+OllamaChat.Addressed.Whisper = ""
+OllamaChat.Addressed.NotAimed = "It was not aimed at anyone in particular."
 
 # --------------------------------------------
 # ENVIRONMENTAL/CONTEXTUAL TEMPLATES

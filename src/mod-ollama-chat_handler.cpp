@@ -1741,7 +1741,10 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
             continue;
         }
 
-        std::string prompt = GenerateBotPrompt(bot, msg, player);
+        const bool botNamed =
+            OllamaFindBotNameMention(trimmedMsg, bot->GetName()) != std::string::npos;
+        std::string prompt = GenerateBotPrompt(bot, msg, player, sourceLocal,
+                                               channel ? channel->GetName() : std::string(), botNamed);
         if (prompt.empty())
             continue;
 
@@ -1900,7 +1903,37 @@ static bool IsBotEligibleForChatChannelLocal(Player* bot, Player* player, ChatCh
     }
 }
 
-std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* player)
+// {chat_channel}: a short phrase for where the line was said, each one a config key.
+static std::string ChatChannelPhrase(ChatChannelSourceLocal source, std::string const& channelName)
+{
+    switch (source)
+    {
+        case SRC_PARTY_LOCAL:   return g_ChannelPhraseParty;
+        case SRC_RAID_LOCAL:    return g_ChannelPhraseRaid;
+        case SRC_GUILD_LOCAL:   return g_ChannelPhraseGuild;
+        case SRC_OFFICER_LOCAL: return g_ChannelPhraseOfficer;
+        case SRC_WHISPER_LOCAL: return g_ChannelPhraseWhisper;
+        case SRC_YELL_LOCAL:    return g_ChannelPhraseYell;
+        case SRC_GENERAL_LOCAL:
+            return SafeFormat(g_ChannelPhraseCustom,
+                              fmt::arg("channel_name", channelName.empty() ? std::string("public") : channelName));
+        case SRC_SAY_LOCAL:
+        default:
+            return g_ChannelPhraseSay;
+    }
+}
+
+// {addressed}: whether the line was aimed at this bot. A whisper is for the bot by definition and the channel phrase
+// already says so, so it has its own (normally empty) text.
+static std::string AddressedPhrase(ChatChannelSourceLocal source, bool named)
+{
+    if (source == SRC_WHISPER_LOCAL)
+        return g_AddressedWhisper;
+    return named ? g_AddressedNamed : g_AddressedNotAimed;
+}
+
+std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* player,
+                              ChatChannelSourceLocal source, std::string const& channelName, bool named)
 {  
     if (!bot || !player) {
         return "";
@@ -2017,7 +2050,9 @@ std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* pl
         fmt::arg("player_message", playerMessage),
         fmt::arg("extra_info", extraInfo),
         fmt::arg("chat_history", chatHistory),
-        fmt::arg("sentiment_info", sentimentInfo)
+        fmt::arg("sentiment_info", sentimentInfo),
+        fmt::arg("chat_channel", ChatChannelPhrase(source, channelName)),
+        fmt::arg("addressed", AddressedPhrase(source, named))
     );
 
     // Add RAG information to the prompt if available
