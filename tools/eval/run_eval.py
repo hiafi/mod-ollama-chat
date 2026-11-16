@@ -73,7 +73,8 @@ class Job:
     result: api.ApiResult | None = None
     processed: str = ""
     emote: str = ""
-    skipped: str = ""
+    skipped: str = ""           # the prompt was not sent (a format error)
+    chose_skip: bool = False    # the model answered with OllamaChat.SkipToken: no line, and not a failure
     crashed: str = ""
     personality: str = ""       # sweep mode: the key this job was swept over (candidate's name for it)
     note: str = ""              # sweep mode: e.g. the baseline fell back to the default prompt
@@ -142,9 +143,16 @@ def failure_of(j: Job) -> str:
         return "not run (the run stopped early)"
     if not j.result.ok:
         return j.result.error or "request failed"
+    if j.chose_skip:
+        return ""
     if not j.processed:
         return "empty reply after clean-up"
     return ""
+
+
+def reply_of(j: Job) -> str | None:
+    """The line a job produced, or None when it failed or the model chose to say nothing."""
+    return None if failure_of(j) or j.chose_skip else j.processed
 
 
 def raw_record(j: Job) -> dict:
@@ -153,6 +161,7 @@ def raw_record(j: Job) -> dict:
         "case": j.case["id"], "variant": j.variant.name, "sample": j.sample, "personality": j.personality or None,
         "prompt_hash": sha(j.rendered.prompt), "system_hash": sha(j.rendered.system_prompt),
         "raw": r.text if r else None, "processed": j.processed or None, "emote": j.emote or None,
+        "chose_skip": j.chose_skip,
         "input_tokens": r.input_tokens if r else None, "output_tokens": r.output_tokens if r else None,
         "latency_ms": r.latency_ms if r else None, "status": r.status if r else None,
         "error": (r.error if r and not r.ok else None) or j.skipped or j.crashed or None,
@@ -171,8 +180,18 @@ def execute(job: Job) -> Job:
         job.result = api.query(s_local, job.rendered.prompt)
         if job.result.ok:
             cfg = job.variant.cfg
+            raw = job.result.text
+            token = cfg.text("SkipToken", "")
+            if token:
+                # RunChatTask: the skip check runs on the reply with think tags stripped, before the clean-up; a token
+                # inside a longer reply is already removed from what goes on.
+                probe, job.chose_skip = postprocess.apply_skip_token(
+                    postprocess.strip_think_tags(raw.encode("utf-8")).decode("utf-8", "replace"), token)
+                if job.chose_skip:
+                    return job
+                raw = probe
             job.processed, job.emote = postprocess.process_llm_response(
-                job.result.text, str(job.case["bot"]["name"]),
+                raw, str(job.case["bot"]["name"]),
                 strip_markdown_on=cfg.boolean("StripMarkdown", True),
                 strip_decorative_on=cfg.boolean("StripDecorativeUnicode", True),
                 max_reply_length=cfg.integer("MaxReplyLength", 240))
@@ -195,8 +214,14 @@ def case_block(case: dict, cjobs: list[Job], args, level: str) -> list[str]:
         for name in ("baseline", "candidate"):
             j = next(x for x in cjobs if x.sample == s and x.variant.name == name)
             f = failure_of(j)
-            cells.append(f"**FAILED:** {md_cell(f)}" if f else md_cell(j.processed))
+            cells.append(f"**FAILED:** {md_cell(f)}" if f else "_(skip)_" if j.chose_skip else md_cell(j.processed))
         md.append(f"| {s + 1} | {cells[0]} | {cells[1]} |")
+    rates = []
+    for name in ("baseline", "candidate"):
+        vj = [x for x in cjobs if x.variant.name == name and not failure_of(x)]
+        rates.append(f"{name} {sum(1 for x in vj if x.chose_skip)}/{len(vj)}")
+    if any(x.chose_skip for x in cjobs):
+        md.append(f"\nSkipped: {', '.join(rates)}")
     rag_hits = {tuple((h['id'], h['score']) for h in x.rendered.rag) for x in cjobs if x.rendered.rag}
     for hits in sorted(rag_hits):
         md.append(f"\nRAG retrieved: {', '.join(f'{i} ({sc})' for i, sc in hits)}")
@@ -204,7 +229,7 @@ def case_block(case: dict, cjobs: list[Job], args, level: str) -> list[str]:
     return md
 
 
-SWEEP_METRICS = ["replies", "slang_open_pct", "words_mean", "distinct_opener_ratio", "near_dup_pct"]
+SWEEP_METRICS = ["replies", "skip_pct", "slang_open_pct", "words_mean", "distinct_opener_ratio", "near_dup_pct"]
 
 
 def personality_section(key: str, jobs: list[Job], cases: list[dict], variants: list[Variant],
@@ -224,8 +249,9 @@ def personality_section(key: str, jobs: list[Job], cases: list[dict], variants: 
     st = {}
     for v in variants:
         vj = [j for j in kjobs if j.variant is v]
-        st[v.name] = metrics.compute([j.processed for j in vj if not failure_of(j)],
-                                     sum(1 for j in vj if failure_of(j)), openers, banned)
+        st[v.name] = metrics.compute([reply_of(j) for j in vj if reply_of(j) is not None],
+                                     sum(1 for j in vj if failure_of(j)), openers, banned,
+                                     skipped=sum(1 for j in vj if j.chose_skip))
     md.append("| metric | baseline | candidate |")
     md.append("|---|---|---|")
     for m in SWEEP_METRICS:
@@ -242,8 +268,9 @@ def build_report(jobs: list[Job], cases: list[dict], variants: list[Variant], ar
     stats = {}
     for v in variants:
         vj = [j for j in jobs if j.variant is v]
-        replies = [j.processed for j in vj if not failure_of(j)]
-        stats[v.name] = metrics.compute(replies, sum(1 for j in vj if failure_of(j)), openers, banned)
+        replies = [reply_of(j) for j in vj if reply_of(j) is not None]
+        stats[v.name] = metrics.compute(replies, sum(1 for j in vj if failure_of(j)), openers, banned,
+                                        skipped=sum(1 for j in vj if j.chose_skip))
 
     ok_results = [j.result for j in jobs if j.result and j.result.ok]
     in_toks = [r.input_tokens for r in ok_results if r.input_tokens is not None]
@@ -263,8 +290,8 @@ def build_report(jobs: list[Job], cases: list[dict], variants: list[Variant], ar
     md.append("## Metrics\n")
     md.append("| metric | baseline | candidate |")
     md.append("|---|---|---|")
-    for m in ["replies", "slang_open_pct", "distinct_opener_ratio", "words_mean", "words_stdev",
-              "near_dup_pct", "banned_hits", "failures"]:
+    for m in ["replies", "skipped", "skip_pct", "slang_open_pct", "distinct_opener_ratio", "words_mean",
+              "words_stdev", "near_dup_pct", "confused_pct", "banned_hits", "failures"]:
         md.append(f"| {m} | {stats['baseline'][m]} | {stats['candidate'][m]} |")
     for v in ("baseline", "candidate"):
         top = ", ".join(f"{t} x{n}" for t, n in stats[v]["banned_top"]) or "none"

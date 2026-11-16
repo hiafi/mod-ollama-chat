@@ -5,6 +5,7 @@
 #include "mod-ollama-chat_rag.h"
 #include "Config.h"
 #include "Log.h"
+#include <algorithm>
 #include "mod-ollama-chat_api.h"
 #include "mod-ollama-chat_capability.h"
 #include "mod-ollama-chat_dispatch.h"
@@ -39,6 +40,9 @@ uint32_t   g_PlayerReplyChance_Guild   = 70;
 uint32_t   g_BotReplyChance_Guild      = 5;
 
 uint32_t   g_MaxBotsToPick     = 2;
+uint32_t   g_MaxBotsToPickParty = 0;
+uint32_t   g_MaxBotsToPickRaid  = 0;
+uint32_t   g_PartyTankPickWeight = 1;
 uint32_t   g_RandomChatterBotCommentChance   = 5;
 uint32_t   g_RandomChatterMaxBotsPerPlayer   = 2;
 uint32_t   g_EventChatterBotCommentChance    = 15;
@@ -303,6 +307,26 @@ std::string g_EventChatterPromptTemplate;
 std::string g_ChatPromptTemplate;
 std::string g_ChatExtraInfoTemplate;
 
+std::string g_ChannelPhraseParty    = "in party chat";
+std::string g_ChannelPhraseRaid     = "in raid chat";
+std::string g_ChannelPhraseGuild    = "in guild chat";
+std::string g_ChannelPhraseOfficer  = "in officer chat";
+std::string g_ChannelPhraseWhisper  = "in a whisper to you";
+std::string g_ChannelPhraseSay      = "out loud nearby";
+std::string g_ChannelPhraseYell     = "in a yell";
+std::string g_ChannelPhraseCustom   = "in the {channel_name} channel";
+std::string g_AddressedNamed        = "They named you.";
+std::string g_AddressedWhisper;
+std::string g_AddressedNotAimed     = "It was not aimed at anyone in particular.";
+std::string g_AddressedConversation;
+std::string g_SkipToken;
+
+std::string g_SituationTemplate;
+bool        g_SituationEnabled              = false;
+uint32_t    g_SituationBetweenPullsSeconds  = 90;
+uint32_t    g_SituationEventWindowSeconds   = 90;
+uint32_t    g_SituationRaidSummaryAbove     = 5;
+
 // --------------------------------------------
 // Personality and Prompt Data
 // --------------------------------------------
@@ -360,6 +384,7 @@ std::string g_RAGDataPath = "rag/";
 uint32_t    g_RAGMaxRetrievedItems = 3;
 float       g_RAGSimilarityThreshold = 0.3f;
 float       g_RAGLocationBoost = 0.0f;
+uint32_t    g_RAGMinQueryWords = 0;
 bool        g_RAGIgnoreCommonWords = false;
 std::string g_RAGPromptTemplate;
 
@@ -586,6 +611,9 @@ void LoadOllamaChatConfig()
     g_BotReplyChance_Guild            = sConfigMgr->GetOption<uint32_t>("OllamaChat.BotReplyChance.Guild", 5);
     
     g_MaxBotsToPick                   = sConfigMgr->GetOption<uint32_t>("OllamaChat.MaxBotsToPick", 2);
+    g_MaxBotsToPickParty              = sConfigMgr->GetOption<uint32_t>("OllamaChat.MaxBotsToPick.Party", 0);
+    g_MaxBotsToPickRaid               = sConfigMgr->GetOption<uint32_t>("OllamaChat.MaxBotsToPick.Raid", 0);
+    g_PartyTankPickWeight             = std::clamp<uint32_t>(sConfigMgr->GetOption<uint32_t>("OllamaChat.Party.TankPickWeight", 1), 1, 100);
     g_OllamaUrl                       = sConfigMgr->GetOption<std::string>("OllamaChat.Url", "http://localhost:11434/api/generate");
     g_OllamaModel                     = sConfigMgr->GetOption<std::string>("OllamaChat.Model", "llama3.2:1b");
     g_OllamaProvider                  = OllamaProvider_Parse(sConfigMgr->GetOption<std::string>("OllamaChat.Provider", "ollama"));
@@ -709,6 +737,26 @@ void LoadOllamaChatConfig()
     
     g_ChatExtraInfoTemplate           = sConfigMgr->GetOption<std::string>("OllamaChat.ChatExtraInfoTemplate", "");
 
+    g_ChannelPhraseParty              = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Party", "in party chat");
+    g_ChannelPhraseRaid               = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Raid", "in raid chat");
+    g_ChannelPhraseGuild              = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Guild", "in guild chat");
+    g_ChannelPhraseOfficer            = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Officer", "in officer chat");
+    g_ChannelPhraseWhisper            = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Whisper", "in a whisper to you");
+    g_ChannelPhraseSay                = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Say", "out loud nearby");
+    g_ChannelPhraseYell               = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Yell", "in a yell");
+    g_ChannelPhraseCustom             = sConfigMgr->GetOption<std::string>("OllamaChat.ChannelPhrase.Custom", "in the {channel_name} channel");
+    g_AddressedNamed                  = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Named", "They named you.");
+    g_AddressedWhisper                = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Whisper", "");
+    g_AddressedNotAimed               = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.NotAimed", "It was not aimed at anyone in particular.");
+    g_AddressedConversation           = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Conversation", "");
+    g_SkipToken                       = sConfigMgr->GetOption<std::string>("OllamaChat.SkipToken", "");
+
+    g_SituationTemplate               = sConfigMgr->GetOption<std::string>("OllamaChat.SituationTemplate", "");
+    g_SituationEnabled                = !g_SituationTemplate.empty();
+    g_SituationBetweenPullsSeconds    = sConfigMgr->GetOption<uint32_t>("OllamaChat.Situation.BetweenPullsSeconds", 90);
+    g_SituationEventWindowSeconds     = sConfigMgr->GetOption<uint32_t>("OllamaChat.Situation.EventWindowSeconds", 90);
+    g_SituationRaidSummaryAbove       = sConfigMgr->GetOption<uint32_t>("OllamaChat.Situation.RaidSummaryAbove", 5);
+
     g_DefaultPersonalityPrompt        = sConfigMgr->GetOption<std::string>("OllamaChat.DefaultPersonalityPrompt", "");
 
     g_MaxConversationHistory          = sConfigMgr->GetOption<uint32_t>("OllamaChat.MaxConversationHistory", 5);
@@ -737,6 +785,7 @@ void LoadOllamaChatConfig()
     g_RAGMaxRetrievedItems            = sConfigMgr->GetOption<uint32_t>("OllamaChat.RAGMaxRetrievedItems", 3);
     g_RAGSimilarityThreshold          = sConfigMgr->GetOption<float>("OllamaChat.RAGSimilarityThreshold", 0.3f);
     g_RAGLocationBoost                = sConfigMgr->GetOption<float>("OllamaChat.RAGLocationBoost", 0.0f);
+    g_RAGMinQueryWords                = sConfigMgr->GetOption<uint32_t>("OllamaChat.RAGMinQueryWords", 0);
     g_RAGIgnoreCommonWords            = sConfigMgr->GetOption<bool>("OllamaChat.RAGIgnoreCommonWords", false);
     g_RAGPromptTemplate               = sConfigMgr->GetOption<std::string>("OllamaChat.RAGPromptTemplate", "RELEVANT INFORMATION:\n{rag_info}\nUse this information to provide accurate and detailed responses when applicable.");
 
@@ -1167,7 +1216,9 @@ void LoadOllamaChatConfig()
              "[Ollama Chat] Config loaded: Enabled = {}, SayDistance = {}, YellDistance = {}, "
              "Reply Chances - Say: P{}%/B{}%, Channel: P{}%/B{}%, Party: P{}%/B{}%, Guild: P{}%/B{}%, MaxBotsToPick = {}, "
              "Provider = {}, Url = {}, Model = {}, ApiKey = {}, MaxConcurrentQueries = {}, EnableRandomChatter = {}, MinRandInt = {}, MaxRandInt = {}, RandomChatterRealPlayerDistance = {}, "
-             "RandomChatterBotCommentChance = {}. MaxConcurrentQueries = {}. Extra blacklist commands: {}",
+             "RandomChatterBotCommentChance = {}. MaxConcurrentQueries = {}. Extra blacklist commands: {}. "
+             "Situation = {} (between pulls {}s, events {}s, raid summary above {}), SkipToken = '{}', "
+             "MaxBotsToPick Party/Raid = {}/{}, Party.TankPickWeight = {}, RAGMinQueryWords = {}",
              g_Enable, g_SayDistance, g_YellDistance,
              g_PlayerReplyChance_Say, g_BotReplyChance_Say,
              g_PlayerReplyChance_Channel, g_BotReplyChance_Channel,
@@ -1177,7 +1228,10 @@ void LoadOllamaChatConfig()
              OllamaProvider_Name(g_OllamaProvider), g_OllamaUrl, g_OllamaModel,
              g_OllamaApiKey.empty() ? "not set" : "set", g_MaxConcurrentQueries,
              g_EnableRandomChatter, g_MinRandomInterval, g_MaxRandomInterval, g_RandomChatterRealPlayerDistance,
-             g_RandomChatterBotCommentChance, g_MaxConcurrentQueries, extraBlacklist);
+             g_RandomChatterBotCommentChance, g_MaxConcurrentQueries, extraBlacklist,
+             g_SituationEnabled ? "on" : "off", g_SituationBetweenPullsSeconds, g_SituationEventWindowSeconds,
+             g_SituationRaidSummaryAbove, g_SkipToken,
+             g_MaxBotsToPickParty, g_MaxBotsToPickRaid, g_PartyTankPickWeight, g_RAGMinQueryWords);
 }
 
 void LoadPersonalityTemplatesFromDB()

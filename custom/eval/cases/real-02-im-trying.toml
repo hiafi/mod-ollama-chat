@@ -5,6 +5,7 @@ message = "im trying"
 history = [
   { player = "anyone want to quest?", bot = "yo sure, im down. lets grind some quests together lol" },
 ]
+addressed = "conversation"
 
 [bot]
 name = "Aldric"

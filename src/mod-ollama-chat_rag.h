@@ -39,8 +39,12 @@ public:
     // Entries are dropped below similarityThreshold on the raw score. When locationBoost > 0, an entry that
     // mentions any of locationNames (case-insensitive substring of title, keywords or content) is ranked
     // as raw * (1 + locationBoost); the boost never lets a below-threshold entry in.
+    // A query with fewer than minQueryWords words left after dropping the common words ("the", "is", ...) retrieves
+    // nothing: one bare word such as 'mana' is a callout, not a question, and would pull in whatever entry shares it.
+    // 0 = no minimum.
     std::vector<RAGResult> RetrieveRelevantInfo(const std::string& query, uint32_t maxResults = 3, float similarityThreshold = 0.3f,
-                                                const std::vector<std::string>& locationNames = {}, float locationBoost = 0.0f);
+                                                const std::vector<std::string>& locationNames = {}, float locationBoost = 0.0f,
+                                                uint32_t minQueryWords = 0);
 
     // Get formatted RAG information for prompt inclusion
     std::string GetFormattedRAGInfo(const std::vector<RAGResult>& results);

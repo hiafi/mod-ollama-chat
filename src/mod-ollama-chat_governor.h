@@ -66,6 +66,10 @@ bool Governor_InConversation(ObjectGuid botGuid, ObjectGuid playerGuid,
 bool Governor_TryConsumeSend(ObjectGuid botGuid, const std::string& scopeKey,
                              bool directAddress = false);
 
+// The model chose to say nothing (the skip token). Starts this bot's cooldown, as a spoken line would, so the same
+// line is not retried at once; leaves the scope and the global rate alone, since nothing was said.
+void Governor_NoteSkip(ObjectGuid botGuid);
+
 // Same checks without reserving, for deciding whether to spend an LLM call.
 bool Governor_CanSend(ObjectGuid botGuid, const std::string& scopeKey,
                       bool directAddress = false);

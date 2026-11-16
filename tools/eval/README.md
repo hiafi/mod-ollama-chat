@@ -27,6 +27,10 @@ path = "reply"                  # reply | random | event
 notes = "free text, shown in the report"
 message = "whats the command to have you lead the way?"          # reply only
 history = [ { player = "...", bot = "..." } ]                    # reply only, optional
+channel = "party"               # reply only, optional: party | raid | guild | officer | whisper | say | yell | channel
+channel_name = "General - Elwynn Forest"    # for channel = "channel" only
+addressed = "open"              # reply only, optional: named | conversation | open (default open)
+situation = "in Deadmines; not in combat; speaker Lilia: healer, 100% HP, 8% mana; you: tank, 100% HP"
 
 [bot]      # name, level, class, race, gender, role, faction, guild, group_status, gold, area, zone, map, personality
 [player]   # reply only: name, level, class, race, gender, role, faction, guild, group_status, gold, distance
@@ -34,6 +38,16 @@ history = [ { player = "...", bot = "..." } ]                    # reply only, o
 [random]   # random only: environment_info (text), or env_template + env_vars; optional variation
 ```
 
+* `channel`, `addressed` and `situation` fill `{chat_channel}`, `{addressed}` and `{situation}` the way
+  `GenerateBotPrompt` does: the phrase comes from `ChannelPhrase.*` (`channel = "channel"` uses `ChannelPhrase.Custom`
+  with `channel_name`, or `public` when it is empty), `addressed` picks `Addressed.Named` (the bot's name is in the message),
+  `Addressed.Conversation` (not named, but the bot already has an exchange going with the speaker here: a follow-up;
+  empty by default) or `Addressed.NotAimed` (`open`, said to the room); a whisper always uses `Addressed.Whisper`.
+  Set it to what the live server would compute: `named` when the message contains the bot's name, else `conversation`
+  when the case has a `history`, else `open`. `situation` is the line `Situation_Build` produces, written in exactly its
+  format (see `src/mod-ollama-chat_situation.cpp`); the config's `SituationTemplate` wraps it, and an empty template or
+  an empty `situation` gives an empty `{situation}`. Defaults, so older cases render as before: `channel = "say"`,
+  `addressed = "open"`, `situation = ""`.
 * Every value a placeholder needs comes from the case; a missing one is an error naming the case and the
   placeholder. Only the fields the effective templates actually use are required.
 * `role` and `class`/`race` are the strings the module would print ("holy priest", "Night Elf" - race is Title Case, as the server sends it).
@@ -98,10 +112,19 @@ A table without `prompt`, with an unknown field, or with a non-string prompt is 
 | gesture hint | `Expression_BuildGesturePrompt` |
 | retrieval | `src/mod-ollama-chat_rag.cpp`, reply path only |
 | request and response | `BuildOllamaRequest`/`ParseGenerateBody`, `BuildOpenAIRequest`/`ParseOpenAIBody`, `BuildAnthropicRequest`/`ParseAnthropicBody`, `OllamaBuildRequestHeaders`, the 429/503/529 back-off in `QueryOllama` |
+| channel and addressing phrases | `ChatChannelPhrase`, `AddressedPhrase` in `src/mod-ollama-chat_handler.cpp` |
+| situation wrapper | `Situation_Build` in `src/mod-ollama-chat_situation.cpp` (the line itself comes from the case) |
+| skip token | `ApplySkipToken` in `src/mod-ollama-chat_response.cpp`, called from `RunChatTask` in `src/mod-ollama-chat_dispatch.cpp` |
 | reply clean-up | `ProcessLlmResponse` (think tags, gesture tags, markdown, quotes, speaker prefix, unicode, length) |
 
 Provider status: **anthropic** was run against the live API; **ollama** and **openai** follow the C++ but are untested here.
 Think mode is always off, as in the module's defaults.
+
+**Skips.** When the effective config has a `SkipToken`, a reply that is only the token (or starts with it) counts as a
+skip: no line, not a failure, shown as `_(skip)_` in the report, and counted in `skipped` / `skip_pct` (skipped samples
+over all answered samples) next to the other metrics; a token inside a longer reply is removed and the rest scored as a
+reply. `confused_pct` is the share of replies that open with `what`/`huh`/`wdym` or say they do not understand: the
+sign of a bot that took a callout for a question.
 
 `raw.jsonl` has one line per sample: case, variant, sample, prompt hash (not the prompt), system-prompt hash, raw and
 processed reply, token usage, latency, status, error and - for the reply path - the retrieved RAG ids and scores

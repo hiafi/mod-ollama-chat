@@ -331,6 +331,26 @@ OllamaChat.EnableWhisperReplies = 0
 #     Default:     2
 OllamaChat.MaxBotsToPick = 2
 
+# OllamaChat.MaxBotsToPick.Party
+# OllamaChat.MaxBotsToPick.Raid
+#     Description: MaxBotsToPick for lines said in party chat or raid chat. In a group every bot hears every line, so
+#                  with the general cap several of them often answer one callout; 1 makes it one at a time. 0 uses
+#                  OllamaChat.MaxBotsToPick. As with MaxBotsToPick, a number is drawn between 1 and this value.
+#                  A bot that was named always answers, whatever this says.
+#     Default:     0
+OllamaChat.MaxBotsToPick.Party = 0
+OllamaChat.MaxBotsToPick.Raid = 0
+
+# OllamaChat.Party.TankPickWeight
+#     Description: When a party or raid line did not name any bot and more bots want to answer than the cap allows,
+#                  each candidate tank counts this many times in the draw of who answers (everyone else counts once).
+#                  A tank is the one who usually talks for the group. A bot that is already in a conversation with the
+#                  speaker (it answered them in this channel a moment ago) gets the same extra weight, and one that
+#                  is both gets it twice, so a follow-up tends to stay with the bot that was answering. Bots that are
+#                  on cooldown or rate limited are removed before the draw. 1 means no preference. Maximum 100.
+#     Default:     1
+OllamaChat.Party.TankPickWeight = 1
+
 # OllamaChat.BlacklistCommands
 #     Description: A comma-separated list of command prefixes that should be ignored by AI bots.
 #                  If a message starts with any of these prefixes, the bot will not respond.
@@ -616,7 +636,7 @@ OllamaChat.SentimentPromptTemplate = "Your relationship sentiment with {player_n
 
 # OllamaChat.ChatPromptTemplate
 #   Description: The main template for bot chat prompts sent to the LLM.
-#   Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_personality} {bot_personality_name} {player_level} {player_class} {player_name} {player_message} {extra_info} {sentiment_info}
+#   Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_personality} {bot_personality_name} {player_level} {player_class} {player_name} {player_message} {extra_info} {sentiment_info} {chat_history} {chat_channel} {addressed} {situation}
 #   Note: {bot_personality_name} contains the name/key of the personality (e.g., "grumpy", "helpful"), while {bot_personality} contains the full personality description text.
 OllamaChat.ChatPromptTemplate = "You're a WoW player familiar with 3.3.5 version of the game and before. Name: {bot_name}, Level: {bot_level} {bot_class}, MAKE SURE YOU RESPOND USING YOUR PERSONALITY, WHICH IS: {bot_personality_name}: {bot_personality}. {sentiment_info} {chat_history} A level {player_level} {player_class} named {player_name} said: '{player_message}'. {extra_info} Reply naturally in under 15 words. Use authentic WoW tone. Be blunt if provoked. Be precise if giving directions. Never contradict your class, race, or location. Never act like a narrator—just respond like a player."
 
@@ -624,6 +644,80 @@ OllamaChat.ChatPromptTemplate = "You're a WoW player familiar with 3.3.5 version
 #   Description: The context/details string about the bot and player, injected into the chat prompt as the last parameter.
 #   Placeholders (named): {bot_race} {bot_gender} {bot_role} {bot_faction} {bot_guild} {bot_group_status} {bot_gold} {player_race} {player_gender} {player_role} {player_faction} {player_guild} {player_group_status} {player_gold} {player_distance} {bot_area} {bot_zone} {bot_map}
 OllamaChat.ChatExtraInfoTemplate = "Your Info: {bot_race} {bot_gender}, Spec: {bot_role}, Faction: {bot_faction}, Guild: {bot_guild}, Group: {bot_group_status}, Gold: {bot_gold}. Player Info: {player_race} {player_gender}, Spec: {player_role}, Faction: {player_faction}, Guild: {player_guild}, Group: {player_group_status}, Gold: {player_gold}, Distance: {player_distance} yards. Location: {bot_area}, Zone: {bot_zone}, Map: {bot_map}. Only respond to the new message. No commentary, no meta-talk, no prefix—just the reply."
+
+# OllamaChat.ChannelPhrase.*
+#   Description: What {chat_channel} says in ChatPromptTemplate: a short phrase for where the line was said, so a bot
+#                can tell a callout in party chat from a question asked to its face. One key per channel kind; reword
+#                them freely. {chat_channel} is only used if the template contains it.
+#   Placeholders (named, Custom only): {channel_name}, the real name of the channel (e.g. "General - Elwynn Forest").
+#   Custom covers General, Trade and any other numbered or custom channel.
+OllamaChat.ChannelPhrase.Party = "in party chat"
+OllamaChat.ChannelPhrase.Raid = "in raid chat"
+OllamaChat.ChannelPhrase.Guild = "in guild chat"
+OllamaChat.ChannelPhrase.Officer = "in officer chat"
+OllamaChat.ChannelPhrase.Whisper = "in a whisper to you"
+OllamaChat.ChannelPhrase.Say = "out loud nearby"
+OllamaChat.ChannelPhrase.Yell = "in a yell"
+OllamaChat.ChannelPhrase.Custom = "in the {channel_name} channel"
+
+# OllamaChat.Addressed.*
+#   Description: What {addressed} says in ChatPromptTemplate: whether the line was aimed at this bot. Named is used when
+#                the bot's name appears in the message. Conversation is used when it does not, but this bot already
+#                answered this person in this channel a moment ago (see OllamaChat.Cooldown.ConversationWindowSeconds), so the
+#                line is a follow-up; it is empty by default, which says nothing. NotAimed is used for any other
+#                line said to the room. A whisper is always for the bot and {chat_channel} already says so, so
+#                Whisper is empty by default. {addressed} is only used if the template contains it.
+OllamaChat.Addressed.Named = "They named you."
+OllamaChat.Addressed.Conversation = ""
+OllamaChat.Addressed.Whisper = ""
+OllamaChat.Addressed.NotAimed = "It was not aimed at anyone in particular."
+
+# OllamaChat.SituationTemplate
+#   Description: Fills {situation} in ChatPromptTemplate with a compact line built from live game state, so a bot can
+#                tell what is going on when a line is said: inside an instance, whether the group is in combat or
+#                between pulls, what just happened (a death, a boss kill), how the speaker and the bot itself are doing
+#                (role, health, mana, dead, drinking or eating), and the rest of the group. Empty (the default) turns
+#                it off; {situation} is then empty.
+#   Placeholders (named): {details}, the line itself, for example:
+#     in Deadmines; between pulls; just now: Garn died; speaker Lilia: healer, 100% HP, 8% mana, drinking; you: tank,
+#     100% HP, 80% mana; party: Garn (dps, dead), Bob (dps, 90% HP, 70% mana), Mira (healer, 100% HP, 25% mana)
+#   Nothing is printed for what cannot be worked out. A raid of more than Situation.RaidSummaryAbove is summarized
+#   (raid of 18, 2 dead, healers at 40/70/90% mana). Roles come from playerbots (IsTank/IsHeal), which read the strategy
+#   of a bot and the talent spec of a player.
+#   Default: "" (off)
+OllamaChat.SituationTemplate = ""
+
+# OllamaChat.SkipToken
+#     Description: A word the model may answer with when a real player would say nothing (a line that was not aimed at
+#                  the bot and needs no answer). A reply that is only this token, or starts with it, is dropped
+#                  silently: nothing is said, nothing is saved to the conversation history, and it does not count as a
+#                  failure; the bot's cooldown still starts. A token inside a longer reply is removed and the rest is
+#                  said. A reply that is only a gesture tag and the token ('[emote:shrug] [skip]') is a skip too.
+#                  Case-insensitive, and punctuation or quotes around it are ignored. A token that starts or ends with
+#                  a letter or digit must stand alone, so 'skip' is not found inside 'skipping'; a bracketed token
+#                  such as [skip] is safest. The prompt must tell the model about it (for example in
+#                  OllamaChat.SystemPrompt). It applies to every kind of bot line, and to the memory and
+#                  relationship summaries (a reply that is the token is discarded, never stored).
+#                  `.ollama status` shows how many were skipped.
+#     Default:     "" (off)
+OllamaChat.SkipToken = ""
+
+# OllamaChat.Situation.BetweenPullsSeconds
+#     Description: A group that has not been in combat for at most this many seconds, after a fight, is reported as
+#                  "between pulls" rather than "not in combat". 0 never says it.
+#     Default:     90
+OllamaChat.Situation.BetweenPullsSeconds = 90
+
+# OllamaChat.Situation.EventWindowSeconds
+#     Description: How long a death or boss kill in the group stays in the situation line ("just now: Garn died"). At
+#                  most the last 3 are kept. 0 turns the events off.
+#     Default:     90
+OllamaChat.Situation.EventWindowSeconds = 90
+
+# OllamaChat.Situation.RaidSummaryAbove
+#     Description: A group with more members than this is summarized instead of listing each member.
+#     Default:     5
+OllamaChat.Situation.RaidSummaryAbove = 5
 
 # --------------------------------------------
 # ENVIRONMENTAL/CONTEXTUAL TEMPLATES
@@ -1056,6 +1150,14 @@ OllamaChat.RAGSimilarityThreshold = 0.3
 OllamaChat.RAGLocationBoost = 0.0
 
 
+
+# OllamaChat.RAGMinQueryWords
+#     Description: A message with fewer words than this, after the common words (the, is, in, where, ...) are left
+#                  out, retrieves nothing. One bare word such as 'mana' is a status callout in group chat rather
+#                  than a question, and would otherwise pull in whatever entry happens to share it (a quest called
+#                  'Mana Surges'). 0 turns the check off.
+#     Default:     0
+OllamaChat.RAGMinQueryWords = 0
 
 # OllamaChat.RAGIgnoreCommonWords
 #     Description: Leave common words (the, is, in, where, you, ...) out of the similarity calculation, for the

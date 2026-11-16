@@ -370,6 +370,70 @@ std::string ClampReplyLength(const std::string& text, uint32_t maxLen)
 
 // --------------------------------------------------------------------------
 
+bool ApplySkipToken(std::string& text, const std::string& token)
+{
+    if (token.empty() || text.size() < token.size())
+        return false;
+
+    auto lower = [](std::string v)
+    {
+        for (char& c : v)
+            c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        return v;
+    };
+    auto isNoise = [](unsigned char c) { return IsSpace(c) || std::ispunct(c); };
+    // Bytes of a multi-byte character count as part of a word, so a plain-word token never matches inside one.
+    auto isWordByte = [](unsigned char c) { return std::isalnum(c) || c >= 0x80; };
+
+    const std::string lowToken = lower(token);
+    std::string lowText = lower(text);
+
+    // A token that starts or ends with a letter or digit must stand alone: 'skip' is not found in 'skipping' or
+    // 'reskip'. A bracketed token like '[skip]' needs no such check on its bracket side.
+    const bool needLeft  = isWordByte(static_cast<unsigned char>(lowToken.front()));
+    const bool needRight = isWordByte(static_cast<unsigned char>(lowToken.back()));
+    auto findToken = [&]() -> size_t
+    {
+        for (size_t at = lowText.find(lowToken); at != std::string::npos; at = lowText.find(lowToken, at + 1))
+        {
+            if (needLeft && at > 0 && isWordByte(static_cast<unsigned char>(lowText[at - 1])))
+                continue;
+            const size_t end = at + lowToken.size();
+            if (needRight && end < lowText.size() && isWordByte(static_cast<unsigned char>(lowText[end])))
+                continue;
+            return at;
+        }
+        return std::string::npos;
+    };
+
+    size_t pos = findToken();
+    if (pos == std::string::npos)
+        return false;
+
+    // Only whitespace and punctuation ahead of it: the reply starts with the token.
+    bool leading = true;
+    for (size_t i = 0; i < pos && leading; ++i)
+        leading = isNoise(static_cast<unsigned char>(text[i]));
+    if (leading)
+        return true;
+
+    // Somewhere inside a longer reply: drop every copy and keep the rest.
+    while ((pos = findToken()) != std::string::npos)
+    {
+        text.erase(pos, lowToken.size());
+        lowText.erase(pos, lowToken.size());
+    }
+    text = Trim(CollapseWhitespace(text));
+
+    // A gesture tag ahead of the token ('[emote:shrug] [skip]') leaves only the gesture behind, which is still
+    // nothing to say. Judge the remainder without its gesture tags.
+    std::string bare = text;
+    ExtractEmoteTag(bare);
+    return std::all_of(bare.begin(), bare.end(), [&](char c) { return isNoise(static_cast<unsigned char>(c)); });
+}
+
+// --------------------------------------------------------------------------
+
 std::string ProcessLlmResponse(const std::string& raw,
                                const std::string& botName,
                                uint32_t* outEmoteId)

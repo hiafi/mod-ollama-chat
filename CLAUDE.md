@@ -25,6 +25,21 @@ How to add a new kind of bot utterance:
 3. `OllamaDispatch_Submit(std::move(request))`.
 4. Delivery happens for you in `OllamaDispatch_Update()`, on the world thread.
 
+**One exception to "the prompt is built on the world thread".** A bot's own
+`/say` and `/yell` (`PlayerbotAI::Say`/`Yell` -> `Player::Say`/`Yell` ->
+`OnPlayerCanUseChat`) fire from the bot's AI update, which runs on a **map
+thread**, and reach `ProcessChat` -> `GenerateBotPrompt` -> `Situation_Build`
+from there. Human chat (`CMSG_MESSAGECHAT` is thread-unsafe, so it runs in
+`World::UpdateSessions`) and bot-to-bot chains from `OllamaDispatch_Update` are
+on the world thread. The map-thread path is safe on this server only because
+`MapUpdate.Threads = 1`: the one map worker runs while the world thread waits,
+so nothing else touches the same objects. With `MapUpdate.Threads > 1` it is a
+data race, the same kind `OllamaWorldSnapshot::Build()` and
+`ChatHandler_GetGroupStatus` already have on that path. The proper fix is to
+defer bot-originated Say/Yell processing to the world thread; that is not done
+here. Do not add new reads of cross-map state on this path without keeping
+that in mind.
+
 Do **not** call `QueryOllama()` directly from anywhere that could be the world
 thread — it blocks for a full LLM round trip.
 

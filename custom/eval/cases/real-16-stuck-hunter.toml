@@ -5,6 +5,7 @@ message = "wooops im stuck"
 history = [
   { player = "mana", bot = "lol dude ur prot, just shield spam. we need you tanking anyway" },
 ]
+addressed = "conversation"
 
 [bot]
 name = "Neydinnu"

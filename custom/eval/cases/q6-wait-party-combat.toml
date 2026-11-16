@@ -1,0 +1,36 @@
+id = "q6-wait-party-combat"
+path = "reply"
+notes = "Q6. The leader says wait in the middle of a fight. Good: a quick ack (k, holding) or [skip] if nothing is owed. Bad: confusion."
+message = "wait"
+channel = "party"
+addressed = "open"
+situation = "in Zul'Farrak; in combat; speaker Lilia: healer, 60% HP, 45% mana; you: tank, 48% HP, 40% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
+
+[bot]
+name = "Thorgrim"
+level = 44
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 31
+group_status = "In a group"
+area = "Zul'Farrak"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "GRUMPY_VETERAN"
+
+[player]
+name = "Lilia"
+level = 44
+class = "priest"
+race = "Human"
+gender = "Female"
+role = "holy priest"
+faction = "Alliance"
+guild = "No Guild"
+gold = 24
+group_status = "In a group"
+distance = 6.0

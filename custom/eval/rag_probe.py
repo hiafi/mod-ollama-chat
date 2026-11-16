@@ -3,7 +3,7 @@
 
     python3 custom/eval/rag_probe.py [--rag-dir custom/rag] [--probes custom/eval/rag-probes.toml]
                                       [--cases custom/eval/cases] [--top 5] [--threshold 0.3 --max-items 3]
-                                      [--sweep] [--ignore-common-words 0|1] [--boost 0.5]
+                                      [--sweep] [--ignore-common-words 0|1] [--boost 0.5] [--min-query-words 2]
 
 For every probe message prints the top entries with their raw scores and where the expected entry ranked. With
 --sweep prints, for a grid of thresholds (and, with --boosts, location boosts), how many chit-chat messages retrieve nothing, how many expected entries land in
@@ -60,6 +60,8 @@ def main(argv=None) -> int:
     ap.add_argument("--max-items", type=int, default=3)
     ap.add_argument("--ignore-common-words", type=int, choices=(0, 1), default=1,
                     help="OllamaChat.RAGIgnoreCommonWords (default 1)")
+    ap.add_argument("--min-query-words", type=int, default=0,
+                    help="OllamaChat.RAGMinQueryWords: a message with fewer non-common words retrieves nothing (default 0)")
     ap.add_argument("--boost", type=float, default=0.0, help="OllamaChat.RAGLocationBoost for the listing")
     ap.add_argument("--boosts", default="0,0.25,0.5,1.0", help="boosts for --sweep")
     ap.add_argument("--thresholds", default="0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5", help="thresholds for --sweep")
@@ -75,7 +77,7 @@ def main(argv=None) -> int:
     boosts = sorted({args.boost, *(float(b) for b in args.boosts.split(","))}) if args.sweep else [args.boost]
     for p in probes:
         # threshold 0 lists everything, ranked by the boost; a threshold applies later on the raw similarity
-        by_boost = {b: system.retrieve(p["message"], len(system.entries), 0.0, p["locations"], b) for b in boosts}
+        by_boost = {b: system.retrieve(p["message"], len(system.entries), 0.0, p["locations"], b, args.min_query_words) for b in boosts}
         top = by_boost[args.boost][:max(args.top, 10)]
         scored.append((p, by_boost))
         if args.quiet:

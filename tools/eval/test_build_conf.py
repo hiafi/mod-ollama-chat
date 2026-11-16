@@ -175,6 +175,21 @@ class PlaceholderTests(unittest.TestCase):
         r = build({"OllamaChat.ChatPromptTemplate": "{bot_name} {player_name} {chat_history}"})
         self.assertFalse(r.errors, r.errors)      # chat_history is passed by the C++ though the stock text omits it
 
+    def test_channel_addressed_and_situation_placeholders_ok(self):
+        r = build({"OllamaChat.ChatPromptTemplate": "{situation} {chat_channel} {addressed} {player_message}"})
+        self.assertFalse(r.errors, r.errors)
+
+    def test_situation_and_channel_templates_take_only_their_own_placeholder(self):
+        shipped = bc.parse_conf_text((HERE.parents[1] / "conf" / "mod_ollama_chat.conf.dist").read_text(encoding="utf-8"))
+        self.assertEqual(bc.validate_placeholders("OllamaChat.SituationTemplate", "", "Now: {details}."), [])
+        self.assertTrue(bc.validate_placeholders("OllamaChat.SituationTemplate", "", "Now: {bot_name}."))
+        self.assertEqual(bc.validate_placeholders("OllamaChat.ChannelPhrase.Custom", "", "in {channel_name}"), [])
+        # the phrases that are not formatted would send a placeholder to the model as it is
+        self.assertTrue(bc.validate_placeholders("OllamaChat.ChannelPhrase.Party", "", "in {channel_name}"))
+        self.assertTrue(bc.validate_placeholders("OllamaChat.Addressed.Named", "", "{bot_name} was named"))
+        self.assertIn("OllamaChat.SkipToken", shipped)
+        self.assertEqual(shipped["OllamaChat.SituationTemplate"], "")
+
     def test_unknown_placeholder(self):
         r = build({"OllamaChat.ChatPromptTemplate": "{bot_name} {bot_nmae}"})
         self.assertTrue(any("bot_nmae" in e for e in r.errors))

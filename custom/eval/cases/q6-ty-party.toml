@@ -1,0 +1,39 @@
+id = "q6-ty-party"
+path = "reply"
+notes = "Q6. Thanks after the bot buffed the speaker. Good: np / anytime or [skip]. Bad: a long reply, asking what for."
+message = "ty"
+channel = "party"
+addressed = "conversation"
+situation = "in Zul'Farrak; not in combat; speaker Lilia: healer, 100% HP, 100% mana; you: tank, 88% HP, 61% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
+history = [
+  { player = "could i get a buff?", bot = "sure, blessing of kings coming up" },
+]
+
+[bot]
+name = "Thorgrim"
+level = 44
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 31
+group_status = "In a group"
+area = "Zul'Farrak"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "QUIET_HEALER"
+
+[player]
+name = "Lilia"
+level = 44
+class = "priest"
+race = "Human"
+gender = "Female"
+role = "holy priest"
+faction = "Alliance"
+guild = "No Guild"
+gold = 24
+group_status = "In a group"
+distance = 6.0

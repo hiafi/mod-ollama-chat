@@ -1,0 +1,36 @@
+id = "q6-nice-party"
+path = "reply"
+notes = "Q6. nice right after the group killed a boss. The situation carries the kill. Good: any short line (gz, nice one, finally) or [skip]. Bad: asking what was nice."
+message = "nice"
+channel = "party"
+addressed = "open"
+situation = "in Zul'Farrak; between pulls; just now: killed Chief Ukorz Sandscalp; speaker Garn: dps, 82% HP; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 35% mana), Mira (dps, 100% HP, 28% mana), Brann (dps, 100% HP, 40% mana)"
+
+[bot]
+name = "Thorgrim"
+level = 44
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 31
+group_status = "In a group"
+area = "Zul'Farrak"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "HYPE_MAN"
+
+[player]
+name = "Garn"
+level = 44
+class = "warrior"
+race = "Human"
+gender = "Male"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+gold = 24
+group_status = "In a group"
+distance = 6.0

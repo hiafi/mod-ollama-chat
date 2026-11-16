@@ -1,0 +1,36 @@
+id = "q6-whisper-mana"
+path = "reply"
+notes = "Q6. A healer in the bot's group whispers mana, low on mana, between pulls. It must reply (never [skip]). Good: an ack (ok, drink up, wait)."
+message = "mana"
+channel = "whisper"
+addressed = "open"
+situation = "in Zul'Farrak; between pulls; speaker Lilia: healer, 90% HP, 10% mana; you: tank, 88% HP, 61% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
+
+[bot]
+name = "Thorgrim"
+level = 44
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 31
+group_status = "In a group"
+area = "Zul'Farrak"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "DUNGEON_REGULAR"
+
+[player]
+name = "Lilia"
+level = 44
+class = "priest"
+race = "Human"
+gender = "Female"
+role = "holy priest"
+faction = "Alliance"
+guild = "No Guild"
+gold = 24
+group_status = "In a group"
+distance = 6.0

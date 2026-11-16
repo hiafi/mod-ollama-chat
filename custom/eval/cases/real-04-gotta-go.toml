@@ -7,6 +7,7 @@ history = [
   { player = "im trying", bot = "lmao frost mage nice, we gonna wreck these noobs. where u at rn?" },
   { player = "man, where are the spawns", bot = "dude we're literally right here in northshire lol. go north by the farm, tons of boars spawning" },
 ]
+addressed = "conversation"
 
 [bot]
 name = "Aldric"

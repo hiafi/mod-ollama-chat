@@ -3,7 +3,8 @@
 One builder and one parser per provider, selected by ``OllamaChat.Provider``.
 Think mode is always off here, as it is for the module's default
 (``ThinkMode = auto`` with ``ThinkModeEnableForModule = 0``), so the reasoning
-reserve is 0 and Anthropic requests carry no ``thinking`` block.
+reserve is 0 and Anthropic requests say ``thinking: {type: disabled}``. A model that rejects that, or temperature, is
+handled the way the module does (see ``Learned``).
 
 Tested live: anthropic. The ollama and openai paths follow the C++ but have
 not been run against a real server from this tool.
@@ -14,6 +15,7 @@ from __future__ import annotations
 import json
 import os
 import struct
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -195,7 +197,44 @@ def build_openai_request(cfg: Settings, prompt: str) -> dict:
     return request
 
 
-def build_anthropic_request(cfg: Settings, prompt: str) -> dict:
+@dataclass
+class Learned:
+    """What the module learns about one Anthropic model from a rejected request, kept for the rest of the session
+    (``g_samplingRejected`` and ``g_anthropicThinkOff`` in src/mod-ollama-chat_api.cpp).
+
+    ``think_off``: 0 sends ``thinking {type: disabled}``, 1 sends ``output_config {effort: low}`` (the model rejected
+    disabled), 2 sends neither (it rejected both). ``sampling_rejected`` leaves out temperature and top_k.
+    """
+    sampling_rejected: bool = False
+    think_off: int = 0
+
+
+_LEARNED: dict[tuple[str, str], Learned] = {}
+_LEARNED_LOCK = threading.Lock()
+
+
+def learned_for(cfg: Settings) -> Learned:
+    with _LEARNED_LOCK:
+        return _LEARNED.setdefault((cfg.provider, cfg.model), Learned())
+
+
+def learn_from_rejection(cfg: Settings, error: str) -> bool:
+    """The Anthropic loop in ``QueryOllama``: record what an HTTP 400 teaches. False when it teaches nothing."""
+    lower = error.lower()
+    learned = learned_for(cfg)
+    if ("deprecated" in lower or "not supported" in lower) and ("temperature" in lower or "top_k" in lower):
+        learned.sampling_rejected = True
+    elif "thinking" in lower and "disabled" in lower:
+        learned.think_off = max(learned.think_off, 1)
+    elif "effort" in lower:
+        learned.think_off = max(learned.think_off, 2)
+    else:
+        return False
+    return True
+
+
+def build_anthropic_request(cfg: Settings, prompt: str, learned: Learned | None = None) -> dict:
+    learned = learned or Learned()
     max_tokens = cfg.num_predict if cfg.num_predict > 0 else 1024
     request: dict = {
         "model": cfg.model,
@@ -209,9 +248,15 @@ def build_anthropic_request(cfg: Settings, prompt: str) -> dict:
         stops = parse_stop_sequences(cfg.stop)
         if stops:
             request["stop_sequences"] = stops
-    request["temperature"] = cfg.temperature
-    if cfg.top_k >= 0:
-        request["top_k"] = cfg.top_k
+    # Think mode is always off here; newer models think on their own unless told not to.
+    if learned.think_off == 0:
+        request["thinking"] = {"type": "disabled"}
+    elif learned.think_off == 1:
+        request["output_config"] = {"effort": "low"}
+    if not learned.sampling_rejected:
+        request["temperature"] = cfg.temperature
+        if cfg.top_k >= 0:
+            request["top_k"] = cfg.top_k
     return request
 
 
@@ -219,7 +264,7 @@ def build_request(cfg: Settings, prompt: str) -> dict:
     if cfg.provider == "openai":
         return build_openai_request(cfg, prompt)
     if cfg.provider == "anthropic":
-        return build_anthropic_request(cfg, prompt)
+        return build_anthropic_request(cfg, prompt, learned_for(cfg))
     return build_ollama_request(cfg, prompt)
 
 
@@ -443,6 +488,14 @@ def query(cfg: Settings, prompt: str, *, opener: Callable = urllib.request.urlop
           sleep: Callable[[float], None] = time.sleep) -> ApiResult:
     """One request plus the module's bounded back-off on 429/503/529."""
     result, retry_after = _post_once(cfg, prompt, opener)
+    # Anthropic parameter rejections (a model that wants no temperature, or no `thinking: disabled`): learn it and
+    # retry at once, up to three times, as the module does. Not gated on whether another worker learned it first.
+    for _ in range(3):
+        if result.ok or cfg.provider != "anthropic" or result.status != 400:
+            break
+        if not learn_from_rejection(cfg, result.error):
+            break
+        result, retry_after = _post_once(cfg, prompt, opener)
     attempt = 0
     while attempt < cfg.rate_limit_retries and not result.ok and is_rate_limited(result.status):
         wait = retry_after if retry_after > 0 else (2 << attempt)

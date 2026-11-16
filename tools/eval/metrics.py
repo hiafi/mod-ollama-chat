@@ -32,8 +32,16 @@ def first_word(text: str) -> str:
     return m.group(0) if m else ""
 
 
-def compute(replies: list[str], failures: int, openers: list[str], banned: list[str]) -> dict:
-    """``replies`` are the non-empty processed replies of one variant, in run order."""
+# A reply that shows the bot did not understand a plain callout or explains itself instead of answering.
+CONFUSED_RE = re.compile(
+    r"^\W*(?:what|huh|wut|wat|hm+|eh|um+)\b[^a-z]*(?:\?|$)|\bwdym\b|what do you mean|what does that mean|"
+    r"i (?:don'?t|do not) (?:get|understand)|not sure what you mean|don'?t need mana",
+    re.I)
+
+
+def compute(replies: list[str], failures: int, openers: list[str], banned: list[str], skipped: int = 0) -> dict:
+    """``replies`` are the non-empty processed replies of one variant, in run order. ``skipped`` counts the samples
+    where the model answered with the skip token: no line, so not in ``replies`` and not a failure."""
     n = len(replies)
     opener_re = re.compile(r"^\W*(?:" + "|".join(re.escape(o) for o in openers) + r")\b", re.I) if openers else None
     slang = sum(1 for r in replies if opener_re and opener_re.search(r))
@@ -61,5 +69,8 @@ def compute(replies: list[str], failures: int, openers: list[str], banned: list[
         "banned_hits": sum(banned_counter.values()),
         "banned_top": banned_counter.most_common(5),
         "near_dup_pct": round(100.0 * dups / n, 1) if n else 0.0,
+        "confused_pct": round(100.0 * sum(1 for r in replies if CONFUSED_RE.search(r)) / n, 1) if n else 0.0,
+        "skipped": skipped,
+        "skip_pct": round(100.0 * skipped / (n + skipped), 1) if (n + skipped) else 0.0,
         "failures": failures,
     }

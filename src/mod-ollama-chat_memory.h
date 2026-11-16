@@ -76,12 +76,16 @@ std::string Memory_BuildPromptSection(Player* bot, Player* about);
 // --- worker-side entry points (called from the dispatcher) ----------------
 
 // Condense a bot's accumulated history into memories, then clear the history.
-void Memory_RunCondensation(uint64_t botGuid, const std::string& prompt);
+// `skipToken` is OllamaChat.SkipToken as copied on the world thread (empty = off): the system prompt tells the model
+// it may answer with it, so a reply that is or contains it is never stored.
+void Memory_RunCondensation(uint64_t botGuid, const std::string& prompt,
+                            const std::string& skipToken = std::string());
 
 // Write or revise how a bot feels about someone.
 void Memory_RunRelationshipUpdate(uint64_t botGuid, uint64_t otherGuid,
                                   const std::string& otherName,
-                                  const std::string& prompt);
+                                  const std::string& prompt,
+                                  const std::string& skipToken = std::string());
 
 // --- prompt builders (world thread; they read config templates) -----------
 

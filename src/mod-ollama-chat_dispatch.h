@@ -76,6 +76,10 @@ struct OllamaChatRequest
     std::string       prompt;
     OllamaRequestKind kind = OllamaRequestKind::ChatReply;
 
+    // OllamaChat.SkipToken as it was when the request was submitted (empty = feature off). Copied here, on the
+    // world thread, because a worker must not read the config string: a reload reassigns it.
+    std::string       skipToken;
+
     // Resolved on the world thread before submission so the worker never has
     // to touch a Player to know these.
     std::string botName;
@@ -128,6 +132,7 @@ struct OllamaDispatchStats
     uint64_t totalDroppedQueueFull;
     uint64_t totalDroppedEmpty;
     uint64_t totalDroppedGovernor;
+    uint64_t totalSkipped;
     uint64_t totalFailed;
     std::string lastError;
 };

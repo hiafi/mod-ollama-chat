@@ -146,10 +146,18 @@ class RagSystem:
         return cosine_similarity(qv, ev)
 
     def retrieve(self, query: str, max_results: int, threshold: float,
-                 location_names: list[str] | None = None, location_boost: float = 0.0) -> list[RagResult]:
-        """Threshold on the raw score; rank by raw * (1 + boost) for entries mentioning a location."""
+                 location_names: list[str] | None = None, location_boost: float = 0.0,
+                 min_query_words: int = 0) -> list[RagResult]:
+        """Threshold on the raw score; rank by raw * (1 + boost) for entries mentioning a location.
+
+        ``min_query_words`` (OllamaChat.RAGMinQueryWords): a query with fewer words than this left after dropping the
+        common words, whatever RAGIgnoreCommonWords says, retrieves nothing. 0 = no minimum."""
         if not query:
             return []
+        if min_query_words > 0:
+            words = [t for t in tokenize_text(preprocess_text(query)) if t not in COMMON_WORDS]
+            if len(words) < min_query_words:
+                return []
         locations = []
         if location_boost > 0.0:
             locations = [p for p in (preprocess_text(n) for n in location_names or []) if p]
