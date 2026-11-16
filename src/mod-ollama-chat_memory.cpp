@@ -4,6 +4,7 @@
 #include "mod-ollama-chat_dispatch.h"
 #include "mod-ollama-chat_handler.h"
 #include "mod-ollama-chat_personality.h"
+#include "mod-ollama-chat_response.h"
 #include "mod-ollama-chat_roleplay.h"
 #include "mod-ollama-chat-utilities.h"
 
@@ -529,13 +530,20 @@ std::string Memory_BuildPromptSection(Player* bot, Player* about)
 // Worker-side
 // --------------------------------------------------------------------------
 
-void Memory_RunCondensation(uint64_t botGuid, const std::string& prompt)
+void Memory_RunCondensation(uint64_t botGuid, const std::string& prompt, const std::string& skipToken)
 {
     OllamaApiResult api = QueryOllama(prompt, OllamaRequestKind::Sentiment);
 
     std::vector<BotMemoryEntry> fresh;
     if (api.ok)
-        fresh = ParseMemories(api.text);
+    {
+        // The system prompt lets the model answer with the skip token. A reply that is the token yields no
+        // memories; one that merely contains it keeps the rest. The token itself is never stored.
+        std::string text = api.text;
+        if (!skipToken.empty() && ApplySkipToken(text, skipToken))
+            text.clear();
+        fresh = ParseMemories(text);
+    }
 
     {
         std::lock_guard<std::mutex> lock(g_mutex);
@@ -582,7 +590,7 @@ void Memory_RunCondensation(uint64_t botGuid, const std::string& prompt)
 
 void Memory_RunRelationshipUpdate(uint64_t botGuid, uint64_t otherGuid,
                                   const std::string& otherName,
-                                  const std::string& prompt)
+                                  const std::string& prompt, const std::string& skipToken)
 {
     OllamaApiResult api = QueryOllama(prompt, OllamaRequestKind::Sentiment);
 
@@ -590,6 +598,10 @@ void Memory_RunRelationshipUpdate(uint64_t botGuid, uint64_t otherGuid,
     if (api.ok)
     {
         description = api.text;
+
+        // A reply that is the skip token says nothing about the relationship; one that contains it keeps the rest.
+        if (!skipToken.empty() && ApplySkipToken(description, skipToken))
+            description.clear();
 
         // One sentence, no markup, bounded length.
         for (char& c : description)

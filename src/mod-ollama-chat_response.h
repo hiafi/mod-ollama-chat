@@ -48,7 +48,9 @@ std::string ClampReplyLength(const std::string& text, uint32_t maxLen);
 //
 // Returns true when the reply is a skip: nothing but the token (ignoring whitespace and punctuation around it, so
 // "[skip]." and a quoted token count), or a reply that starts with it. A token in the middle of a longer reply is
-// removed from `text` and the rest kept, and false is returned. An empty token never matches.
+// removed from `text` and the rest kept, and false is returned; if what is left is only gesture tags ('[emote:shrug]
+// [skip]') it is a skip too. A token that starts or ends with a letter or digit matches only as a whole token ('skip'
+// does not match inside 'skipping'). An empty token never matches.
 bool ApplySkipToken(std::string& text, const std::string& token);
 
 // Run the full pipeline. Returns an empty string only when nothing usable

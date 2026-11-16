@@ -408,7 +408,10 @@ bool Governor_TryConsumeSend(ObjectGuid botGuid, const std::string& scopeKey,
 void Governor_NoteSkip(ObjectGuid botGuid)
 {
     std::lock_guard<std::mutex> lock(g_mutex);
-    g_bots[botGuid.GetRawValue()].lastSend = Clock::now();
+    // find, not operator[]: a skip that arrives after the bot logged out and was forgotten must not bring its entry back.
+    auto it = g_bots.find(botGuid.GetRawValue());
+    if (it != g_bots.end())
+        it->second.lastSend = Clock::now();
 }
 
 bool Governor_CanSend(ObjectGuid botGuid, const std::string& scopeKey,

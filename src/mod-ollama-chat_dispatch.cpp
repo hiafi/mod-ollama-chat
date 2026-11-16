@@ -55,6 +55,8 @@ namespace
         uint64_t    memoryOtherGuid = 0;
         std::string memoryOtherName;
         std::string memoryPrompt;
+        // Copied from g_SkipToken on the world thread when the task is submitted; the worker never reads the global.
+        std::string memorySkipToken;
     };
 
     struct Completion
@@ -209,11 +211,11 @@ namespace
                         RunSentimentTask(task);
                         break;
                     case TaskType::Condense:
-                        Memory_RunCondensation(task.memoryBotGuid, task.memoryPrompt);
+                        Memory_RunCondensation(task.memoryBotGuid, task.memoryPrompt, task.memorySkipToken);
                         break;
                     case TaskType::Relationship:
                         Memory_RunRelationshipUpdate(task.memoryBotGuid, task.memoryOtherGuid,
-                                                     task.memoryOtherName, task.memoryPrompt);
+                                                     task.memoryOtherName, task.memoryPrompt, task.memorySkipToken);
                         break;
                     default:
                         RunChatTask(task);
@@ -669,6 +671,7 @@ void OllamaDispatch_SubmitCondensation(uint64_t botGuid, const std::string& prom
     task.type          = TaskType::Condense;
     task.memoryBotGuid = botGuid;
     task.memoryPrompt  = prompt;
+    task.memorySkipToken = g_SkipToken;
 
     if (SubmitBackground(std::move(task)))
         g_queueCv.notify_one();
@@ -687,6 +690,7 @@ void OllamaDispatch_SubmitRelationship(uint64_t botGuid, uint64_t otherGuid,
     task.memoryOtherGuid = otherGuid;
     task.memoryOtherName = otherName;
     task.memoryPrompt    = prompt;
+    task.memorySkipToken = g_SkipToken;
 
     if (SubmitBackground(std::move(task)))
         g_queueCv.notify_one();
