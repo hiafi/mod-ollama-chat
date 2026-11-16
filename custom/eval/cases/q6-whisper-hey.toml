@@ -1,0 +1,36 @@
+id = "q6-whisper-hey"
+path = "reply"
+notes = "Q6. A plain hey whispered to the bot by someone it does not know. It must reply (never [skip]); a short greeting."
+message = "hey"
+channel = "whisper"
+addressed = false
+situation = "not in combat; speaker Dunn: dps, 100% HP, 100% mana; you: tank, 100% HP, 100% mana"
+
+[bot]
+name = "Thorgrim"
+level = 44
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 31
+group_status = "Solo"
+area = "Gadgetzan"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "CASUAL"
+
+[player]
+name = "Dunn"
+level = 30
+class = "rogue"
+race = "Human"
+gender = "Male"
+role = "combat rogue"
+faction = "Alliance"
+guild = "No Guild"
+gold = 24
+group_status = "Solo"
+distance = 6.0

@@ -1,0 +1,36 @@
+id = "q6-inc-party"
+path = "reply"
+notes = "Q6. A dps calls out incoming mobs while the group is not fighting. Good: [skip] or a one-word ready (ready, k, rdy). Bad: asking what inc means, long answers."
+message = "inc"
+channel = "party"
+addressed = false
+situation = "in Zul'Farrak; not in combat; speaker Garn: dps, 100% HP; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 80% mana), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
+
+[bot]
+name = "Thorgrim"
+level = 44
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 31
+group_status = "In a group"
+area = "Zul'Farrak"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "GRUMPY_VETERAN"
+
+[player]
+name = "Garn"
+level = 44
+class = "warrior"
+race = "Human"
+gender = "Male"
+role = "arms warrior"
+faction = "Alliance"
+guild = "No Guild"
+gold = 24
+group_status = "In a group"
+distance = 6.0

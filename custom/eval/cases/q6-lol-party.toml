@@ -1,0 +1,36 @@
+id = "q6-lol-party"
+path = "reply"
+notes = "Q6. A stray lol in party chat, not aimed at anyone. Mostly [skip]; a short lol back is fine. Bad: asking what is funny, a long reply."
+message = "lol"
+channel = "party"
+addressed = false
+situation = "in Zul'Farrak; not in combat; speaker Mira: dps, 100% HP, 100% mana; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 90% mana), Garn (dps, 100% HP), Brann (dps, 100% HP, 55% mana)"
+
+[bot]
+name = "Thorgrim"
+level = 44
+class = "paladin"
+race = "Dwarf"
+gender = "Male"
+role = "protection paladin"
+faction = "Alliance"
+guild = "No Guild"
+gold = 31
+group_status = "In a group"
+area = "Zul'Farrak"
+zone = "Tanaris"
+map = "Kalimdor"
+personality = "TROLL"
+
+[player]
+name = "Mira"
+level = 44
+class = "mage"
+race = "Gnome"
+gender = "Female"
+role = "frost mage"
+faction = "Alliance"
+guild = "No Guild"
+gold = 24
+group_status = "In a group"
+distance = 6.0
