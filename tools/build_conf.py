@@ -236,8 +236,12 @@ ALLOWED_PLACEHOLDERS: dict[str, set[str]] = {
     "OllamaChat.ChatPromptTemplate": {
         "bot_name", "bot_level", "bot_class", "bot_personality", "bot_personality_name",
         "player_level", "player_class", "player_name", "player_message",
-        "extra_info", "chat_history", "sentiment_info",
+        "extra_info", "chat_history", "sentiment_info", "chat_channel", "addressed", "situation",
     },
+    # situation.cpp Situation_Build wraps the line it builds in this
+    "OllamaChat.SituationTemplate": {"details"},
+    # handler.cpp ChatChannelPhrase: only the custom-channel phrase is formatted
+    "OllamaChat.ChannelPhrase.Custom": {"channel_name"},
     "OllamaChat.ChatExtraInfoTemplate": {
         "bot_race", "bot_gender", "bot_role", "bot_faction", "bot_guild", "bot_group_status", "bot_gold",
         "player_race", "player_gender", "player_role", "player_faction", "player_guild",
@@ -300,6 +304,17 @@ ALLOWED_PLACEHOLDERS: dict[str, set[str]] = {
     "OllamaChat.GuildEnvCommentGuildOnlineMembers": {"online_count", "total_count"},
     # Plain lists, picked with no formatting at all.
     "OllamaChat.SystemPrompt": set(),
+    "OllamaChat.ChannelPhrase.Party": set(),
+    "OllamaChat.ChannelPhrase.Raid": set(),
+    "OllamaChat.ChannelPhrase.Guild": set(),
+    "OllamaChat.ChannelPhrase.Officer": set(),
+    "OllamaChat.ChannelPhrase.Whisper": set(),
+    "OllamaChat.ChannelPhrase.Say": set(),
+    "OllamaChat.ChannelPhrase.Yell": set(),
+    "OllamaChat.Addressed.Named": set(),
+    "OllamaChat.Addressed.Whisper": set(),
+    "OllamaChat.Addressed.NotAimed": set(),
+    "OllamaChat.SkipToken": set(),
     "OllamaChat.RandomChatterPromptVariations": set(),
     "OllamaChat.RandomChatterQuestionVariations": set(),
     "OllamaChat.Roleplay.PromptVariations": set(),

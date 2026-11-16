@@ -252,6 +252,43 @@ class ProcessResponseTests(unittest.TestCase):
         self.assertEqual(self.p(""), "")
 
 
+class SkipTokenTests(unittest.TestCase):
+    """ApplySkipToken in src/mod-ollama-chat_response.cpp."""
+
+    def apply(self, text, token="[skip]"):
+        return pp.apply_skip_token(text, token)
+
+    def test_only_the_token_is_a_skip(self):
+        for text in ["[skip]", "  [SKIP]  ", "[Skip].", '"[skip]"', "*[skip]*", "...[skip]!!", "[skip] [skip]"]:
+            with self.subTest(text=text):
+                self.assertTrue(self.apply(text)[1])
+
+    def test_starting_with_the_token_is_a_skip(self):
+        self.assertTrue(self.apply("[skip] that was not for me")[1])
+        self.assertTrue(self.apply('"[skip]" not aimed at me')[1])
+
+    def test_token_inside_a_longer_reply_is_stripped_and_the_rest_kept(self):
+        self.assertEqual(self.apply("ok drinking [skip] brb"), ("ok drinking brb", False))
+        self.assertEqual(self.apply("np [SKIP]"), ("np", False))
+        self.assertEqual(self.apply("a [skip] b [skip] c"), ("a b c", False))
+
+    def test_no_token_means_untouched(self):
+        self.assertEqual(self.apply("ok drinking"), ("ok drinking", False))
+        self.assertEqual(self.apply("skip it"), ("skip it", False))     # the bare word is not the token
+
+    def test_empty_token_is_off(self):
+        self.assertEqual(self.apply("[skip]", ""), ("[skip]", False))
+        self.assertEqual(self.apply("", ""), ("", False))
+
+    def test_token_without_brackets(self):
+        self.assertTrue(self.apply("SKIP.", "skip")[1])
+        self.assertEqual(self.apply("no skip needed", "skip"), ("no needed", False))
+
+    def test_a_removal_that_leaves_only_punctuation_is_a_skip(self):
+        self.assertTrue(self.apply("ok? [skip]", "ok? [skip]")[1])
+        self.assertEqual(self.apply("... [skip] ...")[1], True)
+
+
 class ApiTests(unittest.TestCase):
     def cfg(self, **kw):
         base = dict(provider="anthropic", url="https://example.invalid/v1/messages", model="m",
@@ -383,6 +420,16 @@ class MetricsTests(unittest.TestCase):
         m = metrics.compute(["see you in the tavern", "see you in the tavern!", "completely different"], 0, [], [])
         self.assertAlmostEqual(m["near_dup_pct"], round(100 / 3, 1))
 
+    def test_skips_are_counted_apart_from_replies(self):
+        m = metrics.compute(["ok", "np"], 1, [], [], skipped=2)
+        self.assertEqual((m["replies"], m["skipped"], m["skip_pct"], m["failures"]), (2, 2, 50.0, 1))
+        self.assertEqual(metrics.compute([], 0, [], [])["skip_pct"], 0.0)
+
+    def test_confused_replies(self):
+        m = metrics.compute(["what? ok paladins dont need mana", "huh", "what time is it", "ok drinking",
+                             "wait for mana", "what do you mean"], 0, [], [])
+        self.assertEqual(m["confused_pct"], round(100 * 3 / 6, 1))
+
     def test_word_stats(self):
         m = metrics.compute(["a b", "a b c d"], 0, [], [])
         self.assertEqual((m["words_mean"], m["words_stdev"]), (3.0, 1.0))
@@ -415,6 +462,59 @@ class RenderTests(unittest.TestCase):
                              "OllamaChat.GestureChance": "0"})
         r = render.render_case(cfg, self.reply_case(), {}, None, 0)
         self.assertEqual(r.prompt, "Thalrin|hi|dwarf/8.5/Dun Morogh|||default")
+
+    def chat_cfg(self, template="{chat_channel}|{addressed}|{situation}|", **extra):
+        return render.Config({**self.conf, "OllamaChat.ChatPromptTemplate": template, "OllamaChat.GestureChance": "0",
+                              **{"OllamaChat." + k: v for k, v in extra.items()}})
+
+    def test_channel_phrases(self):
+        for channel, phrase in [("party", "in party chat"), ("raid", "in raid chat"), ("guild", "in guild chat"),
+                                ("officer", "in officer chat"), ("whisper", "in a whisper to you"),
+                                ("say", "out loud nearby"), ("yell", "in a yell")]:
+            with self.subTest(channel=channel):
+                out = render.render_case(self.chat_cfg(), self.reply_case(channel=channel), {}, None, 0).prompt
+                self.assertTrue(out.startswith(phrase + "|"), out)
+
+    def test_custom_channel_uses_the_real_name(self):
+        case = self.reply_case(channel="channel", channel_name="General - Elwynn Forest")
+        out = render.render_case(self.chat_cfg(), case, {}, None, 0).prompt
+        self.assertTrue(out.startswith("in the General - Elwynn Forest channel|"), out)
+        out = render.render_case(self.chat_cfg(), self.reply_case(channel="channel"), {}, None, 0).prompt
+        self.assertTrue(out.startswith("in the public channel|"), out)
+
+    def test_phrases_follow_the_config(self):
+        cfg = self.chat_cfg(**{"ChannelPhrase.Party": "in the group chat"})
+        out = render.render_case(cfg, self.reply_case(channel="party"), {}, None, 0).prompt
+        self.assertTrue(out.startswith("in the group chat|"), out)
+
+    def test_addressed_phrases(self):
+        cfg = self.chat_cfg()
+        got = lambda **kw: render.render_case(cfg, self.reply_case(**kw), {}, None, 0).prompt.split("|")[1]
+        self.assertEqual(got(channel="party", addressed=True), "They named you.")
+        self.assertEqual(got(channel="party", addressed=False), "It was not aimed at anyone in particular.")
+        # a whisper is for the bot whatever `addressed` says, and its text is empty by default
+        self.assertEqual(got(channel="whisper", addressed=False), "")
+        self.assertEqual(got(channel="whisper", addressed=True), "")
+
+    def test_old_cases_render_as_said_aloud_and_named(self):
+        out = render.render_case(self.chat_cfg(), self.reply_case(), {}, None, 0).prompt
+        self.assertEqual(out, "out loud nearby|They named you.||")
+
+    def test_bad_channel_or_addressed_is_a_case_error(self):
+        for kw in (dict(channel="shout"), dict(addressed="yes")):
+            with self.subTest(kw=kw), self.assertRaises(render.CaseError):
+                render.render_case(self.chat_cfg(), self.reply_case(**kw), {}, None, 0)
+
+    def test_situation_is_wrapped_by_the_template_and_off_without_one(self):
+        details = "not in combat; you: tank, 100% HP"
+        off = render.render_case(self.chat_cfg(), self.reply_case(situation=details), {}, None, 0).prompt
+        self.assertEqual(off, "out loud nearby|They named you.||")
+        on = self.chat_cfg(SituationTemplate="Situation: {details}.")
+        out = render.render_case(on, self.reply_case(situation=details), {}, None, 0).prompt
+        self.assertEqual(out, "out loud nearby|They named you.|Situation: not in combat; you: tank, 100% HP.|")
+        # no situation in the case: nothing, not an empty wrapper
+        out = render.render_case(on, self.reply_case(), {}, None, 0).prompt
+        self.assertEqual(out, "out loud nearby|They named you.||")
 
     def test_history_block_and_missing_footer_without_history(self):
         cfg = render.Config({**self.conf, "OllamaChat.ChatPromptTemplate": "[{chat_history}]",
@@ -627,6 +727,38 @@ class RunRobustnessTests(unittest.TestCase):
         self.assertEqual(len(bad), 1)
         self.assertIn("ValueError: truncated body", bad[0]["error"])
         self.assertIn("ValueError: truncated body", report.read_text(encoding="utf-8"))
+
+    def run_with_skip_token(self, candidate_reply):
+        import json
+        (self.tmp / "cand.toml").write_text('"OllamaChat.SkipToken" = "[skip]"\n', encoding="utf-8")
+        for name in self.cases.glob("*.toml"):
+            if name.name != "reply-greeting.toml":
+                name.unlink()
+
+        def fake(settings, prompt):
+            self.calls += 1
+            # the baseline (bare .dist, no SkipToken) is call 1, the candidate call 2
+            return api.ApiResult(ok=True, text="hello there" if self.calls == 1 else candidate_reply, status=200)
+        rc, out = self.run_main(fake)
+        self.assertEqual(rc, 0)
+        raw, report = self.reports(out)
+        rows = [json.loads(line) for line in raw.read_text(encoding="utf-8").splitlines()]
+        return ({r["variant"]: r for r in rows}, report.read_text(encoding="utf-8"))
+
+    def test_skip_token_reply_is_neither_a_line_nor_a_failure(self):
+        rows, text = self.run_with_skip_token("[skip]")
+        self.assertTrue(rows["candidate"]["chose_skip"])
+        self.assertFalse(rows["candidate"]["error"])
+        self.assertFalse(rows["baseline"]["chose_skip"])
+        self.assertIn("| skipped | 0 | 1 |", text)
+        self.assertIn("| failures | 0 | 0 |", text)
+        self.assertIn("_(skip)_", text)
+
+    def test_skip_token_inside_a_reply_is_stripped(self):
+        rows, text = self.run_with_skip_token("ok drinking [skip] brb")
+        self.assertFalse(rows["candidate"]["chose_skip"])
+        self.assertEqual(rows["candidate"]["processed"], "ok drinking brb")
+        self.assertIn("| skipped | 0 | 0 |", text)
 
     def test_report_and_partial_raw_survive_an_abort(self):
         def fake(settings, prompt):

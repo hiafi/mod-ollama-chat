@@ -350,6 +350,40 @@ def clamp_reply_length(text: bytes, max_len: int) -> bytes:
     return _trim(head)
 
 
+def apply_skip_token(text: str, token: str) -> tuple[str, bool]:
+    """Port of ``ApplySkipToken`` (src/mod-ollama-chat_response.cpp). Returns (text, skipped).
+
+    ``skipped`` is true when the reply is only the token (whitespace and punctuation around it are ignored) or starts
+    with it. A token inside a longer reply is removed and the rest kept. An empty token never matches.
+    """
+    if not token:
+        return text, False
+    t = text.encode("utf-8")
+    tok = token.encode("utf-8")
+    if len(t) < len(tok):
+        return text, False
+
+    def noise(c: int) -> bool:
+        return _is_space(c) or c in _PUNCT_BYTES
+
+    low_tok = _lower(tok)
+    low = _lower(t)
+    pos = low.find(low_tok)
+    if pos < 0:
+        return text, False
+    if all(noise(c) for c in t[:pos]):
+        return text, True
+
+    while True:
+        pos = low.find(low_tok)
+        if pos < 0:
+            break
+        t = t[:pos] + t[pos + len(low_tok):]
+        low = low[:pos] + low[pos + len(low_tok):]
+    t = _trim(collapse_whitespace(t))
+    return t.decode("utf-8", "replace"), all(noise(c) for c in t)
+
+
 def process_llm_response(raw: str, bot_name: str, *, strip_markdown_on: bool = True,
                          strip_decorative_on: bool = True, max_reply_length: int = 240) -> tuple[str, str]:
     """Returns (processed text, emote word or ''). Empty string means the reply would be dropped."""

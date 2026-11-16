@@ -357,6 +357,57 @@ def _summary(view: CaseView) -> str:
             f" ({bot.get('faction', '?')}) in {where}").replace("  ", " ")
 
 
+# ChatChannelPhrase / AddressedPhrase / Situation_Build (handler.cpp, situation.cpp): the three placeholders that say
+# where a line was said, whether it was aimed at the bot and what is going on. A case may set `channel`, `addressed`
+# and `situation`; without them the line is "said out loud nearby" and "not aimed at" the bot (no situation), which is
+# what every older case stands for.
+CHANNEL_KEYS = {
+    "party": ("ChannelPhrase.Party", "in party chat"),
+    "raid": ("ChannelPhrase.Raid", "in raid chat"),
+    "guild": ("ChannelPhrase.Guild", "in guild chat"),
+    "officer": ("ChannelPhrase.Officer", "in officer chat"),
+    "whisper": ("ChannelPhrase.Whisper", "in a whisper to you"),
+    "say": ("ChannelPhrase.Say", "out loud nearby"),
+    "yell": ("ChannelPhrase.Yell", "in a yell"),
+}
+CHANNEL_NAMES = [*CHANNEL_KEYS, "channel"]
+
+
+def chat_channel_phrase(cfg: Config, case: Mapping[str, Any], where: str) -> str:
+    channel = case.get("channel", "say")
+    if channel not in CHANNEL_NAMES:
+        raise CaseError(f"{where}: channel must be one of {', '.join(CHANNEL_NAMES)} (got {channel!r})")
+    if channel == "channel":
+        name = case.get("channel_name") or "public"      # an empty name is "public", as in the C++
+        return safe_format(cfg.text("ChannelPhrase.Custom", "in the {channel_name} channel"),
+                           {"channel_name": name}, f"{where} ChannelPhrase.Custom")
+    key, default = CHANNEL_KEYS[channel]
+    return cfg.text(key, default)
+
+
+def addressed_phrase(cfg: Config, case: Mapping[str, Any], where: str) -> str:
+    named = case.get("addressed", True)
+    if not isinstance(named, bool):
+        raise CaseError(f"{where}: addressed must be true or false")
+    if case.get("channel", "say") == "whisper":
+        return cfg.text("Addressed.Whisper", "")
+    if named:
+        return cfg.text("Addressed.Named", "They named you.")
+    return cfg.text("Addressed.NotAimed", "It was not aimed at anyone in particular.")
+
+
+def situation_text(cfg: Config, case: Mapping[str, Any], where: str) -> str:
+    """The case's `situation` is the line Situation_Build assembles (the {details} of SituationTemplate); the
+    template that wraps it comes from the config, as in the C++. An empty template turns {situation} off."""
+    details = case.get("situation", "")
+    if not isinstance(details, str):
+        raise CaseError(f"{where}: situation must be a string")
+    template = cfg.text("SituationTemplate", "")
+    if not template or not details:
+        return ""
+    return safe_format(template, {"details": details}, f"{where} SituationTemplate")
+
+
 def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
                  rag: RagSystem | None, sample: int) -> Rendered:
     where = f"case '{view.id}'"
@@ -420,6 +471,9 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
         "player_level": player.get("level", MISSING), "player_class": player.get("class", MISSING),
         "player_name": player_name, "player_message": message,
         "extra_info": extra_info, "chat_history": chat_history, "sentiment_info": sent,
+        "chat_channel": chat_channel_phrase(cfg, view.case, where),
+        "addressed": addressed_phrase(cfg, view.case, where),
+        "situation": situation_text(cfg, view.case, where),
     })
     prompt = safe_format(cfg.text("ChatPromptTemplate"), chat_args, f"{where} ChatPromptTemplate")
 
@@ -434,8 +488,11 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
     prompt += build_roleplay_voice(cfg, view)
     prompt += build_gesture_prompt(cfg, rng_for(view.seed, sample, "gesture"))
 
-    return Rendered(prompt, cfg.text("SystemPrompt", ""), "reply", rag_hits,
-                    f"{_summary(view)}; {player_name} says: {message!r}", FORMAT_ERROR in prompt)
+    channel = view.case.get("channel", "say")
+    summary = f"{_summary(view)}; {player_name} says ({channel}): {message!r}"
+    if view.case.get("situation"):
+        summary += f"; situation: {view.case['situation']}"
+    return Rendered(prompt, cfg.text("SystemPrompt", ""), "reply", rag_hits, summary, FORMAT_ERROR in prompt)
 
 
 def pick_env_text(cfg: Config, view: CaseView, sample: int) -> str:
