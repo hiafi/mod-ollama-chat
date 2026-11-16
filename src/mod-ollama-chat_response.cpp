@@ -370,6 +370,46 @@ std::string ClampReplyLength(const std::string& text, uint32_t maxLen)
 
 // --------------------------------------------------------------------------
 
+bool ApplySkipToken(std::string& text, const std::string& token)
+{
+    if (token.empty() || text.size() < token.size())
+        return false;
+
+    auto lower = [](std::string v)
+    {
+        for (char& c : v)
+            c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        return v;
+    };
+    auto isNoise = [](unsigned char c) { return IsSpace(c) || std::ispunct(c); };
+
+    const std::string lowToken = lower(token);
+    std::string lowText = lower(text);
+
+    size_t pos = lowText.find(lowToken);
+    if (pos == std::string::npos)
+        return false;
+
+    // Only whitespace and punctuation ahead of it: the reply starts with the token.
+    bool leading = true;
+    for (size_t i = 0; i < pos && leading; ++i)
+        leading = isNoise(static_cast<unsigned char>(text[i]));
+    if (leading)
+        return true;
+
+    // Somewhere inside a longer reply: drop every copy and keep the rest.
+    while ((pos = lowText.find(lowToken)) != std::string::npos)
+    {
+        text.erase(pos, lowToken.size());
+        lowText.erase(pos, lowToken.size());
+    }
+    text = Trim(CollapseWhitespace(text));
+
+    return std::all_of(text.begin(), text.end(), [&](char c) { return isNoise(static_cast<unsigned char>(c)); });
+}
+
+// --------------------------------------------------------------------------
+
 std::string ProcessLlmResponse(const std::string& raw,
                                const std::string& botName,
                                uint32_t* outEmoteId)

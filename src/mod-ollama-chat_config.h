@@ -135,6 +135,9 @@ extern std::string g_AddressedNamed;
 extern std::string g_AddressedWhisper;
 extern std::string g_AddressedNotAimed;
 
+// A reply that is only this token means "say nothing" (empty = feature off). Workers get it through the request.
+extern std::string g_SkipToken;
+
 // {situation} for ChatPromptTemplate. Empty template = off. g_SituationEnabled mirrors "template not empty" so the
 // script hooks, which run off the world thread, never read the string itself.
 extern std::string g_SituationTemplate;

@@ -664,6 +664,17 @@ OllamaChat.Addressed.NotAimed = "It was not aimed at anyone in particular."
 #   Default: "" (off)
 OllamaChat.SituationTemplate = ""
 
+# OllamaChat.SkipToken
+#     Description: A word the model may answer with when a real player would say nothing (a line that was not aimed at
+#                  the bot and needs no answer). A reply that is only this token, or starts with it, is dropped
+#                  silently: nothing is said, nothing is saved to the conversation history, and it does not count as a
+#                  failure; the bot's cooldown still starts. A token inside a longer reply is removed and the rest is
+#                  said. Case-insensitive, and punctuation or quotes around it are ignored. The prompt must tell the
+#                  model about it (for example in OllamaChat.SystemPrompt). It applies to every kind of bot line.
+#                  `.ollama status` shows how many were skipped.
+#     Default:     "" (off)
+OllamaChat.SkipToken = ""
+
 # OllamaChat.Situation.BetweenPullsSeconds
 #     Description: A group that has not been in combat for at most this many seconds, after a fight, is reported as
 #                  "between pulls" rather than "not in combat". 0 never says it.

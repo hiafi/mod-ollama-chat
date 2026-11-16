@@ -314,6 +314,7 @@ std::string g_ChannelPhraseCustom   = "in the {channel_name} channel";
 std::string g_AddressedNamed        = "They named you.";
 std::string g_AddressedWhisper;
 std::string g_AddressedNotAimed     = "It was not aimed at anyone in particular.";
+std::string g_SkipToken;
 
 std::string g_SituationTemplate;
 bool        g_SituationEnabled              = false;
@@ -738,6 +739,7 @@ void LoadOllamaChatConfig()
     g_AddressedNamed                  = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Named", "They named you.");
     g_AddressedWhisper                = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Whisper", "");
     g_AddressedNotAimed               = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.NotAimed", "It was not aimed at anyone in particular.");
+    g_SkipToken                       = sConfigMgr->GetOption<std::string>("OllamaChat.SkipToken", "");
 
     g_SituationTemplate               = sConfigMgr->GetOption<std::string>("OllamaChat.SituationTemplate", "");
     g_SituationEnabled                = !g_SituationTemplate.empty();

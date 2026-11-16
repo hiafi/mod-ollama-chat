@@ -405,6 +405,12 @@ bool Governor_TryConsumeSend(ObjectGuid botGuid, const std::string& scopeKey,
     return CheckSendLocked(botGuid, scopeKey, Clock::now(), true, directAddress);
 }
 
+void Governor_NoteSkip(ObjectGuid botGuid)
+{
+    std::lock_guard<std::mutex> lock(g_mutex);
+    g_bots[botGuid.GetRawValue()].lastSend = Clock::now();
+}
+
 bool Governor_CanSend(ObjectGuid botGuid, const std::string& scopeKey,
                       bool directAddress)
 {

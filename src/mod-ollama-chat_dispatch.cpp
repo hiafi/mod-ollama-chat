@@ -83,6 +83,7 @@ namespace
     std::atomic<uint64_t> g_droppedQueueFull{ 0 };
     std::atomic<uint64_t> g_droppedEmpty{ 0 };
     std::atomic<uint64_t> g_droppedGovernor{ 0 };
+    std::atomic<uint64_t> g_skipped{ 0 };
     std::atomic<uint64_t> g_totalFailed{ 0 };
 
     std::mutex  g_errorMutex;
@@ -107,8 +108,25 @@ namespace
             return;
         }
 
+        // The model may answer with the skip token: a reply a real player would not have typed. Nothing is said,
+        // saved to history or counted as a failure; the bot's cooldown still starts.
+        std::string raw = api.text;
+        if (!task.request.skipToken.empty())
+        {
+            std::string probe = StripThinkTags(raw);
+            if (ApplySkipToken(probe, task.request.skipToken))
+            {
+                ++g_skipped;
+                Governor_NoteSkip(ObjectGuid(task.request.botGuid));
+                LOG_DEBUG("module.ollamachat", "[Ollama Chat] Bot {} chose to skip ({}).",
+                          task.request.botName, ChatChannelSourceLocalStr[task.request.source]);
+                return;
+            }
+            raw = std::move(probe);     // a token inside a longer reply is already stripped
+        }
+
         uint32_t emoteId = 0;
-        std::string text = ProcessLlmResponse(api.text, task.request.botName, &emoteId);
+        std::string text = ProcessLlmResponse(raw, task.request.botName, &emoteId);
 
         // Roleplay mode rejects lines carrying out-of-world vocabulary rather
         // than mangling the sentence around the offending word.
@@ -488,6 +506,10 @@ bool OllamaDispatch_Submit(OllamaChatRequest request)
     if (request.prompt.empty() || request.botGuid == 0)
         return false;
 
+    // World thread: the one place a worker's copy of the config string is made.
+    if (request.skipToken.empty())
+        request.skipToken = g_SkipToken;
+
     Task task;
     task.type    = TaskType::ChatReply;
     task.request = std::move(request);
@@ -694,6 +716,7 @@ OllamaDispatchStats OllamaDispatch_GetStats()
     stats.totalDroppedQueueFull = g_droppedQueueFull.load();
     stats.totalDroppedEmpty     = g_droppedEmpty.load();
     stats.totalDroppedGovernor  = g_droppedGovernor.load();
+    stats.totalSkipped          = g_skipped.load();
     stats.totalFailed           = g_totalFailed.load();
 
     return stats;

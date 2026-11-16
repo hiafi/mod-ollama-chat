@@ -489,6 +489,8 @@ bool OllamaChatConfigCommand::HandleOllamaStatusCommand(ChatHandler* handler)
                              (unsigned long long)dispatch.totalDroppedQueueFull,
                              (unsigned long long)dispatch.totalDroppedEmpty,
                              (unsigned long long)dispatch.totalDroppedGovernor);
+    handler->PSendSysMessage("Skipped: {} (the model chose to say nothing)",
+                             (unsigned long long)dispatch.totalSkipped);
 
     handler->PSendSysMessage("Governor: {} bots, {} scopes tracked, {} sends in the last minute",
                              gov.trackedBots, gov.trackedScopes, gov.sendsLastMinute);
