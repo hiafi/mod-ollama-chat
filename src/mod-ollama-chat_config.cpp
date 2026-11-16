@@ -315,6 +315,12 @@ std::string g_AddressedNamed        = "They named you.";
 std::string g_AddressedWhisper;
 std::string g_AddressedNotAimed     = "It was not aimed at anyone in particular.";
 
+std::string g_SituationTemplate;
+bool        g_SituationEnabled              = false;
+uint32_t    g_SituationBetweenPullsSeconds  = 90;
+uint32_t    g_SituationEventWindowSeconds   = 90;
+uint32_t    g_SituationRaidSummaryAbove     = 5;
+
 // --------------------------------------------
 // Personality and Prompt Data
 // --------------------------------------------
@@ -732,6 +738,12 @@ void LoadOllamaChatConfig()
     g_AddressedNamed                  = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Named", "They named you.");
     g_AddressedWhisper                = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Whisper", "");
     g_AddressedNotAimed               = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.NotAimed", "It was not aimed at anyone in particular.");
+
+    g_SituationTemplate               = sConfigMgr->GetOption<std::string>("OllamaChat.SituationTemplate", "");
+    g_SituationEnabled                = !g_SituationTemplate.empty();
+    g_SituationBetweenPullsSeconds    = sConfigMgr->GetOption<uint32_t>("OllamaChat.Situation.BetweenPullsSeconds", 90);
+    g_SituationEventWindowSeconds     = sConfigMgr->GetOption<uint32_t>("OllamaChat.Situation.EventWindowSeconds", 90);
+    g_SituationRaidSummaryAbove       = sConfigMgr->GetOption<uint32_t>("OllamaChat.Situation.RaidSummaryAbove", 5);
 
     g_DefaultPersonalityPrompt        = sConfigMgr->GetOption<std::string>("OllamaChat.DefaultPersonalityPrompt", "");
 

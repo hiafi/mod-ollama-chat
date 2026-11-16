@@ -616,7 +616,7 @@ OllamaChat.SentimentPromptTemplate = "Your relationship sentiment with {player_n
 
 # OllamaChat.ChatPromptTemplate
 #   Description: The main template for bot chat prompts sent to the LLM.
-#   Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_personality} {bot_personality_name} {player_level} {player_class} {player_name} {player_message} {extra_info} {sentiment_info} {chat_history} {chat_channel} {addressed}
+#   Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_personality} {bot_personality_name} {player_level} {player_class} {player_name} {player_message} {extra_info} {sentiment_info} {chat_history} {chat_channel} {addressed} {situation}
 #   Note: {bot_personality_name} contains the name/key of the personality (e.g., "grumpy", "helpful"), while {bot_personality} contains the full personality description text.
 OllamaChat.ChatPromptTemplate = "You're a WoW player familiar with 3.3.5 version of the game and before. Name: {bot_name}, Level: {bot_level} {bot_class}, MAKE SURE YOU RESPOND USING YOUR PERSONALITY, WHICH IS: {bot_personality_name}: {bot_personality}. {sentiment_info} {chat_history} A level {player_level} {player_class} named {player_name} said: '{player_message}'. {extra_info} Reply naturally in under 15 words. Use authentic WoW tone. Be blunt if provoked. Be precise if giving directions. Never contradict your class, race, or location. Never act like a narrator—just respond like a player."
 
@@ -648,6 +648,38 @@ OllamaChat.ChannelPhrase.Custom = "in the {channel_name} channel"
 OllamaChat.Addressed.Named = "They named you."
 OllamaChat.Addressed.Whisper = ""
 OllamaChat.Addressed.NotAimed = "It was not aimed at anyone in particular."
+
+# OllamaChat.SituationTemplate
+#   Description: Fills {situation} in ChatPromptTemplate with a compact line built from live game state, so a bot can
+#                tell what is going on when a line is said: inside an instance, whether the group is in combat or
+#                between pulls, what just happened (a death, a boss kill), how the speaker and the bot itself are doing
+#                (role, health, mana, dead, drinking or eating), and the rest of the group. Empty (the default) turns
+#                it off; {situation} is then empty.
+#   Placeholders (named): {details}, the line itself, for example:
+#     in Deadmines; between pulls; just now: Garn died; speaker Lilia: healer, 100% HP, 8% mana, drinking; you: tank,
+#     100% HP, 80% mana; party: Garn (dps, dead), Bob (dps, 90% HP, 70% mana), Mira (healer, 100% HP, 25% mana)
+#   Nothing is printed for what cannot be worked out. A raid of more than Situation.RaidSummaryAbove is summarized
+#   (raid of 18, 2 dead, healers at 40/70/90% mana). Roles come from playerbots (IsTank/IsHeal), which read the strategy
+#   of a bot and the talent spec of a player.
+#   Default: "" (off)
+OllamaChat.SituationTemplate = ""
+
+# OllamaChat.Situation.BetweenPullsSeconds
+#     Description: A group that has not been in combat for at most this many seconds, after a fight, is reported as
+#                  "between pulls" rather than "not in combat". 0 never says it.
+#     Default:     90
+OllamaChat.Situation.BetweenPullsSeconds = 90
+
+# OllamaChat.Situation.EventWindowSeconds
+#     Description: How long a death or boss kill in the group stays in the situation line ("just now: Garn died"). At
+#                  most the last 3 are kept. 0 turns the events off.
+#     Default:     90
+OllamaChat.Situation.EventWindowSeconds = 90
+
+# OllamaChat.Situation.RaidSummaryAbove
+#     Description: A group with more members than this is summarized instead of listing each member.
+#     Default:     5
+OllamaChat.Situation.RaidSummaryAbove = 5
 
 # --------------------------------------------
 # ENVIRONMENTAL/CONTEXTUAL TEMPLATES

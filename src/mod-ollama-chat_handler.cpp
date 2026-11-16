@@ -43,6 +43,7 @@
 #include "mod-ollama-chat_memory.h"
 #include "mod-ollama-chat_topics.h"
 #include "mod-ollama-chat_random.h"
+#include "mod-ollama-chat_situation.h"
 #include <iomanip>
 #include "SpellMgr.h"
 #include "SpellInfo.h"
@@ -2052,7 +2053,8 @@ std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* pl
         fmt::arg("chat_history", chatHistory),
         fmt::arg("sentiment_info", sentimentInfo),
         fmt::arg("chat_channel", ChatChannelPhrase(source, channelName)),
-        fmt::arg("addressed", AddressedPhrase(source, named))
+        fmt::arg("addressed", AddressedPhrase(source, named)),
+        fmt::arg("situation", Situation_Build(bot, player))
     );
 
     // Add RAG information to the prompt if available

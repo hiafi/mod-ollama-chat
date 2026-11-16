@@ -135,6 +135,14 @@ extern std::string g_AddressedNamed;
 extern std::string g_AddressedWhisper;
 extern std::string g_AddressedNotAimed;
 
+// {situation} for ChatPromptTemplate. Empty template = off. g_SituationEnabled mirrors "template not empty" so the
+// script hooks, which run off the world thread, never read the string itself.
+extern std::string g_SituationTemplate;
+extern bool        g_SituationEnabled;
+extern uint32_t    g_SituationBetweenPullsSeconds;
+extern uint32_t    g_SituationEventWindowSeconds;
+extern uint32_t    g_SituationRaidSummaryAbove;
+
 // --------------------------------------------
 // Personality and Prompt Data
 // --------------------------------------------

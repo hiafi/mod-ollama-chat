@@ -5,6 +5,7 @@
 #include "mod-ollama-chat_command.h"
 #include "mod-ollama-chat_expression.h"
 #include "mod-ollama-chat_rag.h"
+#include "mod-ollama-chat_situation.h"
 #include "Log.h"
 
 void Addmod_ollama_chatScripts()
@@ -14,6 +15,7 @@ void Addmod_ollama_chatScripts()
     new PlayerBotChatHandler();
     new OllamaChatMaintenance();
     new OllamaBotRandomChatter();
+    new OllamaSituationTracker();
 
     LOG_INFO("server.loading", "[Ollama Chat] Registering mod-ollama-chat events.");
     new ChatOnKill();
