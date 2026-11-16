@@ -34,6 +34,9 @@ extern uint32_t   g_PlayerReplyChance_Guild;
 extern uint32_t   g_BotReplyChance_Guild;
 
 extern uint32_t   g_MaxBotsToPick;
+extern uint32_t   g_MaxBotsToPickParty;    // 0 = use MaxBotsToPick
+extern uint32_t   g_MaxBotsToPickRaid;     // 0 = use MaxBotsToPick
+extern uint32_t   g_PartyTankPickWeight;   // 1 = no preference
 extern uint32_t   g_RandomChatterBotCommentChance;
 extern uint32_t   g_RandomChatterMaxBotsPerPlayer;
 extern uint32_t   g_EventChatterBotCommentChance;

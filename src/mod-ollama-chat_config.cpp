@@ -5,6 +5,7 @@
 #include "mod-ollama-chat_rag.h"
 #include "Config.h"
 #include "Log.h"
+#include <algorithm>
 #include "mod-ollama-chat_api.h"
 #include "mod-ollama-chat_capability.h"
 #include "mod-ollama-chat_dispatch.h"
@@ -39,6 +40,9 @@ uint32_t   g_PlayerReplyChance_Guild   = 70;
 uint32_t   g_BotReplyChance_Guild      = 5;
 
 uint32_t   g_MaxBotsToPick     = 2;
+uint32_t   g_MaxBotsToPickParty = 0;
+uint32_t   g_MaxBotsToPickRaid  = 0;
+uint32_t   g_PartyTankPickWeight = 1;
 uint32_t   g_RandomChatterBotCommentChance   = 5;
 uint32_t   g_RandomChatterMaxBotsPerPlayer   = 2;
 uint32_t   g_EventChatterBotCommentChance    = 15;
@@ -605,6 +609,9 @@ void LoadOllamaChatConfig()
     g_BotReplyChance_Guild            = sConfigMgr->GetOption<uint32_t>("OllamaChat.BotReplyChance.Guild", 5);
     
     g_MaxBotsToPick                   = sConfigMgr->GetOption<uint32_t>("OllamaChat.MaxBotsToPick", 2);
+    g_MaxBotsToPickParty              = sConfigMgr->GetOption<uint32_t>("OllamaChat.MaxBotsToPick.Party", 0);
+    g_MaxBotsToPickRaid               = sConfigMgr->GetOption<uint32_t>("OllamaChat.MaxBotsToPick.Raid", 0);
+    g_PartyTankPickWeight             = std::clamp<uint32_t>(sConfigMgr->GetOption<uint32_t>("OllamaChat.Party.TankPickWeight", 1), 1, 100);
     g_OllamaUrl                       = sConfigMgr->GetOption<std::string>("OllamaChat.Url", "http://localhost:11434/api/generate");
     g_OllamaModel                     = sConfigMgr->GetOption<std::string>("OllamaChat.Model", "llama3.2:1b");
     g_OllamaProvider                  = OllamaProvider_Parse(sConfigMgr->GetOption<std::string>("OllamaChat.Provider", "ollama"));

@@ -331,6 +331,23 @@ OllamaChat.EnableWhisperReplies = 0
 #     Default:     2
 OllamaChat.MaxBotsToPick = 2
 
+# OllamaChat.MaxBotsToPick.Party
+# OllamaChat.MaxBotsToPick.Raid
+#     Description: MaxBotsToPick for lines said in party chat or raid chat. In a group every bot hears every line, so
+#                  with the general cap several of them often answer one callout; 1 makes it one at a time. 0 uses
+#                  OllamaChat.MaxBotsToPick. As with MaxBotsToPick, a number is drawn between 1 and this value.
+#                  A bot that was named always answers, whatever this says.
+#     Default:     0
+OllamaChat.MaxBotsToPick.Party = 0
+OllamaChat.MaxBotsToPick.Raid = 0
+
+# OllamaChat.Party.TankPickWeight
+#     Description: When a party or raid line did not name any bot and more bots want to answer than the cap allows,
+#                  each candidate tank counts this many times in the draw of who answers (everyone else counts once).
+#                  A tank is the one who usually talks for the group. 1 means no preference. Maximum 100.
+#     Default:     1
+OllamaChat.Party.TankPickWeight = 1
+
 # OllamaChat.BlacklistCommands
 #     Description: A comma-separated list of command prefixes that should be ignored by AI bots.
 #                  If a message starts with any of these prefixes, the bot will not respond.

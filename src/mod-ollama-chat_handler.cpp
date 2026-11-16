@@ -1556,6 +1556,7 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
         return;
     
     std::vector<Player*> finalCandidates;
+    bool anyBotNamed = false;   // some candidate was named in the message
     
     // For whispers, handle directly - there should only be one receiver bot
     if (sourceLocal == SRC_WHISPER_LOCAL)
@@ -1614,6 +1615,7 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
             }
         }
 
+        anyBotNamed = !mentionedBots.empty();
         if (!mentionedBots.empty())
         {
             // Sort by position to get the first mentioned bot
@@ -1693,17 +1695,60 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
         return;
     }
     
-    if (finalCandidates.size() > g_MaxBotsToPick)
+    // Party and raid lines can have their own cap (0 = the general one): five bots all answering a callout is noise.
+    uint32_t maxBotsToPick = g_MaxBotsToPick;
+    if (sourceLocal == SRC_PARTY_LOCAL && g_MaxBotsToPickParty > 0)
+        maxBotsToPick = g_MaxBotsToPickParty;
+    else if (sourceLocal == SRC_RAID_LOCAL && g_MaxBotsToPickRaid > 0)
+        maxBotsToPick = g_MaxBotsToPickRaid;
+
+    if (finalCandidates.size() > maxBotsToPick)
     {
-        std::random_device rd;
-        std::mt19937 g(rd());
-        std::shuffle(finalCandidates.begin(), finalCandidates.end(), g);
-        uint32_t countToPick = urand(1, g_MaxBotsToPick);
+        uint32_t countToPick = 0;
+
+        // A line nobody was named in, said in a party or raid, goes preferably to a tank: each candidate tank
+        // counts TankPickWeight times in the draw. A named bot never gets here (it is the only candidate).
+        const bool weightTanks = !anyBotNamed && g_PartyTankPickWeight > 1 &&
+                                 (sourceLocal == SRC_PARTY_LOCAL || sourceLocal == SRC_RAID_LOCAL);
+        if (weightTanks)
+        {
+            countToPick = urand(1, maxBotsToPick);
+            std::vector<Player*> pool = std::move(finalCandidates);
+            finalCandidates.clear();
+            while (finalCandidates.size() < countToPick && !pool.empty())
+            {
+                uint32_t total = 0;
+                for (Player* candidate : pool)
+                    total += PlayerbotAI::IsTank(candidate) ? g_PartyTankPickWeight : 1;
+
+                uint32_t roll = urand(1, total);
+                for (auto it = pool.begin(); it != pool.end(); ++it)
+                {
+                    const uint32_t weight = PlayerbotAI::IsTank(*it) ? g_PartyTankPickWeight : 1;
+                    if (roll <= weight)
+                    {
+                        finalCandidates.push_back(*it);
+                        pool.erase(it);
+                        break;
+                    }
+                    roll -= weight;
+                }
+            }
+        }
+        else
+        {
+            std::random_device rd;
+            std::mt19937 g(rd());
+            std::shuffle(finalCandidates.begin(), finalCandidates.end(), g);
+            countToPick = urand(1, maxBotsToPick);
+            finalCandidates.resize(countToPick);
+        }
+
         if(g_DebugEnabled)
         {
-            LOG_INFO("module.ollamachat", "[Ollama Chat] Limiting {} bots to {} (MaxBotsToPick)", finalCandidates.size(), countToPick);
+            LOG_INFO("module.ollamachat", "[Ollama Chat] Limited the responders to {} (MaxBotsToPick {}{})",
+                     countToPick, maxBotsToPick, weightTanks ? ", tanks weighted" : "");
         }
-        finalCandidates.resize(countToPick);
     }
     
     if(g_DebugEnabled && !finalCandidates.empty())
