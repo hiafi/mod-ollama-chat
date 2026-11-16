@@ -1695,6 +1695,30 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
         return;
     }
     
+    // Drop the bots that could not speak right now (cooldown, rate limit) before the draw, so a capped pick never
+    // lands on a bot that has to stay silent while another candidate could have answered. Each bot is judged with
+    // its own direct-address status, exactly as the send below does.
+    {
+        std::vector<Player*> ready;
+        ready.reserve(finalCandidates.size());
+        for (Player* bot : finalCandidates)
+        {
+            if (!bot)
+                continue;
+
+            const bool botDirect =
+                OllamaIsDirectAddress(bot, player, sourceLocal, trimmedMsg, senderIsBot, scopeKey);
+            if (Governor_CanSend(bot->GetGUID(), scopeKey, botDirect))
+                ready.push_back(bot);
+            else if (g_DebugEnabled)
+                LOG_INFO("module.ollamachat",
+                         "[Ollama Chat] Bot {} skipped: cooldown or rate limit.", bot->GetName());
+        }
+        finalCandidates = std::move(ready);
+        if (finalCandidates.empty())
+            return;
+    }
+
     // Party and raid lines can have their own cap (0 = the general one): five bots all answering a callout is noise.
     uint32_t maxBotsToPick = g_MaxBotsToPick;
     if (sourceLocal == SRC_PARTY_LOCAL && g_MaxBotsToPickParty > 0)
@@ -1706,12 +1730,25 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
     {
         uint32_t countToPick = 0;
 
-        // A line nobody was named in, said in a party or raid, goes preferably to a tank: each candidate tank
-        // counts TankPickWeight times in the draw. A named bot never gets here (it is the only candidate).
+        // A line nobody was named in, said in a party or raid, goes preferably to a tank, or to a bot that is
+        // already talking with the speaker (it answered them here a moment ago, so this line is a follow-up):
+        // each such candidate counts TankPickWeight times in the draw, one that is both counts a third time over.
+        // A named bot never gets here (it is the only candidate).
         const bool weightTanks = !anyBotNamed && g_PartyTankPickWeight > 1 &&
                                  (sourceLocal == SRC_PARTY_LOCAL || sourceLocal == SRC_RAID_LOCAL);
         if (weightTanks)
         {
+            auto weightOf = [&](Player* candidate) -> uint32_t
+            {
+                uint32_t weight = 1;
+                if (PlayerbotAI::IsTank(candidate))
+                    weight += g_PartyTankPickWeight - 1;
+                if (!senderIsBot &&
+                    Governor_InConversation(candidate->GetGUID(), player->GetGUID(), scopeKey))
+                    weight += g_PartyTankPickWeight - 1;
+                return weight;
+            };
+
             countToPick = urand(1, maxBotsToPick);
             std::vector<Player*> pool = std::move(finalCandidates);
             finalCandidates.clear();
@@ -1719,12 +1756,12 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
             {
                 uint32_t total = 0;
                 for (Player* candidate : pool)
-                    total += PlayerbotAI::IsTank(candidate) ? g_PartyTankPickWeight : 1;
+                    total += weightOf(candidate);
 
                 uint32_t roll = urand(1, total);
                 for (auto it = pool.begin(); it != pool.end(); ++it)
                 {
-                    const uint32_t weight = PlayerbotAI::IsTank(*it) ? g_PartyTankPickWeight : 1;
+                    const uint32_t weight = weightOf(*it);
                     if (roll <= weight)
                     {
                         finalCandidates.push_back(*it);
@@ -1747,7 +1784,7 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
         if(g_DebugEnabled)
         {
             LOG_INFO("module.ollamachat", "[Ollama Chat] Limited the responders to {} (MaxBotsToPick {}{})",
-                     countToPick, maxBotsToPick, weightTanks ? ", tanks weighted" : "");
+                     countToPick, maxBotsToPick, weightTanks ? ", tanks and conversation partners weighted" : "");
         }
     }
     
@@ -1789,8 +1826,12 @@ void PlayerBotChatHandler::ProcessChat(Player* player, uint32_t /*type*/, uint32
 
         const bool botNamed =
             OllamaFindBotNameMention(trimmedMsg, bot->GetName()) != std::string::npos;
+        // Not named, but this bot already answered this person here: the line is a turn in that exchange.
+        const bool botInConversation = !botNamed && !senderIsBot &&
+            Governor_InConversation(bot->GetGUID(), player->GetGUID(), scopeKey);
         std::string prompt = GenerateBotPrompt(bot, msg, player, sourceLocal,
-                                               channel ? channel->GetName() : std::string(), botNamed);
+                                               channel ? channel->GetName() : std::string(), botNamed,
+                                               botInConversation);
         if (prompt.empty())
             continue;
 
@@ -1969,17 +2010,22 @@ static std::string ChatChannelPhrase(ChatChannelSourceLocal source, std::string 
     }
 }
 
-// {addressed}: whether the line was aimed at this bot. A whisper is for the bot by definition and the channel phrase
-// already says so, so it has its own (normally empty) text.
-static std::string AddressedPhrase(ChatChannelSourceLocal source, bool named)
+// {addressed}: whether the line was aimed at this bot. Three states besides a whisper: the bot was named, it is
+// already talking with the speaker (so this line follows on from what it said), or the line was said to the room.
+// A whisper is for the bot by definition and the channel phrase already says so, so it has its own (normally empty)
+// text.
+static std::string AddressedPhrase(ChatChannelSourceLocal source, bool named, bool inConversation)
 {
     if (source == SRC_WHISPER_LOCAL)
         return g_AddressedWhisper;
-    return named ? g_AddressedNamed : g_AddressedNotAimed;
+    if (named)
+        return g_AddressedNamed;
+    return inConversation ? g_AddressedConversation : g_AddressedNotAimed;
 }
 
 std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* player,
-                              ChatChannelSourceLocal source, std::string const& channelName, bool named)
+                              ChatChannelSourceLocal source, std::string const& channelName, bool named,
+                              bool inConversation)
 {  
     if (!bot || !player) {
         return "";
@@ -2047,7 +2093,7 @@ std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* pl
                 ragLocations.push_back(botAreaName);
         }
         auto ragResults = g_RAGSystem->RetrieveRelevantInfo(playerMessage, g_RAGMaxRetrievedItems, g_RAGSimilarityThreshold,
-                                                            ragLocations, g_RAGLocationBoost);
+                                                            ragLocations, g_RAGLocationBoost, g_RAGMinQueryWords);
         std::string ragContent = g_RAGSystem->GetFormattedRAGInfo(ragResults);
         if (!ragContent.empty()) {
             ragInfo = SafeFormat(g_RAGPromptTemplate, fmt::arg("rag_info", ragContent));
@@ -2098,7 +2144,7 @@ std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* pl
         fmt::arg("chat_history", chatHistory),
         fmt::arg("sentiment_info", sentimentInfo),
         fmt::arg("chat_channel", ChatChannelPhrase(source, channelName)),
-        fmt::arg("addressed", AddressedPhrase(source, named)),
+        fmt::arg("addressed", AddressedPhrase(source, named, inConversation)),
         fmt::arg("situation", Situation_Build(bot, player))
     );
 

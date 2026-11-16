@@ -137,6 +137,7 @@ extern std::string g_ChannelPhraseCustom;     // {channel_name}
 extern std::string g_AddressedNamed;
 extern std::string g_AddressedWhisper;
 extern std::string g_AddressedNotAimed;
+extern std::string g_AddressedConversation;
 
 // A reply that is only this token means "say nothing" (empty = feature off). Workers get it through the request.
 extern std::string g_SkipToken;
@@ -461,6 +462,7 @@ extern std::string g_RAGDataPath;                        // Path to RAG data fil
 extern uint32_t    g_RAGMaxRetrievedItems;               // Max items to retrieve
 extern float       g_RAGSimilarityThreshold;             // Similarity threshold for retrieval
 extern float       g_RAGLocationBoost;                   // Rank boost for entries mentioning the bot's zone/area (0 = off)
+extern uint32_t    g_RAGMinQueryWords;                   // Skip retrieval when the query has fewer non-common words (0 = off)
 extern bool        g_RAGIgnoreCommonWords;               // Drop common words (the, is, in, ...) from entries and queries
 extern std::string g_RAGPromptTemplate;                  // Template for RAG info in prompts
 

@@ -161,12 +161,26 @@ bool OllamaRAGSystem::LoadRAGDataFromFile(const std::string& filePath)
 }
 
 std::vector<RAGResult> OllamaRAGSystem::RetrieveRelevantInfo(const std::string& query, uint32_t maxResults, float similarityThreshold,
-                                                             const std::vector<std::string>& locationNames, float locationBoost)
+                                                             const std::vector<std::string>& locationNames, float locationBoost,
+                                                             uint32_t minQueryWords)
 {
     std::vector<RAGResult> results;
 
     if (!m_initialized || query.empty()) {
         return results;
+    }
+
+    // Too short a query to be a question: count the words that are not common ones (whatever RAGIgnoreCommonWords says).
+    if (minQueryWords > 0) {
+        uint32_t words = 0;
+        for (const auto& token : TokenizeText(PreprocessText(query))) {
+            if (!kCommonWords.count(token)) {
+                ++words;
+            }
+        }
+        if (words < minQueryWords) {
+            return results;
+        }
     }
 
     // Preprocess location names once, the same way entry text is preprocessed.

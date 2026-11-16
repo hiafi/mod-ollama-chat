@@ -344,7 +344,10 @@ OllamaChat.MaxBotsToPick.Raid = 0
 # OllamaChat.Party.TankPickWeight
 #     Description: When a party or raid line did not name any bot and more bots want to answer than the cap allows,
 #                  each candidate tank counts this many times in the draw of who answers (everyone else counts once).
-#                  A tank is the one who usually talks for the group. 1 means no preference. Maximum 100.
+#                  A tank is the one who usually talks for the group. A bot that is already in a conversation with the
+#                  speaker (it answered them in this channel a moment ago) gets the same extra weight, and one that
+#                  is both gets it twice, so a follow-up tends to stay with the bot that was answering. Bots that are
+#                  on cooldown or rate limited are removed before the draw. 1 means no preference. Maximum 100.
 #     Default:     1
 OllamaChat.Party.TankPickWeight = 1
 
@@ -659,10 +662,13 @@ OllamaChat.ChannelPhrase.Custom = "in the {channel_name} channel"
 
 # OllamaChat.Addressed.*
 #   Description: What {addressed} says in ChatPromptTemplate: whether the line was aimed at this bot. Named is used when
-#                the bot's name appears in the message, NotAimed when it does not. A whisper is always for the bot and
-#                {chat_channel} already says so, so Whisper is empty by default. {addressed} is only used if the
-#                template contains it.
+#                the bot's name appears in the message. Conversation is used when it does not, but this bot already
+#                answered this person in this channel a moment ago (see OllamaChat.Cooldown.ConversationWindowSeconds), so the
+#                line is a follow-up; it is empty by default, which says nothing. NotAimed is used for any other
+#                line said to the room. A whisper is always for the bot and {chat_channel} already says so, so
+#                Whisper is empty by default. {addressed} is only used if the template contains it.
 OllamaChat.Addressed.Named = "They named you."
+OllamaChat.Addressed.Conversation = ""
 OllamaChat.Addressed.Whisper = ""
 OllamaChat.Addressed.NotAimed = "It was not aimed at anyone in particular."
 
@@ -686,8 +692,12 @@ OllamaChat.SituationTemplate = ""
 #                  the bot and needs no answer). A reply that is only this token, or starts with it, is dropped
 #                  silently: nothing is said, nothing is saved to the conversation history, and it does not count as a
 #                  failure; the bot's cooldown still starts. A token inside a longer reply is removed and the rest is
-#                  said. Case-insensitive, and punctuation or quotes around it are ignored. The prompt must tell the
-#                  model about it (for example in OllamaChat.SystemPrompt). It applies to every kind of bot line.
+#                  said. A reply that is only a gesture tag and the token ('[emote:shrug] [skip]') is a skip too.
+#                  Case-insensitive, and punctuation or quotes around it are ignored. A token that starts or ends with
+#                  a letter or digit must stand alone, so 'skip' is not found inside 'skipping'; a bracketed token
+#                  such as [skip] is safest. The prompt must tell the model about it (for example in
+#                  OllamaChat.SystemPrompt). It applies to every kind of bot line, and to the memory and
+#                  relationship summaries (a reply that is the token is discarded, never stored).
 #                  `.ollama status` shows how many were skipped.
 #     Default:     "" (off)
 OllamaChat.SkipToken = ""
@@ -1140,6 +1150,14 @@ OllamaChat.RAGSimilarityThreshold = 0.3
 OllamaChat.RAGLocationBoost = 0.0
 
 
+
+# OllamaChat.RAGMinQueryWords
+#     Description: A message with fewer words than this, after the common words (the, is, in, where, ...) are left
+#                  out, retrieves nothing. One bare word such as 'mana' is a status callout in group chat rather
+#                  than a question, and would otherwise pull in whatever entry happens to share it (a quest called
+#                  'Mana Surges'). 0 turns the check off.
+#     Default:     0
+OllamaChat.RAGMinQueryWords = 0
 
 # OllamaChat.RAGIgnoreCommonWords
 #     Description: Leave common words (the, is, in, where, you, ...) out of the similarity calculation, for the

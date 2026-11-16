@@ -318,6 +318,7 @@ std::string g_ChannelPhraseCustom   = "in the {channel_name} channel";
 std::string g_AddressedNamed        = "They named you.";
 std::string g_AddressedWhisper;
 std::string g_AddressedNotAimed     = "It was not aimed at anyone in particular.";
+std::string g_AddressedConversation;
 std::string g_SkipToken;
 
 std::string g_SituationTemplate;
@@ -383,6 +384,7 @@ std::string g_RAGDataPath = "rag/";
 uint32_t    g_RAGMaxRetrievedItems = 3;
 float       g_RAGSimilarityThreshold = 0.3f;
 float       g_RAGLocationBoost = 0.0f;
+uint32_t    g_RAGMinQueryWords = 0;
 bool        g_RAGIgnoreCommonWords = false;
 std::string g_RAGPromptTemplate;
 
@@ -746,6 +748,7 @@ void LoadOllamaChatConfig()
     g_AddressedNamed                  = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Named", "They named you.");
     g_AddressedWhisper                = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Whisper", "");
     g_AddressedNotAimed               = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.NotAimed", "It was not aimed at anyone in particular.");
+    g_AddressedConversation           = sConfigMgr->GetOption<std::string>("OllamaChat.Addressed.Conversation", "");
     g_SkipToken                       = sConfigMgr->GetOption<std::string>("OllamaChat.SkipToken", "");
 
     g_SituationTemplate               = sConfigMgr->GetOption<std::string>("OllamaChat.SituationTemplate", "");
@@ -782,6 +785,7 @@ void LoadOllamaChatConfig()
     g_RAGMaxRetrievedItems            = sConfigMgr->GetOption<uint32_t>("OllamaChat.RAGMaxRetrievedItems", 3);
     g_RAGSimilarityThreshold          = sConfigMgr->GetOption<float>("OllamaChat.RAGSimilarityThreshold", 0.3f);
     g_RAGLocationBoost                = sConfigMgr->GetOption<float>("OllamaChat.RAGLocationBoost", 0.0f);
+    g_RAGMinQueryWords                = sConfigMgr->GetOption<uint32_t>("OllamaChat.RAGMinQueryWords", 0);
     g_RAGIgnoreCommonWords            = sConfigMgr->GetOption<bool>("OllamaChat.RAGIgnoreCommonWords", false);
     g_RAGPromptTemplate               = sConfigMgr->GetOption<std::string>("OllamaChat.RAGPromptTemplate", "RELEVANT INFORMATION:\n{rag_info}\nUse this information to provide accurate and detailed responses when applicable.");
 
@@ -1212,7 +1216,9 @@ void LoadOllamaChatConfig()
              "[Ollama Chat] Config loaded: Enabled = {}, SayDistance = {}, YellDistance = {}, "
              "Reply Chances - Say: P{}%/B{}%, Channel: P{}%/B{}%, Party: P{}%/B{}%, Guild: P{}%/B{}%, MaxBotsToPick = {}, "
              "Provider = {}, Url = {}, Model = {}, ApiKey = {}, MaxConcurrentQueries = {}, EnableRandomChatter = {}, MinRandInt = {}, MaxRandInt = {}, RandomChatterRealPlayerDistance = {}, "
-             "RandomChatterBotCommentChance = {}. MaxConcurrentQueries = {}. Extra blacklist commands: {}",
+             "RandomChatterBotCommentChance = {}. MaxConcurrentQueries = {}. Extra blacklist commands: {}. "
+             "Situation = {} (between pulls {}s, events {}s, raid summary above {}), SkipToken = '{}', "
+             "MaxBotsToPick Party/Raid = {}/{}, Party.TankPickWeight = {}, RAGMinQueryWords = {}",
              g_Enable, g_SayDistance, g_YellDistance,
              g_PlayerReplyChance_Say, g_BotReplyChance_Say,
              g_PlayerReplyChance_Channel, g_BotReplyChance_Channel,
@@ -1222,7 +1228,10 @@ void LoadOllamaChatConfig()
              OllamaProvider_Name(g_OllamaProvider), g_OllamaUrl, g_OllamaModel,
              g_OllamaApiKey.empty() ? "not set" : "set", g_MaxConcurrentQueries,
              g_EnableRandomChatter, g_MinRandomInterval, g_MaxRandomInterval, g_RandomChatterRealPlayerDistance,
-             g_RandomChatterBotCommentChance, g_MaxConcurrentQueries, extraBlacklist);
+             g_RandomChatterBotCommentChance, g_MaxConcurrentQueries, extraBlacklist,
+             g_SituationEnabled ? "on" : "off", g_SituationBetweenPullsSeconds, g_SituationEventWindowSeconds,
+             g_SituationRaidSummaryAbove, g_SkipToken,
+             g_MaxBotsToPickParty, g_MaxBotsToPickRaid, g_PartyTankPickWeight, g_RAGMinQueryWords);
 }
 
 void LoadPersonalityTemplatesFromDB()

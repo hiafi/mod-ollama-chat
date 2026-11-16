@@ -41,11 +41,13 @@ void AppendBotConversation(uint64_t botGuid, uint64_t playerGuid,
                            const std::string& playerMessage, const std::string& botReply);
 
 // Prompt builders. World thread only -- they read live world state.
-// `source`, `channelName` and `named` say where the line was said and whether it named this bot; they fill
-// {chat_channel} and {addressed} in ChatPromptTemplate.
+// `source`, `channelName`, `named` and `inConversation` say where the line was said, whether it named this bot and
+// whether the bot is already talking with the speaker; they fill {chat_channel} and {addressed} in
+// ChatPromptTemplate.
 std::string GenerateBotPrompt(Player* bot, std::string playerMessage, Player* player,
                               ChatChannelSourceLocal source = SRC_SAY_LOCAL,
-                              std::string const& channelName = std::string(), bool named = false);
+                              std::string const& channelName = std::string(), bool named = false,
+                              bool inConversation = false);
 std::string BuildEmoteReactionPrompt(Player* bot, Player* player, uint32_t textEmote);
 
 // Bounded, distance-sorted snapshot helpers used by the prompt builders and
