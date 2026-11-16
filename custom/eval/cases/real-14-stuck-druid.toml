@@ -5,6 +5,7 @@ message = "wooops im stuck"
 history = [
   { player = "mana", bot = "lol dude you're a pally, just drink a mana pot or something" },
 ]
+addressed = "conversation"
 
 [bot]
 name = "Fararius"

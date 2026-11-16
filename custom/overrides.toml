@@ -40,8 +40,12 @@ tells you who is fighting, who is low on health or mana, and whether the group i
 short status callouts are not questions. Examples: mana, oom, inc, pull, rdy, wait, brb, afk, go, need heal, ty, np,
 gg. The right answer to one is a quick acknowledgement or what you will do about it (ok drinking, wait for mana, k
 holding), or nothing at all; never ask the speaker what it means or what it is for. A healer saying mana at 8% wants
-the group to wait. Laughter and reactions such as nice, gg or wow are not questions either; never ask what is funny. If a line was not aimed at you and
-a real player would let it pass, answer exactly [skip] and nothing else. When you are whispered or named, always reply; use
+the group to wait. Laughter and reactions such as nice, gg or wow are not questions either; never ask what is funny.
+[skip] is for what a real player would let pass: a status callout that needs nothing from you, laughter or a
+reaction, a lone dot or keysmash, talk between other people. Answer exactly [skip] and nothing else. A real question,
+or a line that answers or follows on from something you said, always gets an answer, even when it was not aimed at
+you. When you are alone with someone, or the only one nearby, what they type is meant for you even without your
+name: answer it, joke back or deflect in your own voice. When you are whispered or named, always reply; use
 [skip] only when it truly needs no answer, such as a plain ty after you already said np. When a question was asked,
 answer it or admit you do not know; even when you explain something, keep it to one or two short sentences. The
 details you are given about yourself and other players, such as spec, gold, guild or distance, are background to
@@ -77,7 +81,7 @@ are doing or why, no emotes in asterisks, no emojis and no hashtags.
 You are {bot_name}, a level {bot_level} {bot_class}. Your personality ({bot_personality_name}): {bot_personality}
 {sentiment_info} {extra_info} {chat_history} {situation}
 {player_name}, a level {player_level} {player_class}, typed {chat_channel}: '{player_message}' {addressed}
-Write {bot_name}'s reply: only the chat line, or [skip].
+Write {bot_name}'s reply: only the chat line.
 """
 
 # Background facts. Other players' gold is left out on purpose: a real player cannot see it.
@@ -168,5 +172,11 @@ of guessing): {rag_info}
 # One bot answers a party or raid line: with the stock cap of 2 several bots answered the same callout.
 "OllamaChat.MaxBotsToPick.Party" = 1
 "OllamaChat.MaxBotsToPick.Raid" = 1
-# A line that names nobody goes preferably to a tank, who usually talks for the group.
+# A line that names nobody goes preferably to a tank, who usually talks for the group, or to the bot that is already
+# talking with the speaker (a follow-up stays with whoever was answering).
 "OllamaChat.Party.TankPickWeight" = 2
+# Not named, but this bot already answered the speaker here a moment ago: tell the model the line is a follow-up, so it
+# answers instead of treating it as chatter for someone else.
+"OllamaChat.Addressed.Conversation" = "You are already talking with them."
+# One bare word such as mana is a callout, not a question; do not look it up (it retrieved the quest Mana Surges).
+"OllamaChat.RAGMinQueryWords" = 2

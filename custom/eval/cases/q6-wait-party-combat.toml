@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. The leader says wait in the middle of a fight. Good: a quick ack (k, holding) or [skip] if nothing is owed. Bad: confusion."
 message = "wait"
 channel = "party"
-addressed = false
+addressed = "open"
 situation = "in Zul'Farrak; in combat; speaker Lilia: healer, 60% HP, 45% mana; you: tank, 48% HP, 40% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

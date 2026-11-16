@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. The party leader asks if everyone is ready, between pulls. Good: ready / 1 sec / rdy (or the honest state: waiting on mana). Bad: [skip] is acceptable only if nobody else could answer, but a reply is better; confusion is bad."
 message = "rdy?"
 channel = "party"
-addressed = false
+addressed = "open"
 situation = "in Zul'Farrak; between pulls; speaker Lilia: healer, 100% HP, 100% mana; you: tank, 88% HP, 61% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

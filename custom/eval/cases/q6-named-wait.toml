@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. The bot is named in party chat. It must reply (never [skip]). Good: ok / sure / np, taking the wait at face value."
 message = "Thorgrim can you wait a sec"
 channel = "party"
-addressed = true
+addressed = "named"
 situation = "in Zul'Farrak; between pulls; speaker Lilia: healer, 100% HP, 15% mana; you: tank, 88% HP, 61% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

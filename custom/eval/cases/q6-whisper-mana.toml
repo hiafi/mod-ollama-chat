@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. A healer in the bot's group whispers mana, low on mana, between pulls. It must reply (never [skip]). Good: an ack (ok, drink up, wait)."
 message = "mana"
 channel = "whisper"
-addressed = false
+addressed = "open"
 situation = "in Zul'Farrak; between pulls; speaker Lilia: healer, 90% HP, 10% mana; you: tank, 88% HP, 61% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

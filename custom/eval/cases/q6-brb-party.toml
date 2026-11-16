@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. Someone steps away. Good: [skip] or k / ok. Bad: a paragraph, asking where they are going."
 message = "brb"
 channel = "party"
-addressed = false
+addressed = "open"
 situation = "in Zul'Farrak; not in combat; speaker Mira: dps, 100% HP, 100% mana; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 90% mana), Garn (dps, 100% HP), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

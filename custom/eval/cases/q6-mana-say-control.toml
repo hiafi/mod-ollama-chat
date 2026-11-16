@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6 control. mana said out loud by a stranger at full mana in the open world, to a solo bot. Puzzled or [skip] are both fine; this checks the bot does not invent a party context."
 message = "mana"
 channel = "say"
-addressed = false
+addressed = "open"
 situation = "not in combat; speaker Dunn: dps, 100% HP, 100% mana; you: tank, 100% HP, 100% mana"
 
 [bot]

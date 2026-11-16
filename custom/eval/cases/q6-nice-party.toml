@@ -3,8 +3,8 @@ path = "reply"
 notes = "Q6. nice right after the group killed a boss. The situation carries the kill. Good: any short line (gz, nice one, finally) or [skip]. Bad: asking what was nice."
 message = "nice"
 channel = "party"
-addressed = false
-situation = "in Zul'Farrak; not in combat; just now: killed Chief Ukorz Sandscalp; speaker Garn: dps, 82% HP; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 35% mana), Mira (dps, 100% HP, 28% mana), Brann (dps, 100% HP, 40% mana)"
+addressed = "open"
+situation = "in Zul'Farrak; between pulls; just now: killed Chief Ukorz Sandscalp; speaker Garn: dps, 82% HP; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 35% mana), Mira (dps, 100% HP, 28% mana), Brann (dps, 100% HP, 40% mana)"
 
 [bot]
 name = "Thorgrim"

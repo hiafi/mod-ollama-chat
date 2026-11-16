@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. A plain hey whispered to the bot by someone it does not know. It must reply (never [skip]); a short greeting."
 message = "hey"
 channel = "whisper"
-addressed = false
+addressed = "open"
 situation = "not in combat; speaker Dunn: dps, 100% HP, 100% mana; you: tank, 100% HP, 100% mana"
 
 [bot]

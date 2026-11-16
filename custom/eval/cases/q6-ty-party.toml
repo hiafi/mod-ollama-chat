@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. Thanks after the bot buffed the speaker. Good: np / anytime or [skip]. Bad: a long reply, asking what for."
 message = "ty"
 channel = "party"
-addressed = false
+addressed = "conversation"
 situation = "in Zul'Farrak; not in combat; speaker Lilia: healer, 100% HP, 100% mana; you: tank, 88% HP, 61% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
 history = [
   { player = "could i get a buff?", bot = "sure, blessing of kings coming up" },

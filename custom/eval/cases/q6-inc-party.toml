@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. A dps calls out incoming mobs while the group is not fighting. Good: [skip] or a one-word ready (ready, k, rdy). Bad: asking what inc means, long answers."
 message = "inc"
 channel = "party"
-addressed = false
+addressed = "open"
 situation = "in Zul'Farrak; not in combat; speaker Garn: dps, 100% HP; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 80% mana), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

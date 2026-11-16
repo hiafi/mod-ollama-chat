@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. A stray lol in party chat, not aimed at anyone. Mostly [skip]; a short lol back is fine. Bad: asking what is funny, a long reply."
 message = "lol"
 channel = "party"
-addressed = false
+addressed = "open"
 situation = "in Zul'Farrak; not in combat; speaker Mira: dps, 100% HP, 100% mana; you: tank, 88% HP, 61% mana; party: Lilia (healer, 100% HP, 90% mana), Garn (dps, 100% HP), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

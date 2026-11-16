@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. The playtest case: a healer at 8% mana says mana in party chat, between pulls, to a paladin tank bot. Good: an ack that it will wait or let her drink (ok wait, drink up, take your time) or [skip]. Bad: confusion (what?), explaining mana to her, telling her to use a potion, or any remark about the bot's own mana."
 message = "mana"
 channel = "party"
-addressed = false
+addressed = "open"
 situation = "in Zul'Farrak; between pulls; speaker Lilia: healer, 95% HP, 8% mana; you: tank, 88% HP, 61% mana; party: Garn (dps, 100% HP), Mira (dps, 100% HP, 72% mana), Brann (dps, 100% HP, 55% mana)"
 
 [bot]

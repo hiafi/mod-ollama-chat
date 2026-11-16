@@ -3,7 +3,7 @@ path = "reply"
 notes = "Q6. A real question in party chat, aimed at nobody in particular. Good: answer it or say you do not know (not [skip]). Any specific location must come from retrieved facts; inventing one is bad."
 message = "anyone know where the warrior trainer is"
 channel = "party"
-addressed = false
+addressed = "open"
 situation = "not in combat; speaker Garn: dps, 100% HP; you: tank, 100% HP, 100% mana; party: Lilia (healer, 100% HP, 100% mana), Mira (dps, 100% HP, 100% mana)"
 
 [bot]

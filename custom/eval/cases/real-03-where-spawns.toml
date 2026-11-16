@@ -6,6 +6,7 @@ history = [
   { player = "anyone want to quest?", bot = "yo sure, im down. lets grind some quests together lol" },
   { player = "im trying", bot = "lmao frost mage nice, we gonna wreck these noobs. where u at rn?" },
 ]
+addressed = "conversation"
 
 [bot]
 name = "Aldric"
