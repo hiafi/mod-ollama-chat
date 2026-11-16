@@ -29,7 +29,7 @@ message = "whats the command to have you lead the way?"          # reply only
 history = [ { player = "...", bot = "..." } ]                    # reply only, optional
 channel = "party"               # reply only, optional: party | raid | guild | officer | whisper | say | yell | channel
 channel_name = "General - Elwynn Forest"    # for channel = "channel" only
-addressed = false               # reply only, optional: did the message name the bot?
+addressed = "open"              # reply only, optional: named | conversation | open (default open)
 situation = "in Deadmines; not in combat; speaker Lilia: healer, 100% HP, 8% mana; you: tank, 100% HP"
 
 [bot]      # name, level, class, race, gender, role, faction, guild, group_status, gold, area, zone, map, personality
@@ -40,11 +40,14 @@ situation = "in Deadmines; not in combat; speaker Lilia: healer, 100% HP, 8% man
 
 * `channel`, `addressed` and `situation` fill `{chat_channel}`, `{addressed}` and `{situation}` the way
   `GenerateBotPrompt` does: the phrase comes from `ChannelPhrase.*` (`channel = "channel"` uses `ChannelPhrase.Custom`
-  with `channel_name`, or `public` when it is empty), `addressed` picks `Addressed.Named` or `Addressed.NotAimed`
-  (a whisper always uses `Addressed.Whisper`). `situation` is the line `Situation_Build` produces, written in exactly its
+  with `channel_name`, or `public` when it is empty), `addressed` picks `Addressed.Named` (the bot's name is in the message),
+  `Addressed.Conversation` (not named, but the bot already has an exchange going with the speaker here: a follow-up;
+  empty by default) or `Addressed.NotAimed` (`open`, said to the room); a whisper always uses `Addressed.Whisper`.
+  Set it to what the live server would compute: `named` when the message contains the bot's name, else `conversation`
+  when the case has a `history`, else `open`. `situation` is the line `Situation_Build` produces, written in exactly its
   format (see `src/mod-ollama-chat_situation.cpp`); the config's `SituationTemplate` wraps it, and an empty template or
   an empty `situation` gives an empty `{situation}`. Defaults, so older cases render as before: `channel = "say"`,
-  `addressed = true`, `situation = ""`.
+  `addressed = "open"`, `situation = ""`.
 * Every value a placeholder needs comes from the case; a missing one is an error naming the case and the
   placeholder. Only the fields the effective templates actually use are required.
 * `role` and `class`/`race` are the strings the module would print ("holy priest", "Night Elf" - race is Title Case, as the server sends it).

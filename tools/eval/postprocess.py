@@ -350,11 +350,18 @@ def clamp_reply_length(text: bytes, max_len: int) -> bytes:
     return _trim(head)
 
 
+def _is_word_byte(c: int) -> bool:
+    """std::isalnum in the C locale, or a byte of a multi-byte character."""
+    return 48 <= c <= 57 or _is_alpha(c) or c >= 0x80
+
+
 def apply_skip_token(text: str, token: str) -> tuple[str, bool]:
     """Port of ``ApplySkipToken`` (src/mod-ollama-chat_response.cpp). Returns (text, skipped).
 
     ``skipped`` is true when the reply is only the token (whitespace and punctuation around it are ignored) or starts
-    with it. A token inside a longer reply is removed and the rest kept. An empty token never matches.
+    with it. A token inside a longer reply is removed and the rest kept; if what is left is only gesture tags
+    (``[emote:shrug] [skip]``) it is a skip too. A token that starts or ends with a letter or digit must stand alone
+    (``skip`` is not found in ``skipping``). An empty token never matches.
     """
     if not token:
         return text, False
@@ -368,20 +375,34 @@ def apply_skip_token(text: str, token: str) -> tuple[str, bool]:
 
     low_tok = _lower(tok)
     low = _lower(t)
-    pos = low.find(low_tok)
+    need_left = _is_word_byte(low_tok[0])
+    need_right = _is_word_byte(low_tok[-1])
+
+    def find_token() -> int:
+        at = low.find(low_tok)
+        while at >= 0:
+            end = at + len(low_tok)
+            if not ((need_left and at > 0 and _is_word_byte(low[at - 1]))
+                    or (need_right and end < len(low) and _is_word_byte(low[end]))):
+                return at
+            at = low.find(low_tok, at + 1)
+        return -1
+
+    pos = find_token()
     if pos < 0:
         return text, False
     if all(noise(c) for c in t[:pos]):
         return text, True
 
     while True:
-        pos = low.find(low_tok)
+        pos = find_token()
         if pos < 0:
             break
         t = t[:pos] + t[pos + len(low_tok):]
         low = low[:pos] + low[pos + len(low_tok):]
     t = _trim(collapse_whitespace(t))
-    return t.decode("utf-8", "replace"), all(noise(c) for c in t)
+    bare, _ = extract_emote_tag(t)
+    return t.decode("utf-8", "replace"), all(noise(c) for c in bare)
 
 
 def process_llm_response(raw: str, bot_name: str, *, strip_markdown_on: bool = True,

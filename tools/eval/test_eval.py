@@ -83,6 +83,22 @@ class RagTests(unittest.TestCase):
         self.assertEqual(hits[0].entry.id, "b")
         self.assertEqual(s.retrieve("cat", 5, 0.99), [])
 
+    def test_min_query_words_skips_short_queries(self):
+        s = rag.RagSystem([rag.RagEntry("mana", "Mana Surges", "bring 5 mana crystals"),
+                           rag.RagEntry("trainer", "Warrior Trainer", "the warrior trainer is in Northshire")])
+        # off by default: a bare "mana" retrieves the quest
+        self.assertEqual([h.entry.id for h in s.retrieve("mana", 3, 0.3)], ["mana"])
+        self.assertEqual([h.entry.id for h in s.retrieve("mana", 3, 0.3, None, 0.0, 0)], ["mana"])
+        # one real word is fewer than 2, whatever the punctuation and case
+        self.assertEqual(s.retrieve("MANA!!", 3, 0.3, None, 0.0, 2), [])
+        # common words do not count toward the minimum, even with RAGIgnoreCommonWords off
+        self.assertEqual(s.retrieve("where is the mana", 3, 0.0, None, 0.0, 2), [])
+        self.assertEqual(s.retrieve("the is in of", 3, 0.0, None, 0.0, 1), [])
+        # two real words pass, and the usual threshold still decides what is returned
+        self.assertEqual([h.entry.id for h in s.retrieve("warrior trainer", 3, 0.3, None, 0.0, 2)], ["trainer"])
+        self.assertEqual([h.entry.id for h in s.retrieve("where is the warrior trainer", 3, 0.3, None, 0.0, 2)],
+                         ["trainer"])
+
     def test_location_boost_reorders_but_never_admits(self):
         # "cat" vs "A cat" (same text apart from the zone word) -> equal raw scores
         s = rag.RagSystem([rag.RagEntry("far", "Cat", "cat in Westfall"),
@@ -283,6 +299,25 @@ class SkipTokenTests(unittest.TestCase):
     def test_token_without_brackets(self):
         self.assertTrue(self.apply("SKIP.", "skip")[1])
         self.assertEqual(self.apply("no skip needed", "skip"), ("no needed", False))
+
+    def test_a_plain_word_token_matches_only_as_a_whole_token(self):
+        self.assertEqual(self.apply("lets skip this pull", "skip"), ("lets this pull", False))
+        self.assertEqual(self.apply("skipping the trash", "skip"), ("skipping the trash", False))
+        self.assertEqual(self.apply("reskip it", "skip"), ("reskip it", False))
+        self.assertEqual(self.apply("no skip, skipping", "skip"), ("no , skipping", False))
+        # a bare word inside a multi-byte word is not a token either
+        self.assertEqual(self.apply("skip\u00e9 now", "skip"), ("skip\u00e9 now", False))
+        # a bracketed token needs no boundary on its bracket side
+        self.assertTrue(self.apply("x[skip]", "[skip]")[1] is False)
+        self.assertEqual(self.apply("hi[skip]", "[skip]"), ("hi", False))
+
+    def test_gesture_tag_with_the_token_is_a_skip(self):
+        for text in ["[emote:shrug] [skip]", "[skip] [emote:shrug]", "*shrugs* [skip]", "[emote:wave]  [SKIP]  ",
+                     "/shrug [skip]"]:
+            with self.subTest(text=text):
+                self.assertTrue(self.apply(text)[1])
+        # a real sentence next to a gesture and the token is still a reply
+        self.assertEqual(self.apply("[emote:wave] hi [skip]")[1], False)
 
     def test_a_removal_that_leaves_only_punctuation_is_a_skip(self):
         self.assertTrue(self.apply("ok? [skip]", "ok? [skip]")[1])
@@ -541,31 +576,40 @@ class RenderTests(unittest.TestCase):
     def test_addressed_phrases(self):
         cfg = self.chat_cfg()
         got = lambda **kw: render.render_case(cfg, self.reply_case(**kw), {}, None, 0).prompt.split("|")[1]
-        self.assertEqual(got(channel="party", addressed=True), "They named you.")
-        self.assertEqual(got(channel="party", addressed=False), "It was not aimed at anyone in particular.")
+        self.assertEqual(got(channel="party", addressed="named"), "They named you.")
+        self.assertEqual(got(channel="party", addressed="open"), "It was not aimed at anyone in particular.")
+        # a follow-up in a conversation the bot already has: empty unless the config says something
+        self.assertEqual(got(channel="party", addressed="conversation"), "")
         # a whisper is for the bot whatever `addressed` says, and its text is empty by default
-        self.assertEqual(got(channel="whisper", addressed=False), "")
-        self.assertEqual(got(channel="whisper", addressed=True), "")
+        for state in ("named", "conversation", "open"):
+            self.assertEqual(got(channel="whisper", addressed=state), "")
 
-    def test_old_cases_render_as_said_aloud_and_named(self):
+    def test_conversation_phrase_follows_the_config(self):
+        cfg = self.chat_cfg(**{"Addressed.Conversation": "You are already talking with them."})
+        got = lambda **kw: render.render_case(cfg, self.reply_case(**kw), {}, None, 0).prompt.split("|")[1]
+        self.assertEqual(got(channel="party", addressed="conversation"), "You are already talking with them.")
+        self.assertEqual(got(channel="party", addressed="open"), "It was not aimed at anyone in particular.")
+        self.assertEqual(got(channel="whisper", addressed="conversation"), "")
+
+    def test_old_cases_render_as_said_aloud_and_not_aimed(self):
         out = render.render_case(self.chat_cfg(), self.reply_case(), {}, None, 0).prompt
-        self.assertEqual(out, "out loud nearby|They named you.||")
+        self.assertEqual(out, "out loud nearby|It was not aimed at anyone in particular.||")
 
     def test_bad_channel_or_addressed_is_a_case_error(self):
-        for kw in (dict(channel="shout"), dict(addressed="yes")):
+        for kw in (dict(channel="shout"), dict(addressed="yes"), dict(addressed=True), dict(addressed=False)):
             with self.subTest(kw=kw), self.assertRaises(render.CaseError):
                 render.render_case(self.chat_cfg(), self.reply_case(**kw), {}, None, 0)
 
     def test_situation_is_wrapped_by_the_template_and_off_without_one(self):
         details = "not in combat; you: tank, 100% HP"
         off = render.render_case(self.chat_cfg(), self.reply_case(situation=details), {}, None, 0).prompt
-        self.assertEqual(off, "out loud nearby|They named you.||")
+        self.assertEqual(off, "out loud nearby|It was not aimed at anyone in particular.||")
         on = self.chat_cfg(SituationTemplate="Situation: {details}.")
         out = render.render_case(on, self.reply_case(situation=details), {}, None, 0).prompt
-        self.assertEqual(out, "out loud nearby|They named you.|Situation: not in combat; you: tank, 100% HP.|")
+        self.assertEqual(out, "out loud nearby|It was not aimed at anyone in particular.|Situation: not in combat; you: tank, 100% HP.|")
         # no situation in the case: nothing, not an empty wrapper
         out = render.render_case(on, self.reply_case(), {}, None, 0).prompt
-        self.assertEqual(out, "out loud nearby|They named you.||")
+        self.assertEqual(out, "out loud nearby|It was not aimed at anyone in particular.||")
 
     def test_history_block_and_missing_footer_without_history(self):
         cfg = render.Config({**self.conf, "OllamaChat.ChatPromptTemplate": "[{chat_history}]",

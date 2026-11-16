@@ -359,8 +359,10 @@ def _summary(view: CaseView) -> str:
 
 # ChatChannelPhrase / AddressedPhrase / Situation_Build (handler.cpp, situation.cpp): the three placeholders that say
 # where a line was said, whether it was aimed at the bot and what is going on. A case may set `channel`, `addressed`
-# and `situation`; without them the line is "said out loud nearby" and "not aimed at" the bot (no situation), which is
-# what every older case stands for.
+# and `situation`; without them the line is "said out loud nearby" and not aimed at anyone (`open`), with no situation.
+# `addressed` has the three states of the C++: `named` (the bot's name is in the message), `conversation` (not named,
+# but the bot already has an exchange going with the speaker here, so the line is a follow-up) and `open` (said to the
+# room). Set it to what the live server would compute for the case.
 CHANNEL_KEYS = {
     "party": ("ChannelPhrase.Party", "in party chat"),
     "raid": ("ChannelPhrase.Raid", "in raid chat"),
@@ -385,14 +387,19 @@ def chat_channel_phrase(cfg: Config, case: Mapping[str, Any], where: str) -> str
     return cfg.text(key, default)
 
 
+ADDRESSED_STATES = ("named", "conversation", "open")
+
+
 def addressed_phrase(cfg: Config, case: Mapping[str, Any], where: str) -> str:
-    named = case.get("addressed", True)
-    if not isinstance(named, bool):
-        raise CaseError(f"{where}: addressed must be true or false")
+    state = case.get("addressed", "open")
+    if state not in ADDRESSED_STATES:
+        raise CaseError(f"{where}: addressed must be one of {', '.join(ADDRESSED_STATES)} (got {state!r})")
     if case.get("channel", "say") == "whisper":
         return cfg.text("Addressed.Whisper", "")
-    if named:
+    if state == "named":
         return cfg.text("Addressed.Named", "They named you.")
+    if state == "conversation":
+        return cfg.text("Addressed.Conversation", "")
     return cfg.text("Addressed.NotAimed", "It was not aimed at anyone in particular.")
 
 
@@ -452,7 +459,8 @@ def render_reply(cfg: Config, view: CaseView, personalities: Mapping[str, str],
                                cfg.number("RAGSimilarityThreshold", 0.3),
                                [n for n in (bot.get("zone"), bot.get("area"))
                                 if isinstance(n, str) and n and n not in ("UnknownZone", "UnknownArea")],
-                               cfg.number("RAGLocationBoost", 0.0))
+                               cfg.number("RAGLocationBoost", 0.0),
+                               cfg.integer("RAGMinQueryWords", 0))
         rag_hits = [{"id": r.entry.id, "score": round(r.similarity, 4)} for r in results]
         content = rag.format_info(results)
         if content:
