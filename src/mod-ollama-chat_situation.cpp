@@ -11,6 +11,8 @@
 #include "Map.h"
 #include "Player.h"
 #include "PlayerbotAI.h"
+#include "SpellAuraEffects.h"
+#include "SpellInfo.h"
 
 #include <algorithm>
 #include <chrono>
@@ -60,6 +62,17 @@ namespace
                     it = g_groupRecords.erase(it);
                 else
                     ++it;
+            }
+
+            // Still full of recent groups: drop the least recently touched
+            // ones so the map really stays at kMaxRecords.
+            while (g_groupRecords.size() >= kMaxRecords)
+            {
+                auto oldest = g_groupRecords.begin();
+                for (auto it = g_groupRecords.begin(); it != g_groupRecords.end(); ++it)
+                    if (it->second.touched < oldest->second.touched)
+                        oldest = it;
+                g_groupRecords.erase(oldest);
             }
         }
 
@@ -112,6 +125,19 @@ namespace
         return static_cast<uint32_t>((uint64_t(p->GetPower(POWER_MANA)) * 100 + max / 2) / max);
     }
 
+    // True when the player carries an aura of this type that only lasts while
+    // seated (food and drink).
+    bool HasSeatedAura(Player* p, AuraType type)
+    {
+        for (AuraEffect const* eff : p->GetAuraEffectsByType(type))
+        {
+            if (SpellInfo const* info = eff->GetSpellInfo())
+                if (info->AuraInterruptFlags & AURA_INTERRUPT_FLAG_NOT_SEATED)
+                    return true;
+        }
+        return false;
+    }
+
     // "healer, 100% HP, 8% mana, drinking"; "dps, dead".
     std::string Describe(Player* p)
     {
@@ -124,12 +150,17 @@ namespace
         if (UsesMana(p))
             out += SafeFormat(", {}% mana", ManaPct(p));
 
-        // Sitting with a food or drink regeneration aura is what eating and
-        // drinking are in this client; a bare /sit has neither aura.
+        // Eating and drinking are seated regeneration auras: food is
+        // SPELL_AURA_MOD_REGEN and drink SPELL_AURA_MOD_POWER_REGEN in the
+        // 3.3.5 Spell.dbc (the OBS_MOD_* types are only a handful of odd
+        // items). Requiring the not-seated interrupt flag keeps an unrelated
+        // regeneration buff on a sitting player from counting.
         if (p->getStandState() == UNIT_STAND_STATE_SIT)
         {
-            const bool drinking = p->HasAuraType(SPELL_AURA_OBS_MOD_POWER);
-            const bool eating   = p->HasAuraType(SPELL_AURA_OBS_MOD_HEALTH);
+            const bool drinking = HasSeatedAura(p, SPELL_AURA_MOD_POWER_REGEN) ||
+                                  HasSeatedAura(p, SPELL_AURA_OBS_MOD_POWER);
+            const bool eating   = HasSeatedAura(p, SPELL_AURA_MOD_REGEN) ||
+                                  HasSeatedAura(p, SPELL_AURA_OBS_MOD_HEALTH);
             if (drinking && eating)
                 out += ", eating and drinking";
             else if (drinking)

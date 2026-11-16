@@ -12,7 +12,8 @@ class Player;
 // group. It is what lets a bot tell 'mana' said by a healer at 8% mana from a
 // stray word.
 //
-// Built from live game state, so WORLD THREAD ONLY. Empty when
+// Built from live game state. Meant for the world thread; a bot's own /say and /yell also reach it on a map thread,
+// which is safe only while MapUpdate.Threads = 1 (see the module's CLAUDE.md). Empty when
 // OllamaChat.SituationTemplate is empty, which is the default.
 // --------------------------------------------------------------------------
 
